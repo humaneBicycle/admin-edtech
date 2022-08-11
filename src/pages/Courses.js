@@ -91,8 +91,9 @@ export default function Courses() {
                 <div className="card-text">{"heading: " + course.headline}</div>
                 <Link to="/editcourse"></Link>
                 <div href="#" className="btn btn-primary" onClick={editCourse}>
+                  <Link to="/editcourses">
                   Edit Course
-                  
+                  </Link>
                 </div>
               </div>
             </div>

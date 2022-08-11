@@ -12,6 +12,7 @@ import Discussion from './pages/Discussion';
 import Settings from './pages/Settings';
 import AdminProfile from './pages/AdminProfile';
 import Login from './pages/Login';
+import EditCourseModal from './components/EditCourseModal';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -27,6 +28,7 @@ root.render(
       <Route path="/settings" element={<Settings />} />
       <Route path="/admin-profile" element={<AdminProfile />} />
       <Route path="/login" element={<Login />} />
+      <Route path="/editcourse" element={<EditCourseModal />} />
 
     </Routes>
     </BrowserRouter>
