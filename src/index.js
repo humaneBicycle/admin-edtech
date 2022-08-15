@@ -13,22 +13,29 @@ import Settings from './pages/Settings';
 import AdminProfile from './pages/AdminProfile';
 import Login from './pages/Login';
 import EditCourseModal from './components/EditCourseModal';
+import StorageHelper from './utils/StorageHelper';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <BrowserRouter>
     <Routes>
-      <Route path="/" element={<App />} />
-      <Route path="/course" element={<Courses />} />
-      <Route path="/students" element={<Students />} />
-      <Route path="/events" element={<Events />} />
-      <Route path="/analytics" element={<Analytics />} />
-      <Route path="/discussion" element={<Discussion />} />
-      <Route path="/settings" element={<Settings />} />
-      <Route path="/admin-profile" element={<AdminProfile />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/editcourse" element={<EditCourseModal />} />
+      {StorageHelper.get("token")===null?
+      
+        <Route path="/" element={<Login />} />
+        :<>
+        <Route path="/" element={<App />} />
+        <Route path="/course" element={<Courses />} />
+        <Route path="/students" element={<Students />} />
+        <Route path="/events" element={<Events />} />
+        <Route path="/analytics" element={<Analytics />} />
+        <Route path="/discussion" element={<Discussion />} />
+        <Route path="/settings" element={<Settings />} />
+        <Route path="/admin-profile" element={<AdminProfile />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/course/editCourse" element={<EditCourseModal />} />
+        </>
+    }
 
     </Routes>
     </BrowserRouter>

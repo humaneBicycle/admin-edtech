@@ -1,10 +1,13 @@
-import React from 'react'
-import Navbar from '../components/Navbar'
+import React from "react";
+import Navbar from "../components/Navbar";
 
 export default function Settings() {
   return (
-    <div className='page-position-default'>
-        <Navbar/>
+    <div className="row">
+      <div className="col-md-2 border-end">
+  
+        <Navbar />
+      </div>
     </div>
-  )
+  );
 }

@@ -4,7 +4,6 @@ import StorageHelper from "../utils/StorageHelper";
 
 
 export default function Login() {
-  // let button = document.getElementById("login_load_button").style.display = "none";
   const [loginButton, setloginButton] = useState(false);
 
   const handleSubmit = async (e) => {
@@ -28,8 +27,8 @@ export default function Login() {
 
         setloginButton(true);
         console.log(data);
-        if(data.error==="User not found"){
-          
+        if(!data.success){
+          alert(data.message);
           setloginButton(false);
 
         }else{
@@ -47,7 +46,7 @@ export default function Login() {
       console.log(e.target.password.value);
     } catch (error) {
       console.log(error);
-      alert("Something went wrong. Email or Password is incorrect");
+      alert("Something went wrong.");
     }
     
 
@@ -55,7 +54,6 @@ export default function Login() {
 
   return (
     <div>
-      {/* <image src={"./images/login_illustration.png"} alt="login" /> */}
       <form className="container" onSubmit={handleSubmit}>
         <div className="form-group my-8">
           <label htmlFor="exampleInputEmail1">Email address</label>

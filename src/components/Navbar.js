@@ -6,40 +6,54 @@ export default function Navbar() {
     <>
       <div>
         <div className="vertical-nav ">
-          <Link to="/">
+          <div
+            className="bg-image hover-overlay ripple p-3 border-bottom"
+            data-mdb-ripple-color="light"
+          >
             <img
-              className="header__logo mx-4 my-4"
+              className="img-fluid"
               src="https://www.google.com/images/branding/googlelogo/2x/googlelogo_dark_color_92x30dp.png"
               alt="admin"
             />
-          </Link>
+            <Link to="/">
+              <div className="mask"></div>
+            </Link>
+          </div>
           <ul className="mx-4 my-4 navbar-nav fs-3">
             <Link to="/course">
-              <li className="text-decoration-none">Course</li>
+              <li className="sidenav-link">
+                <i className="fas fa-book-open"></i> Course
+              </li>
             </Link>
             <Link to="/students">
-              <li className="col-1">Students</li>
+              <li className="sidenav-link">
+                <i className="fas fa-book-open"></i> Students
+              </li>
             </Link>
-            <Link to="/events">
-              <li className="col-1">Events</li>
+            <Link to="/students">
+              <li className="sidenav-link">
+                <i className="fas fa-book-open"></i> Events
+              </li>
             </Link>
-            <Link to="/analytics">
-              <li className="col-1">Analytics</li>
+            <Link to="/students">
+              <li className="sidenav-link">
+                <i className="fas fa-book-open"></i> Analytics
+              </li>
             </Link>
-            <Link to="/discussion">
-              <li className="col-1">Discussion</li>
+            <Link to="/students">
+              <li className="sidenav-link">
+                <i className="fas fa-book-open"></i> Discussion
+              </li>
             </Link>
           </ul>
-          <Link to="/settings">
-            <div className="fixed-bottom align-items-end text-decoration-none mx-4 my-4rem">
+          <div className="d-flex  p-3">
+            <Link to="/settings" className="badge badge-info me-3">
               Settings
-            </div>
-          </Link>
-          <Link to="/admin-profile">
-            <div className="fixed-bottom align-items-end text-decoration-none mx-4 my-2rem">
+            </Link>
+            <Link to="/admin-profile" className="badge badge-primary">
               Admin Profile
-            </div>
-          </Link>
+            </Link>
+          </div>
         </div>
       </div>
     </>
