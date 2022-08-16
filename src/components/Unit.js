@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 export default function Unit({
   has_prerequisite,
@@ -14,6 +15,18 @@ export default function Unit({
 }) {
   function editUnit(e) {
     e.preventDefault();
+  }
+  let unit = {
+    has_prerequisite:has_prerequisite,
+    type:type,
+    time:time,
+    message:message,
+    title:title,
+    tags:tags,
+    total_lessons:total_lessons,
+    is_paid:is_paid,
+    is_locked:is_locked,
+    _id:_id,
   }
 
   return (
@@ -62,22 +75,7 @@ export default function Unit({
               </div>
             </div>
           </div>
-          {/* <h5 className="card-title">
-        {title}
-      </h5>
-      <h6 className="card-subtitle mb-2 text-muted">
-        {message}
-      </h6>
-      <ul className="list-group list-group-flush">
-        <li className="list-group-item">has Prerequisite? {has_prerequisite}</li>
-        <li className="list-group-item">Type: {type}</li>
-        <li className="list-group-item">Tags {tags}</li>
-        <li className="list-group-item">Total Lessons {total_lessons}</li>
-        <li className="list-group-item">Time {time}</li>
-        <li className="list-group-item">isPaid {is_paid}</li>
-        <li className="list-group-item">isLocked {is_locked}</li>
-        <li className="list-group-item">ID {_id}</li>
-      </ul> */}
+        
         </div>
         <div class="card-footer border-0 bg-light p-2 d-flex justify-content-between">
           <div>
@@ -87,15 +85,16 @@ export default function Unit({
               </>
             ))}
           </div>
-          <button
+          <Link
             className="btn btn-primary btn-sm  me-2 ms-auto "
-            onClick={editUnit}
-          >
-            <i className="far fa-edit "></i>
-          </button>
-          <button className="btn btn-outline-primary btn-sm  me-2 ">
+            to="edit-unit"
+            state={{unit:unit}}
+            >
+            Edit Unit<i className="far fa-edit mx-2"></i>
+          </Link>
+          <Link className="btn btn-outline-primary btn-sm  me-2 " to="add-lesson">
             Add lesson<i className="fas fa-plus ms-2"></i>
-          </button>
+          </Link>
         </div>
       </div>
     </div>

@@ -30,17 +30,17 @@ export default function Navbar() {
                 <i className="fas fa-book-open"></i> Students
               </li>
             </Link>
-            <Link to="/students">
+            <Link to="/events">
               <li className="sidenav-link">
                 <i className="fas fa-book-open"></i> Events
               </li>
             </Link>
-            <Link to="/students">
+            <Link to="/analytics">
               <li className="sidenav-link">
                 <i className="fas fa-book-open"></i> Analytics
               </li>
             </Link>
-            <Link to="/students">
+            <Link to="/discussion">
               <li className="sidenav-link">
                 <i className="fas fa-book-open"></i> Discussion
               </li>

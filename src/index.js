@@ -14,6 +14,10 @@ import AdminProfile from './pages/AdminProfile';
 import Login from './pages/Login';
 import EditCourseModal from './components/EditCourseModal';
 import StorageHelper from './utils/StorageHelper';
+import AddUnit from './pages/AddUnit';
+import EditUnit from './pages/EditUnit';
+import AddLesson from './pages/AddLesson';
+import Lessons from './pages/Lessons';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -34,6 +38,10 @@ root.render(
         <Route path="/admin-profile" element={<AdminProfile />} />
         <Route path="/login" element={<Login />} />
         <Route path="/course/editCourse" element={<EditCourseModal />} />
+        <Route path="/course/add-unit" element={<AddUnit />} />
+        <Route path="/course/edit-unit" element={<EditUnit />} />
+        <Route path="/course/add-lesson" element={<AddLesson />} />
+        <Route path="/course/lessons" element={<Lessons />} />
         </>
     }
 

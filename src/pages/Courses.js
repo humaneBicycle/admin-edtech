@@ -126,9 +126,11 @@ export default function Courses() {
                         {"heading: " + course.headline}
                       </div>
                       <div className="d-flex flex-row justify-content-end mt-3">
-                        <button className="btn btn-primary btn-sm">
+                        <Link className="btn btn-primary btn-sm"
+                            to="add-unit"
+                            state={{course:course}}>
                           Add Unit <i className="fas fa-plus ms-2"></i>
-                        </button>
+                        </Link>
                         <Link
                           className="btn btn-outline-primary btn-sm ms-auto me-2"
                           to="editCourse"
@@ -154,8 +156,8 @@ export default function Courses() {
                             title={unit.unit_title}
                             tags={unit.tags}
                             total_lessons={unit.total_lessons}
-                            is_paid={unit.is_paid.toString()}
-                            is_locked={unit.is_locked.toString()}
+                            is_paid={unit.is_paid}
+                            is_locked={unit.is_locked}
                             _id={unit._id}
                           />
                         </>
