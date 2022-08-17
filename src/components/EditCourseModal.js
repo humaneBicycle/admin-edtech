@@ -4,8 +4,15 @@ import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { s3Client } from "../libs/s3Clients"; // Helper function that creates an Amazon S3 service client module.
-import { path } from "path";
-import { fs } from "fs";
+import S3FileUpload from 'react-s3';
+
+const config = {
+  bucketName: 'quasar-edtech',
+  dirName: 'photos', /* optional */
+  region: 'eu-east-1',
+  accessKeyId: 'AKIA5PW5INIXZIDSBRTU',
+  secretAccessKey: '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',
+}
 
 var videoFile;
 
@@ -210,39 +217,10 @@ async function updateCourse(e, newCourse) {
   console.log(newCourse);
   var response, data;
 
-  try {
-    const file = path.basename(videoFile); // Path to and name of object. For example '../myFiles/index.js'.
-    const fileStream = fs.createReadStream(file);
-    console.log(file,fileStream);
-    const uploadParams = {
-      Bucket: "quasar-edtech",
-      // Add the required 'Key' parameter using the 'path' module.
-      Key: path.basename(file),
-      // Add the required 'Body' parameter
-      Body: fileStream,
-    };
-    // uploadVideo();
-
-    async function uploadVideo() {
-      try {
-        const data = await s3Client.send(new PutObjectCommand(uploadParams));
-        console.log("Success", data);
-        
-      } catch (err) {
-        console.log(err);
-      }
-    }
-    console.log(file);
-  } catch (err) {
-    alert("please select a file");
-    console.log(err);
-  }
-
-  // s3.putObject({
-  //   Body: newCourse.id,
-  //   Bucket: "quasar-edtech",
-  //   Key: newCourse.id,
-  // });
+  S3FileUpload
+    .uploadFile(videoFile, config)
+    .then(data => console.log(data))
+    .catch(err => console.error(err))
 
   // try {
   //   response = await fetch(LinkHelper.getLink() + "admin/updateCourse", {
