@@ -5,6 +5,7 @@ import MediaConvert from "aws-sdk/clients/mediaconvert";
 import LinkHelper from "../utils/LinkHelper";
 
 var videoFile;
+var uid;
 var credentials = {
   accessKeyId: "AKIA5PW5INIX25E2FKL7",
   secretAccessKey: "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",
@@ -23,7 +24,7 @@ export default function AllLessonVideo() {
     if (mode == "video") {
       videoFile = e.target.files[0];
       activeLessonVideo[mode] = videoFile;
-      let uid = "id" + new Date().getTime();
+      uid = "id" + new Date().getTime();
       videoUId=uid+videoFile.name.split(".").pop();
       console.log(videoUId)
       setActivevLessonVideo({ ...activeLessonVideo, mode: videoFile });
@@ -465,7 +466,7 @@ export default function AllLessonVideo() {
             DeblockFilter: "DISABLED",
             DenoiseFilter: "DISABLED",
             TimecodeSource: "EMBEDDED",
-            FileInput: "s3://quasaredtech-adminuploads/"+Uid,
+            FileInput: "s3://quasaredtech-adminuploads/"+uid,
           },
         ],
       }
