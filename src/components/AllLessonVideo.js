@@ -1,13 +1,8 @@
 import React, { useState } from "react";
 import { Upload } from "@aws-sdk/lib-storage";
 import { S3Client, S3 } from "@aws-sdk/client-s3";
-// var AWS = require('aws-sdk');
 import MediaConvert from "aws-sdk/clients/mediaconvert";
 import LinkHelper from "../utils/LinkHelper";
-// Set the Region
-// AWS.config.update({region: 'us-east-1'});
-// Set the custom endpoint for your account
-// AWS.config.mediaconvert = {};
 
 var videoFile;
 var credentials = {
@@ -470,7 +465,7 @@ export default function AllLessonVideo() {
             DeblockFilter: "DISABLED",
             DenoiseFilter: "DISABLED",
             TimecodeSource: "EMBEDDED",
-            FileInput: "s3://quasaredtech-adminuploads/"+videoUId,
+            FileInput: "s3://quasaredtech-adminuploads/"+Uid,
           },
         ],
       }
