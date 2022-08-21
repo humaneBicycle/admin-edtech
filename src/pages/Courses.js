@@ -5,9 +5,12 @@ import StorageHelper from "../utils/StorageHelper";
 import Unit from "../components/Unit";
 import { Link } from "react-router-dom";
 
+// let isLoaded;
+
 export default function Courses() {
   const [progressVisibility, isVisible] = React.useState(true);
   const [course, setCourses] = React.useState({});
+  const [isError, setErrorStaus] = React.useState(false);
   const [isEditCourseModalVisible, setEditCourseModalVisibility] =
     React.useState(false);
   useEffect(() => {
@@ -20,6 +23,7 @@ export default function Courses() {
   }
 
   var data, response;
+
   let getCourses = async () => {
     try {
       response = await fetch(LinkHelper.getLink() + "admin/course", {
@@ -34,17 +38,28 @@ export default function Courses() {
       try {
         data = await response.json();
         console.log(data);
+        // setLoaded(true);
+
         updateUI(data.data);
       } catch (err) {
-        alert("Invalid Response! Please Reload");
-        updateUI(null);
+        // alert("Invalid Response! Please Reload");
+        // updateUI(null);
+        loadFailed(err);
         console.log(progressVisibility);
       }
     } catch (err) {
       console.log(err);
-      alert("Something went wrong! Please Reload");
-      updateUI(null);
+      loadFailed(err);
+      // alert("Something went wrong! Please Reload");
+      // updateUI(null);
     }
+  };
+
+  let loadFailed = (error) => {
+    isVisible(false);
+    setErrorStaus(true);
+    
+    // alert("Something went wrong! Please Reload");
   };
 
   return (
@@ -74,18 +89,20 @@ export default function Courses() {
               </div>
             </div>
           </div>
+
+          
+          
           {progressVisibility ? (
+            
+              
             <div class="d-flex">
-              <div
-                class="spinner-grow text-primary m-auto  my-5"
-             
-                role="status"
-              >
+              <div class="spinner-grow text-primary m-auto  my-5" role="status">
                 <span class="visually-hidden">Loading...</span>
               </div>
             </div>
           ) : (
             // course model have been loaded. populate the views
+            !isError?(
             <>
               <div className="row g-3">
                 <div className="col-12 d-flex bg-light p-2 rounded-3 d-none">
@@ -126,9 +143,11 @@ export default function Courses() {
                         {"heading: " + course.headline}
                       </div>
                       <div className="d-flex flex-row justify-content-end mt-3">
-                        <Link className="btn btn-primary btn-sm"
-                            to="add-unit"
-                            state={{course:course}}>
+                        <Link
+                          className="btn btn-primary btn-sm"
+                          to="add-unit"
+                          state={{ course: course }}
+                        >
                           Add Unit <i className="fas fa-plus ms-2"></i>
                         </Link>
                         <Link
@@ -171,7 +190,15 @@ export default function Courses() {
                 </div>
               </div>
             </>
+            ):(
+              <div className="d-flex justify-content-center">
+                Error Loading Content. Please Reload. Backend problem
+                
+                </div>
+            )
           )}
+
+
         </div>
       </div>
     </>

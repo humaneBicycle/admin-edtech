@@ -3,6 +3,7 @@ import { Upload } from "@aws-sdk/lib-storage";
 import { S3Client, S3 } from "@aws-sdk/client-s3";
 import MediaConvert from "aws-sdk/clients/mediaconvert";
 import LinkHelper from "../utils/LinkHelper";
+import { useLocation } from "react-router";
 
 var videoFile;
 var uid;
@@ -14,12 +15,19 @@ var videoUId;
 
 export default function AllLessonVideo() {
   let [progress, setProgress] = useState(-1);
+  const location = useLocation();
+  let {unit} = location.state;
+  // console.log(unit)
   let [activeLessonVideo, setActivevLessonVideo] = useState({
     type: "video",
+    unit_id: unit._id
   });
 
   let updateUI = (e, mode) => {
-    let val = e.target.value;
+    let val;
+    if(mode!="video_id"){
+      val = e.target.value;
+    }
 
     if (mode == "video") {
       videoFile = e.target.files[0];
@@ -39,7 +47,8 @@ export default function AllLessonVideo() {
     if (
       lesson.video == null ||
       lesson.thumbnail_url == undefined ||
-      lesson.name == undefined
+      lesson.name == undefined ||
+      lesson.description == undefined 
     ) {
       alert("please complete the form");
       return;
@@ -508,7 +517,7 @@ export default function AllLessonVideo() {
             
           })
 
-          
+          console.log(activeLessonVideo);
           try{
             jsonData = await resposnse.json()
             console.log(jsonData)
@@ -518,6 +527,7 @@ export default function AllLessonVideo() {
           }
         }catch(err){
           console.log(err)
+          alert("Something went wrong"+err.message)
         }
   }
 
@@ -575,12 +585,25 @@ export default function AllLessonVideo() {
           />
           <label htmlFor="floatingInput">Thumbnail Url</label>
         </div>
+        <div className="form-floating mb-3">
+          <input
+            className="form-control"
+            id="floatingInput"
+            placeholder="name@example.com"
+            value={activeLessonVideo.description}
+            onChange={(event) => {
+              updateUI(event, "description");
+            }}
+          />
+          <label htmlFor="floatingInput">Description</label>
+        </div>
 
         <>
           <button
             type="button"
             className="btn btn-primary"
             onClick={(event) => {
+              updateUI(videoUId, "video_id");
               addLesson(event, activeLessonVideo);
             }}
           >

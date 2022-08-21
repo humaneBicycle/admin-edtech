@@ -92,7 +92,8 @@ export default function Unit({
             >
             Edit Unit<i className="far fa-edit mx-2"></i>
           </Link>
-          <Link className="btn btn-outline-primary btn-sm  me-2 " to="add-lesson">
+          <Link className="btn btn-outline-primary btn-sm  me-2 " to="add-lesson"
+          state={{unit:unit}}>
             Add lesson<i className="fas fa-plus ms-2"></i>
           </Link>
         </div>
