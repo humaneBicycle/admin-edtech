@@ -21,7 +21,7 @@ import Lessons from './pages/Lessons';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
+  
     <BrowserRouter>
     <Routes>
       {StorageHelper.get("token")===null?
@@ -46,11 +46,11 @@ root.render(
     }
 
     </Routes>
-    </BrowserRouter>
+    
     {/* <BrowserRouter>
     <App />
     </BrowserRouter> */}
-  </React.StrictMode>
+  </BrowserRouter>
 );
 
 // App.use(cors());

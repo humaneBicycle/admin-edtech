@@ -30,7 +30,8 @@ export default function Unit({
   }
 
   return (
-    <div className="mb-3">
+    <div className="mb-3" key={_id}>
+      {/* <Link to="lessons" state={{ unit: unit }}> */}
       <div className="card" >
         <div className="card-body p-2">
           <div className="row g-0">
@@ -48,6 +49,9 @@ export default function Unit({
                 <span className="badge badge-primary ms-auto me-2">{type} </span>
                 <span className="badge badge-info me-2">{total_lessons} Lessons</span>
                 </h6>
+                <p className="card-text">
+                  {_id}
+                </p>
                 <p className="card-text">
                   {message}
                 </p>
@@ -98,6 +102,7 @@ export default function Unit({
           </Link>
         </div>
       </div>
+      {/* </Link> */}
     </div>
   );
 }

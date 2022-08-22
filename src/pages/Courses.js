@@ -4,13 +4,24 @@ import LinkHelper from "../utils/LinkHelper";
 import StorageHelper from "../utils/StorageHelper";
 import Unit from "../components/Unit";
 import { Link } from "react-router-dom";
+import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 
 // let isLoaded;
+let updatedUnits;
+let unitJsonToUpdate = {
+  user_id: StorageHelper.get("token"),
+  units:[
+    
+  ]
+};
 
 export default function Courses() {
+  const [isUnitOrderChanged, setIsUnitOrderChanged] = React.useState(false);
   const [progressVisibility, isVisible] = React.useState(true);
   const [course, setCourses] = React.useState({});
   const [isError, setErrorStaus] = React.useState(false);
+  
+
   const [isEditCourseModalVisible, setEditCourseModalVisibility] =
     React.useState(false);
   useEffect(() => {
@@ -19,6 +30,13 @@ export default function Courses() {
 
   function updateUI(course) {
     isVisible(false);
+    unitJsonToUpdate.units=course.units.map(unit=>{
+      return {
+        id:unit.id,
+        name:unit.name,
+        order:unit.order
+      }
+    });
     setCourses(course);
   }
 
@@ -58,9 +76,80 @@ export default function Courses() {
   let loadFailed = (error) => {
     isVisible(false);
     setErrorStaus(true);
-    
+
     // alert("Something went wrong! Please Reload");
   };
+
+  let handleOnDragEvent = (result) => {
+    
+    console.log(result);
+    updateChangedUnitOrder = Array.from(course.units);
+    // updateChangedUnitOrder[result.source.index].index=result.destination.index;
+    updateChangedUnitOrder[result.source.index].index=result.destination.index;
+    
+    
+    
+    const [reOrderedItems] = updateChangedUnitOrder.splice(result.source.index, 1);
+    updateChangedUnitOrder.splice(result.destination.index, 0, reOrderedItems);
+    setCourses({ ...course, units: updateChangedUnitOrder });
+    // for(let i =result.destination.index;i<updateChangedUnitOrder.length-1;i++){
+    //   updateChangedUnitOrder[result.destination.index+i].index=updateChangedUnitOrder[result.destination.index+i].index+1;
+    // }
+    let i=0
+    updateChangedUnitOrder.forEach(unit => {
+      unit.index=i;
+      i++;
+    });
+
+    // let newIndex = (2*result.destination.index+1)/2
+    // updateChangedUnitOrder.forEach(unit => {
+    //   if(unit._id===result.
+    // });
+    unitJsonToUpdate.units=updateChangedUnitOrder.map(unit=>{
+      return {
+        unit_id:unit.unit_id,
+        index:unit.index
+      }
+    })
+    
+
+    setCourses({ ...course, units: updateChangedUnitOrder });
+    
+    console.log(unitJsonToUpdate)
+    // console.log(reOrderedItems)
+    setIsUnitOrderChanged(true);
+  };
+
+  let updateChangedUnitOrder = async (event) => {
+    console.log(updatedUnits)
+    
+    let response,data;
+    try{
+      response = await fetch(LinkHelper.getLink() + "admin/course/update", {
+        method: "PUT",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify(updatedUnits)
+      })
+      try{
+        data = await response.json();
+        console.log(data);
+        if(data.success){
+          alert("Successfully Updated");
+        }else{
+          alert("Something went wrong! Please Retry");
+        }
+        setIsUnitOrderChanged(false);
+      }
+      catch(err){
+        console.log(err)
+      }
+    }catch(err){
+      console.log(err);
+    }
+  }
+
 
   return (
     <>
@@ -90,31 +179,31 @@ export default function Courses() {
             </div>
           </div>
 
-          
-          
           {progressVisibility ? (
-            
-              
             <div class="d-flex">
               <div class="spinner-grow text-primary m-auto  my-5" role="status">
                 <span class="visually-hidden">Loading...</span>
               </div>
             </div>
-          ) : (
-            // course model have been loaded. populate the views
-            !isError?(
+          ) : // course model have been loaded. populate the views
+          !isError ? (
             <>
-              <div className="row g-3">
-                <div className="col-12 d-flex bg-light p-2 rounded-3 d-none">
-                  <span className="py-1 ps-4">
-                    {" "}
-                    Do you want to save this sort ?
-                  </span>
-                  <button className="btn btn-outline-primary me-3 ms-auto">
-                    Cancel
-                  </button>
-                  <button className="btn btn-primary me-3">Save</button>
-                </div>
+              <div className="row g-3 ">
+                {isUnitOrderChanged ? (
+                  <div className="row ">
+                    <div className="col-12 d-flex bg-light p-2 rounded-3 ">
+                      <span className="py-1 ps-4">
+                        Do you want to save this sort ?
+                      </span>
+                      {/* <button className="btn btn-outline-primary me-3 ms-auto">
+                        Cancel
+                      </button> */}
+                      <button className="btn btn-primary me-3" onClick={updateChangedUnitOrder}>Save</button>
+                    </div>
+                  </div>
+                ) : (
+                  <></>
+                )}
                 <div className="col-md-5">
                   <div className="card w-100">
                     {/* <div className="card-header my_course">
@@ -163,42 +252,64 @@ export default function Courses() {
                 </div>
                 <div className="col-md-7">
                   <div className="d-flex flex-column">
-                    {course.units != null ? (
-                      course.units.map((unit) => (
-                        <>
-                          <Unit
-                            key={unit._id}
-                            has_prerequisite={unit.prerequisite.has_prerequisite.toString()}
-                            type={unit.prerequisite.type}
-                            time={unit.prerequisite.time}
-                            message={unit.prerequisite.message}
-                            title={unit.unit_title}
-                            tags={unit.tags}
-                            total_lessons={unit.total_lessons}
-                            is_paid={unit.is_paid}
-                            is_locked={unit.is_locked}
-                            _id={unit._id}
-                          />
-                        </>
-                      ))
-                    ) : (
-                      <>
-                        <div>No Units found</div>
-                      </>
-                    )}
+                    <DragDropContext onDragEnd={handleOnDragEvent}>
+                      <Droppable droppableId="droppable">
+                        {(provided) => (
+                          <ul
+                            className="list-group"
+                            {...provided.droppableProps}
+                            ref={provided.innerRef}
+                          >
+                            {course.units != null ? (
+                              course.units.map((unit, index) => (
+                                <>
+                                  <Draggable
+                                    key={unit._id}
+                                    draggableId={unit._id}
+                                    index={index}
+                                  >
+                                    {(provided) => (
+                                      <li
+                                        {...provided.draggableProps}
+                                        ref={provided.innerRef}
+                                        {...provided.dragHandleProps}
+                                      >
+                                        <Unit
+                                          key={unit.unit_id}
+                                          has_prerequisite={unit.prerequisite.has_prerequisite.toString()}
+                                          type={unit.prerequisite.type}
+                                          time={unit.prerequisite.time}
+                                          message={unit.prerequisite.message}
+                                          title={unit.unit_title}
+                                          tags={unit.tags}
+                                          total_lessons={unit.total_lessons}
+                                          is_paid={unit.is_paid}
+                                          is_locked={unit.is_locked}
+                                          _id={unit.unit_id}
+                                        />
+                                      </li>
+                                    )}
+                                  </Draggable>
+                                </>
+                              ))
+                            ) : (
+                              <>
+                                <div>No Units found</div>
+                              </>
+                            )}
+                          </ul>
+                        )}
+                      </Droppable>
+                    </DragDropContext>
                   </div>
                 </div>
               </div>
             </>
-            ):(
-              <div className="d-flex justify-content-center">
-                Error Loading Content. Please Reload. Backend problem
-                
-                </div>
-            )
+          ) : (
+            <div className="d-flex justify-content-center">
+              Error Loading Content. Please Reload. Backend problem
+            </div>
           )}
-
-
         </div>
       </div>
     </>

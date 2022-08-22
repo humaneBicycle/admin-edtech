@@ -18,7 +18,7 @@ export default function AllLessonVideo() {
   const location = useLocation();
   let {unit} = location.state;
   // console.log(unit)
-  let [activeLessonVideo, setActivevLessonVideo] = useState({
+  let [activeLessonVideo, setActiveLessonVideo] = useState({
     type: "video",
     unit_id: unit._id
   });
@@ -35,11 +35,11 @@ export default function AllLessonVideo() {
       uid = "id" + new Date().getTime();
       videoUId=uid+videoFile.name.split(".").pop();
       console.log(videoUId)
-      setActivevLessonVideo({ ...activeLessonVideo, mode: videoFile });
+      setActiveLessonVideo({ ...activeLessonVideo, mode: videoFile });
     } else {
       activeLessonVideo[mode] = val;
       
-      setActivevLessonVideo({ ...activeLessonVideo, mode: val });
+      setActiveLessonVideo({ ...activeLessonVideo, mode: val });
     }
   };
 
