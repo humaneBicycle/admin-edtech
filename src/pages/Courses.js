@@ -261,7 +261,7 @@ export default function Courses() {
                       <Droppable droppableId="droppable">
                         {(provided) => (
                           <ul
-                            className="list-group"
+                            className="list-group mx-4"
                             {...provided.droppableProps}
                             ref={provided.innerRef}
                           >
