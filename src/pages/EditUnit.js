@@ -8,6 +8,7 @@ export default function EditUnit() {
   const unit = location.state.unit;
   var [activeUnit, setActiveUnit] = useState({});
   activeUnit = unit;
+
   console.log(activeUnit);
 
   function updateUI(event, mode) {
@@ -67,12 +68,12 @@ export default function EditUnit() {
             <input
               className="form-control"
               id="floatingInput"
-              value={activeUnit.title}
+              value={activeUnit.unit_name}
               onChange={(event) => {
-                updateUI(event, "title");
+                updateUI(event, "unit_name");
               }}
             />
-            <label htmlFor="floatingInput">Title</label>
+            <label htmlFor="floatingInput">Name</label>
           </div>
           <div className="form-floating mb-3">
             <input

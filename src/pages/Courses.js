@@ -121,22 +121,23 @@ export default function Courses() {
   };
 
   let updateChangedUnitOrder = async (event) => {
-    console.log(updatedUnits)
+    console.log(unitJsonToUpdate)
     
     let response,data;
     try{
-      response = await fetch(LinkHelper.getLink() + "admin/course/update", {
+      response = await fetch(LinkHelper.getLink() + "admin/unit/update/position", {
         method: "PUT",
         headers: {
           "content-type": "application/json",
         },
-        body: JSON.stringify(updatedUnits)
+        body: JSON.stringify(unitJsonToUpdate)
       })
       try{
         data = await response.json();
         console.log(data);
         if(data.success){
           alert("Successfully Updated");
+          setIsUnitOrderChanged(false);
         }else{
           alert("Something went wrong! Please Retry");
         }
@@ -144,9 +145,13 @@ export default function Courses() {
       }
       catch(err){
         console.log(err)
+        alert("Something went wrong! Please Retry");
+        setIsUnitOrderChanged(false);
       }
     }catch(err){
       console.log(err);
+      alert("Something went wrong! Please Retry");
+      setIsUnitOrderChanged(false);
     }
   }
 
@@ -264,8 +269,8 @@ export default function Courses() {
                               course.units.map((unit, index) => (
                                 <>
                                   <Draggable
-                                    key={unit._id}
-                                    draggableId={unit._id}
+                                    key={unit.unit_id}
+                                    draggableId={unit.unit_id}
                                     index={index}
                                   >
                                     {(provided) => (
@@ -274,19 +279,21 @@ export default function Courses() {
                                         ref={provided.innerRef}
                                         {...provided.dragHandleProps}
                                       >
+                                        <Link to="lessons" state={{ unit: unit }}>
                                         <Unit
                                           key={unit.unit_id}
                                           has_prerequisite={unit.prerequisite.has_prerequisite.toString()}
                                           type={unit.prerequisite.type}
                                           time={unit.prerequisite.time}
                                           message={unit.prerequisite.message}
-                                          title={unit.unit_title}
+                                          unit_name={unit.unit_title}
                                           tags={unit.tags}
                                           total_lessons={unit.total_lessons}
                                           is_paid={unit.is_paid}
                                           is_locked={unit.is_locked}
-                                          _id={unit.unit_id}
+                                          unit_id={unit.unit_id}
                                         />
+                                        </Link>
                                       </li>
                                     )}
                                   </Draggable>

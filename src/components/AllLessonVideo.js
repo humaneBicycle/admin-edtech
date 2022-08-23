@@ -6,22 +6,25 @@ import LinkHelper from "../utils/LinkHelper";
 import { useLocation } from "react-router";
 
 var videoFile;
-var uid;
+let uid;
 var credentials = {
   accessKeyId: "AKIA5PW5INIX25E2FKL7",
   secretAccessKey: "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",
 };
-var videoUId;
+let videoUId;
 
 export default function AllLessonVideo() {
   let [progress, setProgress] = useState(-1);
   const location = useLocation();
   let {unit} = location.state;
   // console.log(unit)
+
   let [activeLessonVideo, setActiveLessonVideo] = useState({
     type: "video",
-    unit_id: unit._id
+    unit_id: unit.unit_id,
+    video_id: "fasdfd"
   });
+  
 
   let updateUI = (e, mode) => {
     let val;
@@ -29,13 +32,14 @@ export default function AllLessonVideo() {
       val = e.target.value;
     }
 
-    if (mode == "video") {
+    if (mode === "video") {
       videoFile = e.target.files[0];
       activeLessonVideo[mode] = videoFile;
       uid = "id" + new Date().getTime();
       videoUId=uid+videoFile.name.split(".").pop();
-      console.log(videoUId)
-      setActiveLessonVideo({ ...activeLessonVideo, mode: videoFile });
+      console.log(uid)
+      // activeLessonVideo.video_id = uid;
+      setActiveLessonVideo({ ...activeLessonVideo, "video_id": uid });
     } else {
       activeLessonVideo[mode] = val;
       
@@ -44,21 +48,22 @@ export default function AllLessonVideo() {
   };
 
   let addLesson = async (event, lesson) => {
+    event.preventDefault();
     if (
       lesson.video == null ||
       lesson.thumbnail_url == undefined ||
-      lesson.name == undefined ||
+      lesson.title == undefined ||
       lesson.description == undefined 
     ) {
       alert("please complete the form");
       return;
     }
-    event.preventDefault();
+    // console.log(activeLessonVideo);
     uploadVideo(lesson.video);
   };
   let uploadVideo = async (video) => {
     
-    console.log(videoUId)
+    // console.log(videoUId)
 
     try {
       const parallelUploads3 = new Upload({
@@ -67,7 +72,7 @@ export default function AllLessonVideo() {
           new S3Client({}),
         params: {
           Bucket: "quasaredtech-adminuploads",
-          Key: videoUId,
+          Key: uid,
           Body: video,
         },
 
@@ -494,7 +499,7 @@ export default function AllLessonVideo() {
     endpointPromise.then(
       function (data) {
         console.log("Job created! ", data);
-        uploadResult(data)
+        uploadResult();
       },
       function (err) {
         console.log("Error", err);
@@ -502,24 +507,27 @@ export default function AllLessonVideo() {
     );
     
   };
-  let uploadResult=async (data)=>{
+  let uploadResult=async ()=>{
+    // console.log(uid)
     let resposnse, jsonData;
-        console.log("Success ", data);
+        // console.log("Success ", data);
         try{
-          console.log(activeLessonVideo)
+          
           resposnse = await fetch(LinkHelper.getLink()+"admin/lesson/create",{
+            
             method: "POST",
             headers: {
               
               'Content-Type': 'application/json'
             },
-            body: JSON.stringify({activeLessonVideo})
+            body: JSON.stringify(activeLessonVideo)
             
-          })
+          });
+          console.log("req sent")
 
-          console.log(activeLessonVideo);
+          // console.log(activeLessonVideo);
           try{
-            jsonData = await resposnse.json()
+            jsonData = await resposnse.json();
             console.log(jsonData)
             alert("success")
           }catch(e){
@@ -551,9 +559,9 @@ export default function AllLessonVideo() {
             className="form-control"
             id="floatingInput"
             placeholder="name@example.com"
-            value={activeLessonVideo.name}
+            value={activeLessonVideo.title}
             onChange={(event) => {
-              updateUI(event, "name");
+              updateUI(event, "title");
             }}
           />
           <label htmlFor="floatingInput">Title</label>
@@ -603,7 +611,7 @@ export default function AllLessonVideo() {
             type="button"
             className="btn btn-primary"
             onClick={(event) => {
-              updateUI(videoUId, "video_id");
+              // updateUI(event, "video_id");
               addLesson(event, activeLessonVideo);
             }}
           >

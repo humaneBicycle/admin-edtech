@@ -6,31 +6,29 @@ export default function Unit({
   type,
   time,
   message,
-  title,
+  unit_name,
   tags,
   total_lessons,
   is_paid,
   is_locked,
-  _id,
+  unit_id,
 }) {
   function editUnit(e) {
     e.preventDefault();
   }
   let unit = {
     has_prerequisite:has_prerequisite,
-    type:type,
-    time:time,
     message:message,
-    title:title,
+    unit_name:unit_name,
     tags:tags,
     total_lessons:total_lessons,
     is_paid:is_paid,
     is_locked:is_locked,
-    _id:_id,
+    unit_id:unit_id,
   }
 
   return (
-    <div className="mb-3" key={_id}>
+    <div className="mb-3" key={unit_id}>
       {/* <Link to="lessons" state={{ unit: unit }}> */}
       <div className="card" >
         <div className="card-body p-2">
@@ -44,13 +42,13 @@ export default function Unit({
             </div>
             <div className="col-md-8">
               <div className="card-body py-0 pt-2">
-                <h5 className="card-title">{title}</h5>
+                <h5 className="card-title">{unit_name}</h5>
                 <h6>
                 <span className="badge badge-primary ms-auto me-2">{type} </span>
                 <span className="badge badge-info me-2">{total_lessons} Lessons</span>
                 </h6>
                 <p className="card-text">
-                  {_id}
+                  {unit_id}
                 </p>
                 <p className="card-text">
                   {message}
