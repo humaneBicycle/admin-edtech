@@ -170,5 +170,5 @@ export default function AddLesson() {
 
 function addLesson(lesson, event) {
   event.preventDefault();
-  console.log(lesson);
+  console.log(lesson);  
 }
