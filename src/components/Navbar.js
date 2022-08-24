@@ -35,15 +35,15 @@ export default function Navbar() {
                 <i className="fas fa-book-open"></i> Events
               </li>
             </Link>
-            <Link to="/analytics">
+            {/* <Link to="/analytics">
               <li className="sidenav-link">
                 <i className="fas fa-book-open"></i> Analytics
               </li>
-            </Link>
-            <Link to="/discussion">
+            </Link> */}
+            <Link to="/forum">
               <li className="sidenav-link">
-                <i className="fas fa-book-open"></i> Discussion
-              </li>
+                <i className="fas fa-book-open"></i> Forum
+              </li> 
             </Link>
           </ul>
           <div className="d-flex  p-3">

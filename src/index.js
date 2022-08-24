@@ -8,7 +8,7 @@ import Courses from './pages/Courses';
 import Students from './pages/Students';
 import Events from './pages/Events';
 import Analytics from './pages/Analytics';
-import Discussion from './pages/Discussion';
+import Discussion from './pages/Forum';
 import Settings from './pages/Settings';
 import AdminProfile from './pages/AdminProfile';
 import Login from './pages/Login';
@@ -33,7 +33,7 @@ root.render(
         <Route path="/students" element={<Students />} />
         <Route path="/events" element={<Events />} />
         <Route path="/analytics" element={<Analytics />} />
-        <Route path="/discussion" element={<Discussion />} />
+        <Route path="/forum" element={<Discussion />} />
         <Route path="/settings" element={<Settings />} />
         <Route path="/admin-profile" element={<AdminProfile />} />
         <Route path="/login" element={<Login />} />

@@ -12,8 +12,10 @@ var credentials = {
   secretAccessKey: "9ClRajRwphj6iCt8EVAyZV4+NdO6XCXvpg3wo+EU",
 };
 let videoUId;
-
+let thumbnailFile;
+let thimbnailUId;
 export default function AllLessonVideo() {
+  
   let [progress, setProgress] = useState(-1);
   const location = useLocation();
   let {unit} = location.state;
@@ -37,8 +39,6 @@ export default function AllLessonVideo() {
       activeLessonVideo[mode] = videoFile;
       uid = "id" + new Date().getTime();
       videoUId=uid+videoFile.name.split(".").pop();
-      console.log(uid)
-      // activeLessonVideo.video_id = uid;
       setActiveLessonVideo({ ...activeLessonVideo, "video_id": uid });
     } else {
       activeLessonVideo[mode] = val;
@@ -528,10 +528,13 @@ export default function AllLessonVideo() {
           // console.log(activeLessonVideo);
           try{
             jsonData = await resposnse.json();
-            console.log(jsonData)
-            alert("success")
+            if(jsonData.succuss){
+              alert("success")
+              
+            }
+            console.log("response",jsonData)
           }catch(e){
-
+            console.log(e)
           }
         }catch(err){
           console.log(err)
@@ -553,7 +556,7 @@ export default function AllLessonVideo() {
               aria-valuemax="100"
             ></div>
           </div>
-        ) : null}
+        ) : <></>}
         <div className="form-floating mb-3">
           <input
             className="form-control"
@@ -586,12 +589,13 @@ export default function AllLessonVideo() {
             className="form-control"
             id="floatingInput"
             placeholder="name@example.com"
+            type="file"
             value={activeLessonVideo.thumbnail_url}
             onChange={(event) => {
               updateUI(event, "thumbnail_url");
             }}
           />
-          <label htmlFor="floatingInput">Thumbnail Url</label>
+          <label htmlFor="floatingInput">Thumbnail</label>
         </div>
         <div className="form-floating mb-3">
           <input

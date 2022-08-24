@@ -122,7 +122,7 @@ export default function Courses() {
 
   let updateChangedUnitOrder = async (event) => {
     console.log(unitJsonToUpdate)
-    
+      
     let response,data;
     try{
       response = await fetch(LinkHelper.getLink() + "admin/unit/update/position", {
@@ -279,7 +279,7 @@ export default function Courses() {
                                         ref={provided.innerRef}
                                         {...provided.dragHandleProps}
                                       >
-                                        <Link to="lessons" state={{ unit: unit }}>
+                                        
                                         <Unit
                                           key={unit.unit_id}
                                           has_prerequisite={unit.prerequisite.has_prerequisite.toString()}
@@ -293,7 +293,7 @@ export default function Courses() {
                                           is_locked={unit.is_locked}
                                           unit_id={unit.unit_id}
                                         />
-                                        </Link>
+                                        
                                       </li>
                                     )}
                                   </Draggable>

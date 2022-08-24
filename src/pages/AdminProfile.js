@@ -13,15 +13,17 @@ export default function AdminProfile() {
     <div className="row">
       <div className="col-md-2 border-end">
         <Navbar />
-
-        <button
-          type="button"
-          className="btn btn-outline-danger mx-4 my-4 "
-          onClick={logoutButton}
-        >
-          Logout <i className="fas fa-sign-in-alt ms-2"></i>
-        </button>
+        
       </div>
+      <div className="col-md-9">
+          <button
+            type="button"
+            className="btn btn-outline-danger mx-4 my-4 "
+            onClick={logoutButton}
+          >
+            Logout <i className="fas fa-sign-in-alt ms-2"></i>
+          </button>
+        </div>
     </div>
   );
 }
