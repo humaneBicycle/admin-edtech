@@ -18,6 +18,7 @@ import AddUnit from './pages/AddUnit';
 import EditUnit from './pages/EditUnit';
 import AddLesson from './pages/AddLesson';
 import Lessons from './pages/Lessons';
+import StudentProfile from './pages/StudentProfile';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -42,6 +43,7 @@ root.render(
         <Route path="/course/edit-unit" element={<EditUnit />} />
         <Route path="/course/add-lesson" element={<AddLesson />} />
         <Route path="/course/lessons" element={<Lessons />} />
+        <Route path="/student/profile" element={<StudentProfile />} />
         </>
     }
 
