@@ -84,6 +84,13 @@ export default function Discussion() {
     }
   };
 
+  let deleteQuestion = async (id,event) => {
+    console.log(id)
+    let response, data;
+    // try{
+    //   response = await fetch(LinkHelper.getLink() + "/admin/forum/deleteQuestion", {
+    // }
+  }
   return (
     <div className="page-position-default">
       <div className="row">
@@ -131,6 +138,11 @@ export default function Discussion() {
                             <h5>{index + 1 + ". " +question.head}</h5>
                             { question.body}
                             <h6>{ "Total Likes: "+question.total_likes}</h6>
+                            <div 
+                              className="btn btn-danger" onClick={(event)=>{
+                                deleteQuestion(question._id, event);
+                                
+                              }}>Delete</div>
                           </li>
                         ) : (
                           <li
@@ -142,7 +154,12 @@ export default function Discussion() {
                           >
                             <h5>{index + 1 + ". " +question.head}</h5>
                             { question.body}  
-                            <h6>{ "Total Likes: "+question.total_likes}</h6>  
+                            <h6>{ "Total Likes: "+question.total_likes}</h6>
+                            <div 
+                              className="btn btn-danger" onClick={(event)=>{
+                                deleteQuestion(question._id, event);
+                                
+                              }}>Delete</div>  
                           </li>
                         )}
                       </>

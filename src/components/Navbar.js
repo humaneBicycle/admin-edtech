@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+let logo = require("../images/logo_edtech.png");
 
 export default function Navbar() {
   return (
@@ -10,9 +11,16 @@ export default function Navbar() {
             className="bg-image hover-overlay ripple p-3 border-bottom"
             data-mdb-ripple-color="light"
           >
+            {/* <img
+              className="img-fluid"
+              
+              src="https://www.google.com/images/branding/googlelogo/2x/googlelogo_dark_color_92x30dp.png"
+              alt="admin"
+            /> */}
             <img
               className="img-fluid"
-              src="https://www.google.com/images/branding/googlelogo/2x/googlelogo_dark_color_92x30dp.png"
+
+              src={logo}
               alt="admin"
             />
             <Link to="/">
@@ -27,12 +35,12 @@ export default function Navbar() {
             </Link>
             <Link to="/students">
               <li className="sidenav-link">
-                <i className="fas fa-book-open"></i> Students
+              <i class="fas fa-user-alt"></i> Students
               </li>
             </Link>
             <Link to="/events">
               <li className="sidenav-link">
-                <i className="fas fa-book-open"></i> Events
+              <i class="fas fa-calendar"></i> Events
               </li>
             </Link>
             {/* <Link to="/analytics">
@@ -42,11 +50,11 @@ export default function Navbar() {
             </Link> */}
             <Link to="/forum">
               <li className="sidenav-link">
-                <i className="fas fa-book-open"></i> Forum
+              <i class="fas fa-comment-alt"></i> Forum
               </li> 
             </Link>
           </ul>
-          <div className="d-flex  p-3">
+          <div className=" myicons_container  mx-4">
             <Link to="/settings" className="badge badge-info me-3">
               Settings
             </Link>
