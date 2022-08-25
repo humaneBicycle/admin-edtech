@@ -8,6 +8,7 @@ export default function Discussion() {
   let [isAnswerLoaded, setIsAnswerLoaded] = useState(false);
   let [activeQuestionIndex, setActiveQuestionIndex] = useState(0);
   let [activeAnswerIndex, setActiveAnswerIndex] = useState(0);
+  let [spinner, setSpinner] = useState(false);
 
   useEffect(() => {
     getQuestions();
@@ -84,13 +85,49 @@ export default function Discussion() {
     }
   };
 
-  let deleteQuestion = async (id,event) => {
-    console.log(id)
+  let deleteQuestion = async (id, event) => {
+    setSpinner(true);
+    event.preventDefault();
+    console.log(id);
     let response, data;
-    // try{
-    //   response = await fetch(LinkHelper.getLink() + "/admin/forum/deleteQuestion", {
-    // }
-  }
+    try {
+      response = await fetch(
+        LinkHelper.getLink() + "/admin/forum/question/remove",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            user_id: localStorage.getItem("user_id"),
+            question_id: id,
+          }),
+        }
+      );
+      try {
+        data = await response.json();
+        if (data.success) {
+          console.log(data);
+          alert("Question deleted successfully");
+          setSpinner(false);
+          window.location.reload();
+        } else {
+          setSpinner(false);
+          throw new Error(data.message);
+        }
+      } catch (err) {
+        alert("Error");
+        setSpinner(false);
+        setSpinner(false);
+
+        console.log("error");
+      }
+    } catch (err) {
+      setSpinner(false);
+
+      console.log(err);
+    }
+  };
   return (
     <div className="page-position-default">
       <div className="row">
@@ -119,6 +156,20 @@ export default function Discussion() {
               </div>
             </div>
           </div>
+          {spinner ? (
+            <>
+              <div class="d-flex">
+                <div
+                  class="spinner-grow text-primary m-auto  my-5"
+                  role="status"
+                >
+                  <span class="visually-hidden">Loading...</span>
+                </div>
+              </div>
+            </>
+          ) : (
+            <></>
+          )}
           {isLoaded ? (
             <>
               <div className="row">
@@ -135,14 +186,17 @@ export default function Discussion() {
                               handleQuestionClick(question, index);
                             }}
                           >
-                            <h5>{index + 1 + ". " +question.head}</h5>
-                            { question.body}
-                            <h6>{ "Total Likes: "+question.total_likes}</h6>
-                            <div 
-                              className="btn btn-danger" onClick={(event)=>{
+                            <h5>{index + 1 + ". " + question.head}</h5>
+                            {question.body}
+                            <h6>{"Total Likes: " + question.total_likes}</h6>
+                            <div
+                              className="btn btn-danger"
+                              onClick={(event) => {
                                 deleteQuestion(question._id, event);
-                                
-                              }}>Delete</div>
+                              }}
+                            >
+                              Delete
+                            </div>
                           </li>
                         ) : (
                           <li
@@ -152,14 +206,17 @@ export default function Discussion() {
                               handleQuestionClick(question, index);
                             }}
                           >
-                            <h5>{index + 1 + ". " +question.head}</h5>
-                            { question.body}  
-                            <h6>{ "Total Likes: "+question.total_likes}</h6>
-                            <div 
-                              className="btn btn-danger" onClick={(event)=>{
+                            <h5>{index + 1 + ". " + question.head}</h5>
+                            {question.body}
+                            <h6>{"Total Likes: " + question.total_likes}</h6>
+                            {/* <div
+                              className="btn btn-danger"
+                              onClick={(event) => {
                                 deleteQuestion(question._id, event);
-                                
-                              }}>Delete</div>  
+                              }}
+                            >
+                              Delete
+                            </div> */}
                           </li>
                         )}
                       </>

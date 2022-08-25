@@ -27,7 +27,7 @@ export default function Navbar() {
               <div className="mask"></div>
             </Link>
           </div>
-          <ul className="mx-4 my-4 navbar-nav fs-3">
+          <ul className="mx-2 my-4 navbar-nav fs-3">
             <Link to="/course">
               <li className="sidenav-link">
                 <i className="fas fa-book-open"></i> Course
@@ -51,6 +51,11 @@ export default function Navbar() {
             <Link to="/forum">
               <li className="sidenav-link">
               <i class="fas fa-comment-alt"></i> Forum
+              </li> 
+            </Link>
+            <Link to="/notifications">
+              <li className="sidenav-link">
+              <i class="fas fa-bullhorn"></i> Notifications
               </li> 
             </Link>
           </ul>

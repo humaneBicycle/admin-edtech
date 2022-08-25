@@ -19,6 +19,7 @@ import EditUnit from './pages/EditUnit';
 import AddLesson from './pages/AddLesson';
 import Lessons from './pages/Lessons';
 import StudentProfile from './pages/StudentProfile';
+import Notifications from './pages/Notifications';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -34,6 +35,7 @@ root.render(
         <Route path="/students" element={<Students />} />
         <Route path="/events" element={<Events />} />
         <Route path="/analytics" element={<Analytics />} />
+        <Route path="/notifications" element={<Notifications />} />
         <Route path="/forum" element={<Discussion />} />
         <Route path="/settings" element={<Settings />} />
         <Route path="/admin-profile" element={<AdminProfile />} />
