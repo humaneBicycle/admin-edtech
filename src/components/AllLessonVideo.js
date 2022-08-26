@@ -6,11 +6,13 @@ import LinkHelper from "../utils/LinkHelper";
 import { useLocation } from "react-router";
 
 var videoFile;
+
 let uid;
-var credentials = {
-  accessKeyId: "AKIA5PW5INIX25E2FKL7",
-  secretAccessKey: "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",
-};
+let credentials = {
+  accessKeyId: process.env.REACT_APP_ACCESS_KEY_ID,
+  secretAccessKey: process.env.REACT_APP_ACCESS_KEY_SECRET,
+};  
+
 let videoUId;
 let thumbnailFile;
 let thimbnailUId;
@@ -19,6 +21,7 @@ export default function AllLessonVideo() {
   let [progress, setProgress] = useState(-1);
   const location = useLocation();
   let {unit} = location.state;
+  // console.log(unit)
   // console.log(unit)
 
   let [activeLessonVideo, setActiveLessonVideo] = useState({

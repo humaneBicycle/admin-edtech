@@ -5,10 +5,10 @@ let logo = require("../images/logo_edtech.png");
 export default function Navbar() {
   return (
     <>
-      <div>
-        <div className="vertical-nav ">
+      <div className="">
+        <div className="vertical-nav">
           <div
-            className="bg-image hover-overlay ripple p-3 border-bottom"
+            className="bg-image hover-overlay ripple p-3 border-bottom "
             data-mdb-ripple-color="light"
           >
             {/* <img
@@ -18,8 +18,8 @@ export default function Navbar() {
               alt="admin"
             /> */}
             <img
-              className="img-fluid"
-
+              className="img-fluid "
+              style={{"position":"fixed","top":"1rem","left":"1rem","width":"13rem","height":"7rem"}}
               src={logo}
               alt="admin"
             />
@@ -27,7 +27,7 @@ export default function Navbar() {
               <div className="mask"></div>
             </Link>
           </div>
-          <ul className="mx-2 my-4 navbar-nav fs-3">
+          <ul className="mx-2 my-4 navbar-nav fs-3 side_nav_container ">
             <Link to="/course">
               <li className="sidenav-link">
                 <i className="fas fa-book-open"></i> Course

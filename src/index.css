@@ -19,6 +19,15 @@ body {
   position: fixed;
         bottom: 2rem;
 }
+
+.side_nav_container{
+  position: fixed;
+        top: 8rem;
+}
+.side_nav_container_logo{
+  position: fixed;
+        top: 1rem;
+}
 /* body div{
   background-color: #000;
   color: #eee;

@@ -2,21 +2,29 @@ import React, { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import LinkHelper from "../utils/LinkHelper";
 
-let questions, answers;
+let questions=[];
+let answers=[];
 export default function Discussion() {
+  let [loadedPageQuestion , setLoadedPageQuestion] = useState(1);
   let [isLoaded, setIsLoaded] = useState(false);
   let [isAnswerLoaded, setIsAnswerLoaded] = useState(false);
   let [activeQuestionIndex, setActiveQuestionIndex] = useState(0);
   let [activeAnswerIndex, setActiveAnswerIndex] = useState(0);
   let [spinner, setSpinner] = useState(false);
-
+  let [isAllQuestionLoaded,setIsAllQuestionLoaded] = useState(false);
   useEffect(() => {
-    getQuestions();
+    getQuestions(1);
+
   }, []);
 
   let getQuestions = async () => {
+    console.log(loadedPageQuestion);
     let response, data;
     try {
+      let json={
+        page:loadedPageQuestion
+      }
+      // console.log(json)
       response = await fetch(
         LinkHelper.getLink() + "/admin/forum/getAllQuestion",
         {
@@ -24,26 +32,33 @@ export default function Discussion() {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({}),
+          body: JSON.stringify(json),
         }
       );
       try {
         data = await response.json();
         if (data.success) {
-          questions = data.data.questions;
+          questions.push(...data.data.questions);
           setIsLoaded(true);
+          setLoadedPageQuestion(loadedPageQuestion+1);
+          console.log(data.pages,loadedPageQuestion);
+          if(data.pages===loadedPageQuestion){
+            // console.log("if reached")
+            setIsAllQuestionLoaded(true);
+          }
+          console.log(loadedPageQuestion);
           console.log(questions);
           getAnswers(data.data.questions._id, 0);
         } else {
           throw new Error(data.message);
         }
       } catch {
-        alert("Error");
+        alert("Error"+data.message);
         console.log("error");
       }
     } catch (error) {
       console.log(error);
-      alert("Error");
+      alert("Error"+data.message);
     }
   };
 
@@ -69,7 +84,7 @@ export default function Discussion() {
         data = await response.json();
         if (data.success) {
           answers = data.data.answers;
-          console.log(answers);
+          // console.log(answers);
           setActiveAnswerIndex(index);
           setIsAnswerLoaded(true);
         } else {
@@ -86,6 +101,7 @@ export default function Discussion() {
   };
 
   let deleteQuestion = async (id, event) => {
+    // console.log(id,event)
     setSpinner(true);
     event.preventDefault();
     console.log(id);
@@ -94,7 +110,7 @@ export default function Discussion() {
       response = await fetch(
         LinkHelper.getLink() + "/admin/forum/question/remove",
         {
-          method: "POST",
+          method: "DELETE",
           headers: {
             "Content-Type": "application/json",
           },
@@ -129,9 +145,9 @@ export default function Discussion() {
     }
   };
   return (
-    <div className="page-position-default">
-      <div className="row">
-        <div className="col-md-2">
+    < >
+      <div className="row ">
+        <div className="col-md-2 border-end">
           <Navbar />
         </div>
 
@@ -222,6 +238,17 @@ export default function Discussion() {
                       </>
                     ))}
                   </ul>
+                  
+                  <button className="btn btn-primary mx-4 my-4" onClick={() => {
+                    if(!isAllQuestionLoaded){
+
+                      getQuestions(loadedPageQuestion+1);
+                    }else{
+                      alert("All questions are loaded");
+                    }
+                    
+                  
+                  }}>Load More Questions</button>
                 </div>
                 <div className="col-md-7">
                   <h2>Answers</h2>
@@ -270,6 +297,6 @@ export default function Discussion() {
           )}
         </div>
       </div>
-    </div>
+    </>
   );
 }

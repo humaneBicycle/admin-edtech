@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Navbar from "../components/Navbar";
+import { useLocation } from "react-router-dom";
 
 import AllLessonArticle from "../components/AllLessonArticle";
 import AllLessonVideo from "../components/AllLessonVideo";
@@ -8,20 +9,8 @@ import Event from "../components/Event";
 import Payment from "../components/Payment";
 
 export default function AddLesson() {
-  let [lesson, setLesson] = useState({});
+  let {unit} = useLocation().state;
 
-  let updateUI = (e, name) => {
-    let val = e.target.value;
-    if (name == "is_paid") {
-      if (e.target.value == "on") {
-        val = true;
-      } else {
-        val = false;
-      }
-    }
-    lesson[name] = val;
-    setLesson({ ...lesson, name: val });
-  };
 
   return (
     <div className="row">
@@ -34,6 +23,7 @@ export default function AddLesson() {
           <div className="NavHeading ms-4">
             <h2>Add Lesson </h2>
           </div>
+          
 
           <div className=" ms-5 me-auto NavSearch">
             <div className="input-group rounded d-flex flex-nowrap">
@@ -50,6 +40,9 @@ export default function AddLesson() {
             </div>
           </div>
         </div>
+        <div className="NavHeading ms-4">
+            <h5>Adding to: {unit.unit_name} </h5><br></br>
+          </div>
         <ul class="nav nav-tabs mb-3" id="ex1" role="tablist">
           <li class="nav-item" role="presentation">
             <a

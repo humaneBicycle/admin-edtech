@@ -11,7 +11,7 @@ export default function Notifications() {
         <div className="col-md-10">
           <div className="Navbar  d-flex justify-content-start mt-3 mb-4 border-bottom">
             <div className="NavHeading ms-4">
-              <h2>Forum</h2>
+              <h2>Notifications</h2>
             </div>
 
             <div className=" ms-5 me-auto NavSearch">
