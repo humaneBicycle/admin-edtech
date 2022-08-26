@@ -8,12 +8,15 @@ let users;
 
 export default function Students() {
   let [isLoaded, setIsLoaded] = useState(false);
+  let [isAllLoaded, setIsAllLoaded]= useState(false);
+  let [loadedPageStudent , setLoadedPageStudent] = useState(1);
+
 
   useEffect(() => {
     getUsers(1);
   }, []);
 
-  let getUsers = async (page) => {
+  let getUsers = async () => {
     let response, data;
     try {
       response = await fetch(LinkHelper.getLink() + "/admin/users", {
@@ -23,14 +26,19 @@ export default function Students() {
         },
         body: JSON.stringify({
           user_id: localStorage.getItem("user_id"),
-          page: page,
+          page: loadedPageStudent,
         }),
       });
       try {
         data = await response.json();
         if (data.success) {
           users=data.data.users;
-          console.log(data.data.users);
+          console.log(data);
+          if(data.pages===loadedPageStudent){
+            setLoadedPageStudent(loadedPageStudent);
+            setIsAllLoaded(true);
+          }
+          setLoadedPageStudent(loadedPageStudent+1);
           setIsLoaded(true);
         } else {
           throw new Error(data.message);
@@ -92,6 +100,14 @@ export default function Students() {
                 </Link>
               </>
             ))}
+        <button className="btn btn-primary mx-4 my-4" onClick={()=>{
+          if(!isAllLoaded){
+            getUsers();
+          }{
+            alert("All Loaded");
+          }
+        }}>Load More</button>
+
           </>
         ) : (
           <>
