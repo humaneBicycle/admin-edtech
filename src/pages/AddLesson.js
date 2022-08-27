@@ -11,7 +11,7 @@ import Payment from "../components/Payment";
 
 export default function AddLesson() {
   let [isLoaded , setIsLoaded] = useState(false);
-  let lessons=[];
+  let [lessons,setLessons]=useState([]);
 
   let {unit} = useLocation().state;
   useEffect(() => {
@@ -34,8 +34,9 @@ export default function AddLesson() {
         data = await response.json();
         console.log(data);
 
-        lessons.push(...data.data);
-        console.log(lessons);
+        // lessons.push(...data.data);
+        setLessons([...lessons,...data.data])
+        // console.log(lessons);
         setIsLoaded(true);
       } catch {
         console.log("error");

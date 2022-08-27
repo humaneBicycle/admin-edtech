@@ -5,14 +5,19 @@ import LinkHelper from "../utils/LinkHelper";
 export default function AllLessonArticle(props) {
   let location = useLocation();
   let { unit } = location.state;
+  let [spinner,setSpinner]=useState(false);
   let articleInit = {
     type: "article",
     unit_id: unit.unit_id,
+    prerequisite:{
+      has_prerequisite:true
+    }
   };
   let lessons = props.lessons;
-  console.log(lessons)
+  // console.log(lessons);
 
   let [article, setArticle] = useState(articleInit);
+  console.log(article)
   let [hasPrerequisite, setHasPrerequisite] = useState(true);
 
   let handleArticleChange = (mode, e) => {
@@ -23,40 +28,62 @@ export default function AllLessonArticle(props) {
 
   let prerequisiteItemClick = (e, lesson) => {
     console.log(lesson);
+    setArticle({...article,prerequisite:{...article.prerequisite,on:lesson._id}})
+    console.log(article);
   };
 
   let uploadArticle = async () => {
-    console.log(article);
-    // let response, data;
-    // try {
-    //   response = await fetch(LinkHelper.getLink() + "/admin/lesson/create", {
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify(articleToUpload),
-    //   });
-    //   try {
-    //     data = await response.json();
-    //     if (data.success) {
-    //       alert("Article Uploaded");
-    //     } else {
-    //       throw new Error(data.message);
-    //     }
-    //   } catch {
-    //     alert("Error");
-    //     console.log("error");
-    //   }
-    // } catch (error) {
-    //   console.log(error);
-    //   alert("Error");
-    // }
+    if(article.body==undefined || article.head==undefined || article.title==undefined||article.prerequisite.has_prerequisite){
+      if(article.prerequisite.has_prerequisite){
+        if( article.prerequisite.on==undefined||article.prerequisite.time==undefined||article.prerequisite.message==undefined){
+          alert("Please fill all the fields")
+          return;
+        }
+      }
+        
+    }
+    // console.log("done",article);
+    let response, data;
+    try {
+      response = await fetch(LinkHelper.getLink() + "/admin/lesson/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(article),
+      });
+      try {
+        data = await response.json();
+        if (data.success) {
+          alert("Article Uploaded");
+          window.location.href="/course";
+        } else {
+          throw new Error(data.message);
+        }
+      } catch {
+        alert("Error");
+        console.log("error");
+      }
+    } catch (error) {
+      console.log(error);
+      alert("Error");
+    }
   };
 
   return (
     <div>
       <>
         <div className="mb-3">
+          {spinner?
+            <div class="d-flex">
+            <div
+              class="spinner-grow text-primary m-auto  my-5"
+              role="status"
+            >
+              <span class="visually-hidden">Loading...</span>
+            </div>
+          </div>
+          :<></>}
           <label htmlFor="exampleFormControlInput1" className="form-label">
             Title
           </label>
@@ -112,7 +139,7 @@ export default function AllLessonArticle(props) {
                 type="radio"
                 name="flexRadioDefault"
                 id="flexRadioDefault2"
-                defaultChecked=""
+                defaultChecked="truei"
               />
               <label className="form-check-label" htmlFor="flexRadioDefault2">
                 Completion Auto
@@ -128,6 +155,8 @@ export default function AllLessonArticle(props) {
                 id="flexSwitchCheckChecked"
                 defaultChecked="true"
                 onChange={(event) => {
+                  // article.prerequisite.has_prerequisite=!hasPrerequisite
+                  setArticle({...article,prerequisite:{...article.prerequisite,has_prerequisite:!hasPrerequisite}})
                   setHasPrerequisite(!hasPrerequisite);
                 }}
               />
@@ -156,9 +185,8 @@ export default function AllLessonArticle(props) {
                       className="dropdown-menu"
                       aria-labelledby="dropdownMenuButton"
                     >
-                      
                       {lessons.map((lesson) => {
-                        console.log(lessons)
+                        // console.log(lessons);
                         return (
                           <li
                             onClick={(e) => {
@@ -171,6 +199,35 @@ export default function AllLessonArticle(props) {
                       })}
                     </ul>
                   </div>
+                  <>
+                    <label htmlFor="inputPassword5" className="form-label">
+                      After Time in Seconds
+                    </label>
+                    <input  
+                      id="inputPassword5"
+                      className="form-control"
+                      aria-describedby="passwordHelpBlock"
+                      type="number"
+                      value={article.prerequisite.time}
+                      onChange={(event)=>{
+                        setArticle({...article,prerequisite:{...article.prerequisite,time:event.target.value}})
+                      }}
+                    />
+                    
+                    <label htmlFor="inputPassword5" className="form-label">
+                      Prerequisite Message
+                    </label>
+                    <input  
+                      id="inputPassword5"
+                      className="form-control"
+                      aria-describedby="passwordHelpBlock"
+                      value={article.prerequisite.message}
+                      onChange={(event)=>{
+                        setArticle({...article,prerequisite:{...article.prerequisite,message:event.target.value}})
+                      }}/>
+
+                   
+                  </>
                 </>
               </>
             ) : (
@@ -178,7 +235,7 @@ export default function AllLessonArticle(props) {
             )}
           </div>
 
-          <button className="btn btn-primary mx-4 my-4" onClick={uploadArticle}>
+          <button className="btn btn-primary my-2" onClick={uploadArticle}>
             Submit
           </button>
         </div>
