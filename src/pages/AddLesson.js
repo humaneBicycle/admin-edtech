@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import { useLocation } from "react-router-dom";
+import LinkHelper from "../utils/LinkHelper";
 
 import AllLessonArticle from "../components/AllLessonArticle";
 import AllLessonVideo from "../components/AllLessonVideo";
@@ -9,7 +10,41 @@ import Event from "../components/Event";
 import Payment from "../components/Payment";
 
 export default function AddLesson() {
+  let [isLoaded , setIsLoaded] = useState(false);
+  let lessons=[];
+
   let {unit} = useLocation().state;
+  useEffect(() => {
+    getLessons();
+  },[])
+  let getLessons = async () => {
+    let response, data;
+    try {
+      response = await fetch(LinkHelper.getLink() + "/admin/lessons", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          unit_id: unit.unit_id,
+          user_id: localStorage.getItem("user_id"),
+        }),
+      });
+      try {
+        data = await response.json();
+        console.log(data);
+
+        lessons.push(...data.data);
+        console.log(lessons);
+        setIsLoaded(true);
+      } catch {
+        console.log("error");
+      }
+    } catch (error) {
+      console.log(error);
+      alert("Error");
+    }
+  };
 
 
   return (
@@ -40,6 +75,7 @@ export default function AddLesson() {
             </div>
           </div>
         </div>
+        {isLoaded ? (<>
         <div className="NavHeading ms-4">
             <h5>Adding to: {unit.unit_name} </h5><br></br>
           </div>
@@ -128,7 +164,7 @@ export default function AddLesson() {
           role="tabpanel"
           aria-labelledby="ex1-tab-2"
         >
-          <AllLessonArticle />
+          <AllLessonArticle lessons={lessons} />
         </div>
         <div
           class="tab-pane fade"
@@ -155,13 +191,23 @@ export default function AddLesson() {
           <Payment />
         </div>
       </div>
+          
+        </> ) : (
+          <>
+            <div class="d-flex">
+                <div
+                  class="spinner-grow text-primary m-auto  my-5"
+                  role="status"
+                >
+                  <span class="visually-hidden">Loading...</span>
+                </div>
+              </div>
+          </>
+        )}
       {/* <!-- Tabs content --> */}
       </div>
     </div>
   );
 }
 
-function addLesson(lesson, event) {
-  event.preventDefault();
-  console.log(lesson);  
-}
+

@@ -6,7 +6,7 @@ export default function Navbar() {
   return (
     <>
       <div className="">
-        <div className="vertical-nav">
+        <div className="vertical-nav  ">
           <div
             className="bg-image hover-overlay ripple p-3 border-bottom "
             data-mdb-ripple-color="light"
