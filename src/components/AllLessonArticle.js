@@ -39,6 +39,9 @@ export default function AllLessonArticle(props) {
           alert("Please fill all the fields")
           return;
         }
+      }else{
+        alert("Please fill all the fields")
+        return;
       }
         
     }
