@@ -25,4 +25,5 @@ yarn-error.log*
 # code workspace
 edtech-admin-panel.code-workspace
 
+.env.development
 .env

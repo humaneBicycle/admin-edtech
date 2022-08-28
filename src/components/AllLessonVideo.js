@@ -21,8 +21,6 @@ export default function AllLessonVideo() {
   let [progress, setProgress] = useState(-1);
   const location = useLocation();
   let {unit} = location.state;
-  // console.log(unit)
-  // console.log(unit)
 
   let [activeLessonVideo, setActiveLessonVideo] = useState({
     type: "video",

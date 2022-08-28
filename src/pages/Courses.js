@@ -282,6 +282,7 @@ export default function Courses() {
                                         
                                         <Unit
                                           key={unit.unit_id}
+                                          image_id={unit.image_url}
                                           has_prerequisite={unit.prerequisite.has_prerequisite.toString()}
                                           type={unit.prerequisite.type}
                                           time={unit.prerequisite.time}

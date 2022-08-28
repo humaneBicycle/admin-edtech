@@ -5,19 +5,19 @@ import LinkHelper from "../utils/LinkHelper";
 export default function AllLessonArticle(props) {
   let location = useLocation();
   let { unit } = location.state;
-  let [spinner,setSpinner]=useState(false);
+  let [spinner, setSpinner] = useState(false);
   let articleInit = {
     type: "article",
     unit_id: unit.unit_id,
-    prerequisite:{
-      has_prerequisite:true
-    }
+    prerequisite: {
+      has_prerequisite: true,
+    },
   };
   let lessons = props.lessons;
   // console.log(lessons);
 
   let [article, setArticle] = useState(articleInit);
-  console.log(article)
+  console.log(article);
   let [hasPrerequisite, setHasPrerequisite] = useState(true);
 
   let handleArticleChange = (mode, e) => {
@@ -28,24 +28,35 @@ export default function AllLessonArticle(props) {
 
   let prerequisiteItemClick = (e, lesson) => {
     console.log(lesson);
-    setArticle({...article,prerequisite:{...article.prerequisite,on:lesson._id}})
+    setArticle({
+      ...article,
+      prerequisite: { ...article.prerequisite, on: lesson._id },
+    });
     console.log(article);
   };
 
   let uploadArticle = async () => {
-    if(article.body==undefined || article.head==undefined || article.title==undefined||article.prerequisite.has_prerequisite){
-      if(article.prerequisite.has_prerequisite){
-        if( article.prerequisite.on==undefined||article.prerequisite.time==undefined||article.prerequisite.message==undefined){
-          alert("Please fill all the fields")
+    console.log("done", article);
+    if (
+      article.body == undefined ||
+      article.head == undefined ||
+      article.title == undefined ||
+      article.prerequisite.has_prerequisite
+    ) {
+      if (article.prerequisite.has_prerequisite) {
+        if (
+          article.prerequisite.on == undefined ||
+          article.prerequisite.time == undefined ||
+          article.prerequisite.message == undefined
+        ) {
+          alert("Please fill all the fields");
           return;
         }
-      }else{
-        alert("Please fill all the fields")
+      } else {
+        alert("Please fill all the fields");
         return;
       }
-        
     }
-    // console.log("done",article);
     let response, data;
     try {
       response = await fetch(LinkHelper.getLink() + "/admin/lesson/create", {
@@ -59,7 +70,7 @@ export default function AllLessonArticle(props) {
         data = await response.json();
         if (data.success) {
           alert("Article Uploaded");
-          window.location.href="/course";
+          window.location.href = "/course";
         } else {
           throw new Error(data.message);
         }
@@ -77,16 +88,15 @@ export default function AllLessonArticle(props) {
     <div>
       <>
         <div className="mb-3">
-          {spinner?
+          {spinner ? (
             <div class="d-flex">
-            <div
-              class="spinner-grow text-primary m-auto  my-5"
-              role="status"
-            >
-              <span class="visually-hidden">Loading...</span>
+              <div class="spinner-grow text-primary m-auto  my-5" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
             </div>
-          </div>
-          :<></>}
+          ) : (
+            <></>
+          )}
           <label htmlFor="exampleFormControlInput1" className="form-label">
             Title
           </label>
@@ -131,6 +141,9 @@ export default function AllLessonArticle(props) {
                 type="radio"
                 name="flexRadioDefault"
                 id="flexRadioDefault1"
+                onChange={() => {
+                  setArticle({ ...article, completetion: "manual" });
+                }}
               />
               <label className="form-check-label" htmlFor="flexRadioDefault1">
                 Completion Manual
@@ -142,7 +155,10 @@ export default function AllLessonArticle(props) {
                 type="radio"
                 name="flexRadioDefault"
                 id="flexRadioDefault2"
-                defaultChecked="truei"
+                defaultChecked="true"
+                onChange={() => {
+                  setArticle({ ...article, completetion: "auto" });
+                }}
               />
               <label className="form-check-label" htmlFor="flexRadioDefault2">
                 Completion Auto
@@ -159,7 +175,13 @@ export default function AllLessonArticle(props) {
                 defaultChecked="true"
                 onChange={(event) => {
                   // article.prerequisite.has_prerequisite=!hasPrerequisite
-                  setArticle({...article,prerequisite:{...article.prerequisite,has_prerequisite:!hasPrerequisite}})
+                  setArticle({
+                    ...article,
+                    prerequisite: {
+                      ...article.prerequisite,
+                      has_prerequisite: !hasPrerequisite,
+                    },
+                  });
                   setHasPrerequisite(!hasPrerequisite);
                 }}
               />
@@ -188,48 +210,62 @@ export default function AllLessonArticle(props) {
                       className="dropdown-menu"
                       aria-labelledby="dropdownMenuButton"
                     >
-                      {lessons.map((lesson) => {
-                        // console.log(lessons);
-                        return (
-                          <li
-                            onClick={(e) => {
-                              prerequisiteItemClick(e, lesson);
-                            }}
-                          >
-                            {lesson.title}
-                          </li>
-                        );
-                      })}
+                      {lessons.length !== 0 ? (
+                        lessons.map((lesson) => {
+                          return (
+                            <li
+                              onClick={(e) => {
+                                prerequisiteItemClick(e, lesson);
+                              }}
+                            >
+                              {lesson.title}
+                            </li>
+                          );
+                        })
+                      ) : (
+                        <li>No Lessons Found. Can't set Prerequisite</li>
+                      )}
                     </ul>
                   </div>
                   <>
                     <label htmlFor="inputPassword5" className="form-label">
                       After Time in Seconds
                     </label>
-                    <input  
+                    <input
                       id="inputPassword5"
                       className="form-control"
                       aria-describedby="passwordHelpBlock"
                       type="number"
                       value={article.prerequisite.time}
-                      onChange={(event)=>{
-                        setArticle({...article,prerequisite:{...article.prerequisite,time:event.target.value}})
+                      onChange={(event) => {
+                        setArticle({
+                          ...article,
+                          prerequisite: {
+                            ...article.prerequisite,
+                            time: event.target.value,
+                          },
+                        });
                       }}
                     />
-                    
+
                     <label htmlFor="inputPassword5" className="form-label">
                       Prerequisite Message
                     </label>
-                    <input  
+                    <input
                       id="inputPassword5"
                       className="form-control"
                       aria-describedby="passwordHelpBlock"
                       value={article.prerequisite.message}
-                      onChange={(event)=>{
-                        setArticle({...article,prerequisite:{...article.prerequisite,message:event.target.value}})
-                      }}/>
-
-                   
+                      onChange={(event) => {
+                        setArticle({
+                          ...article,
+                          prerequisite: {
+                            ...article.prerequisite,
+                            message: event.target.value,
+                          },
+                        });
+                      }}
+                    />
                   </>
                 </>
               </>
