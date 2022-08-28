@@ -34,7 +34,8 @@ export default function Login() {
         }else{
           alert("Login Successful");
           setloginButton(false);
-          StorageHelper.set("token",data.data._id);
+          // console.log(data.data.admin_id)
+          StorageHelper.set("token",data.data.admin_id);
           window.location.href = "/";
         }
 

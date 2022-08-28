@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import LinkHelper from "../utils/LinkHelper";
+import StorageHelper from "../utils/StorageHelper";
 let data, response;
 export default function Lessons() {
   let [isLoaded, setIsLoaded] = useState(false);
@@ -22,7 +23,7 @@ export default function Lessons() {
         },
         body: JSON.stringify({
           unit_id: unit.unit_id,
-          user_id: localStorage.getItem("user_id"),
+          admin_id: StorageHelper.get("token"),
         }),
       });
       try {

@@ -5,6 +5,7 @@ import LinkHelper from "../utils/LinkHelper";
 import { Upload } from "@aws-sdk/lib-storage";
 import { S3Client, S3 } from "@aws-sdk/client-s3";
 import * as AWSManager from "../utils/AWSManager";
+import StorageHelper from "../utils/StorageHelper";
 // require("dotenv").config();
 
 let image;
@@ -20,6 +21,7 @@ export default function AddUnit() {
   let units = location.state.course.units;
   let [hasPrerequisite, setHasPrerequisite] = useState(false);
   let [unit, setUnit] = useState({
+    admin_id: StorageHelper.get("token"),
     is_paid: false,
     prerequisite: {
       has_prerequisite: false,

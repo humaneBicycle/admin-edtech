@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import LinkHelper from "../utils/LinkHelper";
+import StorageHelper from "../utils/StorageHelper";
 
 let questions=[];
 let answers=[];
@@ -22,6 +23,7 @@ export default function Discussion() {
     let response, data;
     try {
       let json={
+        admin_id: StorageHelper.get("token"),
         page:loadedPageQuestion
       }
       // console.log(json)
@@ -77,7 +79,7 @@ export default function Discussion() {
         },
         body: JSON.stringify({
           question_id: id,
-          user_id: localStorage.getItem("user_id"),
+          admin_id: StorageHelper.get("token"),
         }),
       });
       try {
@@ -115,7 +117,7 @@ export default function Discussion() {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            user_id: localStorage.getItem("user_id"),
+            admin_id: StorageHelper.get("token"),
             question_id: id,
           }),
         }

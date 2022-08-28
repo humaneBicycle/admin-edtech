@@ -4,6 +4,7 @@ import { S3Client, S3 } from "@aws-sdk/client-s3";
 import MediaConvert from "aws-sdk/clients/mediaconvert";
 import LinkHelper from "../utils/LinkHelper";
 import { useLocation } from "react-router";
+import StorageHelper from "../utils/StorageHelper";
 
 var videoFile;
 
@@ -23,6 +24,7 @@ export default function AllLessonVideo() {
   let {unit} = location.state;
 
   let [activeLessonVideo, setActiveLessonVideo] = useState({
+    admin_id: StorageHelper.get("token"),
     type: "video",
     unit_id: unit.unit_id,
     video_id: "fasdfd"

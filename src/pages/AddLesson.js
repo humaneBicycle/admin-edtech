@@ -8,6 +8,7 @@ import AllLessonVideo from "../components/AllLessonVideo";
 import AllLessonAssignment from "../components/AllLessonAssignment";
 import Event from "../components/Event";
 import Payment from "../components/Payment";
+import StorageHelper from "../utils/StorageHelper";
 
 export default function AddLesson() {
   let [isLoaded , setIsLoaded] = useState(false);
@@ -27,7 +28,7 @@ export default function AddLesson() {
         },
         body: JSON.stringify({
           unit_id: unit.unit_id,
-          user_id: localStorage.getItem("user_id"),
+          admin_id: StorageHelper.get("token"),
         }),
       });
       try {

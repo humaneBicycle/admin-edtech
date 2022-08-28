@@ -2,11 +2,14 @@ import React, { useState } from "react";
 import Navbar from "../components/Navbar";
 import { useLocation } from "react-router-dom";
 import LinkHelper from "../utils/LinkHelper";
+import StorageHelper from "../utils/StorageHelper";
 
 export default function EditUnit() {
   const location = useLocation();
   const unit = location.state.unit;
-  var [activeUnit, setActiveUnit] = useState({});
+  var [activeUnit, setActiveUnit] = useState({
+    admin_id: StorageHelper.get("token"),
+  });
   activeUnit = unit;
 
   console.log(activeUnit);

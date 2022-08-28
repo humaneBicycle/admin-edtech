@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import LinkHelper from "../utils/LinkHelper";
+import StorageHelper from "../utils/StorageHelper";
 
 export default function Unit({
   has_prerequisite,
@@ -41,7 +42,7 @@ export default function Unit({
         },
         body: JSON.stringify({
           unit_id: unit.unit_id,
-          user_id: localStorage.getItem("user_id"),
+          admin_id: StorageHelper.get("token"),
         }),
       });
       try {

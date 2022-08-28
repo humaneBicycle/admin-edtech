@@ -5,6 +5,7 @@ import { useLocation } from "react-router-dom";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { s3Client } from "../libs/s3Clients"; // Helper function that creates an Amazon S3 service client module.
 import S3FileUpload from 'react-s3';
+import StorageHelper from "../utils/StorageHelper";
 
 const config = {
   bucketName: 'quasar-edtech',

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import LinkHelper from "../utils/LinkHelper";
+import StorageHelper from "../utils/StorageHelper";
 
 
 let users;
@@ -25,7 +26,7 @@ export default function Students() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          user_id: localStorage.getItem("user_id"),
+          admin_id: StorageHelper.get("token"),
           page: loadedPageStudent,
         }),
       });

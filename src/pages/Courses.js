@@ -9,7 +9,7 @@ import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 // let isLoaded;
 let updatedUnits;
 let unitJsonToUpdate = {
-  user_id: StorageHelper.get("token"),
+  admin_id: StorageHelper.get("token"),
   units:[
     
   ]
@@ -50,7 +50,7 @@ export default function Courses() {
           "content-type": "application/json",
         },
         body: JSON.stringify({
-          user_id: StorageHelper.get("token"),
+          admin_id: StorageHelper.get("token"),
         }),
       });
       try {
@@ -63,7 +63,7 @@ export default function Courses() {
         // alert("Invalid Response! Please Reload");
         // updateUI(null);
         loadFailed(err);
-        console.log(progressVisibility);
+        // console.log(progressVisibility);
       }
     } catch (err) {
       console.log(err);

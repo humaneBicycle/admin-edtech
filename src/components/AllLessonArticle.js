@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
 import LinkHelper from "../utils/LinkHelper";
+import StorageHelper from "../utils/StorageHelper";
 
 export default function AllLessonArticle(props) {
   let location = useLocation();
   let { unit } = location.state;
   let [spinner, setSpinner] = useState(false);
   let articleInit = {
+    admin_id: StorageHelper.get("token"),
     type: "article",
     unit_id: unit.unit_id,
     prerequisite: {
