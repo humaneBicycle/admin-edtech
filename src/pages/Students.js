@@ -23,10 +23,12 @@ export default function Students() {
       response = await fetch(LinkHelper.getLink() + "/admin/users", {
         method: "POST",
         headers: {
+          "authorization": "Bearer " + StorageHelper.get("token"),
+
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          admin_id: StorageHelper.get("token"),
+          admin_id: StorageHelper.get("admin_id"),
           page: loadedPageStudent,
         }),
       });

@@ -38,11 +38,13 @@ export default function Unit({
       response = await fetch(LinkHelper.getLink() + "/admin/unit/remove", {
         method: "DELETE",
         headers: {
+          "authorization": "Bearer " + StorageHelper.get("token"),
+
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
           unit_id: unit.unit_id,
-          admin_id: StorageHelper.get("token"),
+          admin_id: StorageHelper.get("admin_id"),
         }),
       });
       try {

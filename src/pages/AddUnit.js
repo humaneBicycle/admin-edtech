@@ -21,7 +21,7 @@ export default function AddUnit() {
   let units = location.state.course.units;
   let [hasPrerequisite, setHasPrerequisite] = useState(false);
   let [unit, setUnit] = useState({
-    admin_id: StorageHelper.get("token"),
+    admin_id: StorageHelper.get("admin_id"),
     is_paid: false,
     prerequisite: {
       has_prerequisite: false,
@@ -91,6 +91,8 @@ export default function AddUnit() {
       response = await fetch(LinkHelper.getLink() + "admin/unit/create", {
         method: "POST",
         headers: {
+          "authorization": "Bearer " + StorageHelper.get("token"),
+
           "Content-Type": "application/json",
         },
         body: JSON.stringify(unit),

@@ -8,7 +8,7 @@ export default function EditUnit() {
   const location = useLocation();
   const unit = location.state.unit;
   var [activeUnit, setActiveUnit] = useState({
-    admin_id: StorageHelper.get("token"),
+    admin_id: StorageHelper.get("admin_id"),
   });
   activeUnit = unit;
 
@@ -197,6 +197,8 @@ async function editUnit(unit11, e) {
       response = await fetch(LinkHelper.getLink() + "admin/unit/update",{
         method: "PUT",
         headers: {
+          "authorization": "Bearer " + StorageHelper.get("token"),
+
           "Content-Type": "application/json",
         },
         body: JSON.stringify(unit11)

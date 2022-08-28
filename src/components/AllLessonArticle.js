@@ -8,7 +8,7 @@ export default function AllLessonArticle(props) {
   let { unit } = location.state;
   let [spinner, setSpinner] = useState(false);
   let articleInit = {
-    admin_id: StorageHelper.get("token"),
+    admin_id: StorageHelper.get("admin_id"),
     type: "article",
     unit_id: unit.unit_id,
     prerequisite: {
@@ -65,6 +65,8 @@ export default function AllLessonArticle(props) {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "authorization": "Bearer " + StorageHelper.get("token"),
+
         },
         body: JSON.stringify(article),
       });

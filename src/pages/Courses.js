@@ -9,7 +9,7 @@ import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 // let isLoaded;
 let updatedUnits;
 let unitJsonToUpdate = {
-  admin_id: StorageHelper.get("token"),
+  admin_id: StorageHelper.get("admin_id"),
   units:[
     
   ]
@@ -43,15 +43,19 @@ export default function Courses() {
   var data, response;
 
   let getCourses = async () => {
+    let json = {
+      admin_id: StorageHelper.get("admin_id"),
+    }
+    console.log(json)
     try {
       response = await fetch(LinkHelper.getLink() + "admin/course", {
         method: "POST",
         headers: {
+
           "content-type": "application/json",
+          "authorization": "Bearer " + StorageHelper.get("token"),
         },
-        body: JSON.stringify({
-          admin_id: StorageHelper.get("token"),
-        }),
+        body: JSON.stringify(json)
       });
       try {
         data = await response.json();
@@ -128,6 +132,8 @@ export default function Courses() {
       response = await fetch(LinkHelper.getLink() + "admin/unit/update/position", {
         method: "PUT",
         headers: {
+          "authorization": "Bearer " + StorageHelper.get("token"),
+
           "content-type": "application/json",
         },
         body: JSON.stringify(unitJsonToUpdate)

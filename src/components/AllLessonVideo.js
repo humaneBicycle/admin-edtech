@@ -24,7 +24,7 @@ export default function AllLessonVideo() {
   let {unit} = location.state;
 
   let [activeLessonVideo, setActiveLessonVideo] = useState({
-    admin_id: StorageHelper.get("token"),
+    admin_id: StorageHelper.get("admin_id"),
     type: "video",
     unit_id: unit.unit_id,
     video_id: "fasdfd"
@@ -520,6 +520,7 @@ export default function AllLessonVideo() {
             
             method: "POST",
             headers: {
+          "authorization": "Bearer " + StorageHelper.get("token"),
               
               'Content-Type': 'application/json'
             },

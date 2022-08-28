@@ -15,6 +15,7 @@ export default function Login() {
       response = await fetch(LinkHelper.getLink() + "admin/login", {
         method: "POST",
         headers: {
+          
           "content-type": "application/json",
         },
         body: JSON.stringify({
@@ -34,8 +35,9 @@ export default function Login() {
         }else{
           alert("Login Successful");
           setloginButton(false);
-          // console.log(data.data.admin_id)
-          StorageHelper.set("token",data.data.admin_id);
+          // console.log(data)
+          StorageHelper.set("admin_id",data.data.admin_id);
+          StorageHelper.set("token",data.data.token);
           window.location.href = "/";
         }
 

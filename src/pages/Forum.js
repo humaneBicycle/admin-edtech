@@ -23,7 +23,7 @@ export default function Discussion() {
     let response, data;
     try {
       let json={
-        admin_id: StorageHelper.get("token"),
+        admin_id: StorageHelper.get("admin_id"),
         page:loadedPageQuestion
       }
       // console.log(json)
@@ -32,6 +32,8 @@ export default function Discussion() {
         {
           method: "POST",
           headers: {
+          "authorization": "Bearer " + StorageHelper.get("token"),
+
             "Content-Type": "application/json",
           },
           body: JSON.stringify(json),
@@ -75,11 +77,13 @@ export default function Discussion() {
       response = await fetch(LinkHelper.getLink() + "/admin/forum/question", {
         method: "POST",
         headers: {
+          "authorization": "Bearer " + StorageHelper.get("token"),
+
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
           question_id: id,
-          admin_id: StorageHelper.get("token"),
+          admin_id: StorageHelper.get("admin_id"),
         }),
       });
       try {
@@ -114,10 +118,12 @@ export default function Discussion() {
         {
           method: "DELETE",
           headers: {
+          "authorization": "Bearer " + StorageHelper.get("token"),
+
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            admin_id: StorageHelper.get("token"),
+            admin_id: StorageHelper.get("admin_id"),
             question_id: id,
           }),
         }

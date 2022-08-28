@@ -19,11 +19,13 @@ export default function Lessons() {
       response = await fetch(LinkHelper.getLink() + "/admin/lessons", {
         method: "POST",
         headers: {
+          "authorization": "Bearer " + StorageHelper.get("token"),
+
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
           unit_id: unit.unit_id,
-          admin_id: StorageHelper.get("token"),
+          admin_id: StorageHelper.get("admin_id"),
         }),
       });
       try {
