@@ -4,6 +4,7 @@ import Navbar from "../components/Navbar";
 import LinkHelper from "../utils/LinkHelper";
 import { Upload } from "@aws-sdk/lib-storage";
 import { S3Client, S3 } from "@aws-sdk/client-s3";
+import * as AWSManager from "../utils/AWSManager";
 // require("dotenv").config();
 
 let image;
@@ -12,7 +13,7 @@ let credentials = {
   accessKeyId: process.env.REACT_APP_ACCESS_KEY_ID,
   secretAccessKey: process.env.REACT_APP_ACCESS_KEY_SECRET,
 };
-console.log(credentials);
+// console.log(credentials);
 
 export default function AddUnit() {
   let location = useLocation();
@@ -41,7 +42,7 @@ export default function AddUnit() {
     }
     unit[type] = val;
     setUnit({ ...unit, type: val });
-    console.log(unit)
+    // console.log(unit)
   }
   let prerequisiteItemClick = (e, oldUnit) => {
     setUnit({
@@ -50,7 +51,7 @@ export default function AddUnit() {
     });
   };
   async function addUnit(event, unit) {
-    console.log(unit);
+    // console.log(unit);
     if (
       unit.creator == undefined ||
       unit.description == undefined ||
@@ -78,10 +79,11 @@ export default function AddUnit() {
 
     uploadImageToS3();
 
-    console.log(unit);
+    // console.log(unit);
     
   }
-  let UploadUnitInfo =async (event,unit)=>{
+  let UploadUnitInfo =async (event)=>{
+    // console.log("adding unit");
     var response, data;
     try {
       response = await fetch(LinkHelper.getLink() + "admin/unit/create", {
@@ -137,6 +139,8 @@ export default function AddUnit() {
       UploadUnitInfo();
     }catch(error){
       console.log(error)
+      alert("Error uploading image");
+      setSpinner(false);
     }
   }
 
@@ -185,7 +189,7 @@ export default function AddUnit() {
                 className="form-control"
                 id="floatingInput"
                 placeholder="name@example.com"
-                value={unit.title}
+                value={unit.unit_name}
                 onChange={(e) => {
                   updateUI(e, "unit_name");
                 }}
@@ -259,7 +263,7 @@ export default function AddUnit() {
                 onChange={(e) => {
                   let imageID=new Date().getTime();
                   image = e.target.files[0];
-                  imageId= "imageID"+imageID+"."+image.name.split(".")[1];
+                  imageId= AWSManager.getBucketLink()+"imageID"+imageID+"."+image.name.split(".")[1];
                   setUnit({...unit,image_url:imageId});
                 }}
               />

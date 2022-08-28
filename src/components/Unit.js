@@ -31,6 +31,7 @@ export default function Unit({
   };
 
   let deleteUnit = async () => {
+    // console.log("delete");
     let response, data;
     try {
       response = await fetch(LinkHelper.getLink() + "/admin/unit/remove", {
@@ -67,7 +68,7 @@ export default function Unit({
             <div className="row g-0">
               <div className="col-md-4 ">
                 <img
-                  src={"https://quasar-edtech-stream.s3.amazonaws.com"+unit.image_id}
+                  src={"https://quasar-edtech-stream.s3.amazonaws.com/"+unit.image_id}
                   
                   className="img-fluid rounded-2 me-2"
                 />
