@@ -51,9 +51,12 @@ export default function Unit({
       });
       try {
         data = await response.json();
+        console.log(data)
 
         if (data.success) {
           window.location.reload();
+        }else{
+          alert("failed")
         }
       } catch (error) {
         console.log(error);
@@ -73,7 +76,7 @@ export default function Unit({
             <div className="row g-0">
               <div className="col-md-4 ">
                 <img
-                  src={"https://quasar-edtech-stream.s3.amazonaws.com/"+unit.image_id}
+                  src={unit.image_id}
                   
                   className="img-fluid rounded-2 me-2"
                 />
@@ -92,9 +95,7 @@ export default function Unit({
                   </h6>
                   <p className="card-text">{unit_id}</p>
                   <p className="card-text">{message}</p>
-                  <p className="card-subtitle mb-2">
-                    <small className="text-muted fw-bold">{time} hours</small>
-                  </p>
+                  
                   <div className="d-flex ">
                     {is_paid ? (
                       <span className="badge badge-success me-2">Paid</span>

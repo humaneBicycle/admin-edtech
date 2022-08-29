@@ -115,16 +115,19 @@ export default function AddUnit() {
     }
   }
   let uploadImageToS3 = async () => {
+    let params={
+      Bucket: "quasaredtech-adminuploads",
+      Key: imageId,
+      Body: image,
+
+    }
+    // console.log(params);
     try {
       const parallelUploads3 = new Upload({
         client:
           new S3({ region: "us-east-1", credentials: credentials }) ||
           new S3Client({}),
-        params: {
-          Bucket: "quasaredtech-adminuploads",
-          Key: imageId,
-          Body: image,
-        },
+          params: params,
 
         tags: [
           /*...*/
@@ -266,10 +269,10 @@ export default function AddUnit() {
                 type="file"
                 accept="image/*"
                 onChange={(e) => {
-                  let imageID=new Date().getTime();
                   image = e.target.files[0];
-                  imageId= AWSManager.getBucketLink()+"imageID"+imageID+"."+image.name.split(".")[1];
-                  setUnit({...unit,image_url:imageId});
+                  imageId="imageId"+new Date().getTime()+"."+image.name.split(".")[1];
+                  let imageIdurl= AWSManager.getImageBucketLink()+imageId;
+                  setUnit({...unit,image_url:imageIdurl});
                 }}
               />
               <label htmlFor="floatingInput">Thumbnail Image</label>

@@ -85,42 +85,27 @@ export default function Courses() {
   };
 
   let handleOnDragEvent = (result) => {
-    
-    console.log(result);
-    updateChangedUnitOrder = Array.from(course.units);
-    // updateChangedUnitOrder[result.source.index].index=result.destination.index;
+    if(!result.destination)return;
+    // console.log(result);
+    let updateChangedUnitOrder = Array.from(course.units);
     updateChangedUnitOrder[result.source.index].index=result.destination.index;
-    
-    
-    
     const [reOrderedItems] = updateChangedUnitOrder.splice(result.source.index, 1);
     updateChangedUnitOrder.splice(result.destination.index, 0, reOrderedItems);
     setCourses({ ...course, units: updateChangedUnitOrder });
-    // for(let i =result.destination.index;i<updateChangedUnitOrder.length-1;i++){
-    //   updateChangedUnitOrder[result.destination.index+i].index=updateChangedUnitOrder[result.destination.index+i].index+1;
-    // }
     let i=0
     updateChangedUnitOrder.forEach(unit => {
       unit.index=i;
       i++;
     });
-
-    // let newIndex = (2*result.destination.index+1)/2
-    // updateChangedUnitOrder.forEach(unit => {
-    //   if(unit._id===result.
-    // });
     unitJsonToUpdate.units=updateChangedUnitOrder.map(unit=>{
       return {
         unit_id:unit.unit_id,
         index:unit.index
       }
     })
-    
-
     setCourses({ ...course, units: updateChangedUnitOrder });
     
     console.log(unitJsonToUpdate)
-    // console.log(reOrderedItems)
     setIsUnitOrderChanged(true);
   };
 

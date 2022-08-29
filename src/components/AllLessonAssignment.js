@@ -31,12 +31,12 @@ export default function AllLessonAsignment(props) {
 
   let uploadAssigment = async() => {
     console.log(assignment)
-    if(assignment.title==undefined||assignment.body==undefined||assignment.sample==undefined||assignment.placeholder||assignment.submitted_url==undefined||assignment.prerequisite.has_prerequisite){
+    if(assignment.title==undefined||assignment.body==undefined||assignment.sample==undefined||assignment.placeholder==undefined||assignment.submitted_url==undefined||assignment.prerequisite.has_prerequisite){
       if(assignment.prerequisite.has_prerequisite){
         if (
-          article.prerequisite.on == undefined ||
-          article.prerequisite.time == undefined ||
-          article.prerequisite.message == undefined
+          assignment.prerequisite.on == undefined ||
+          assignment.prerequisite.time == undefined ||
+          assignment.prerequisite.message == undefined
         ) {
           alert("Please fill all the fields");
           return;
@@ -46,6 +46,7 @@ export default function AllLessonAsignment(props) {
         return;
       }
     }
+    setSpinner(true);
 
     
     let response,data;
@@ -62,14 +63,20 @@ export default function AllLessonAsignment(props) {
 
         data=await response.json();
         if(data.success){
-          window.location.href="course";
+          window.location.href="/course";
         }
+    setSpinner(false);
+
       }catch(err){
         console.log(err);
+    setSpinner(false);
+
       }
 
     }catch(err){
       console.log(err);
+    setSpinner(false);
+
     }
 
   }

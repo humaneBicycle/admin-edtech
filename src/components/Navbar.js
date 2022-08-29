@@ -63,9 +63,9 @@ export default function Navbar() {
             <Link to="/settings" className="badge badge-info me-3">
               Settings
             </Link>
-            <Link to="/admin-profile" className="badge badge-primary">
+            {/* <Link to="/admin-profile" className="badge badge-primary">
               Admin Profile
-            </Link>
+            </Link> */}
           </div>
         </div>
       </div>

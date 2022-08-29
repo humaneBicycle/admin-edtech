@@ -59,6 +59,7 @@ export default function AllLessonArticle(props) {
         return;
       }
     }
+    setSpinner(true);
     // console.log(article);
     let response, data;
     try {
@@ -75,6 +76,7 @@ export default function AllLessonArticle(props) {
         data = await response.json();
         if (data.success) {
           alert("Article Uploaded");
+          setSpinner(false);
           window.location.href = "/course";
         } else {
           throw new Error(data.message);
@@ -82,10 +84,14 @@ export default function AllLessonArticle(props) {
       } catch {
         alert("Error");
         console.log("error");
+        setSpinner(false);
+
       }
     } catch (error) {
       console.log(error);
       alert("Error");
+      setSpinner(false);
+
     }
   };
 
