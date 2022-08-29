@@ -30,8 +30,10 @@ export default function Unit({
     unit_id: unit_id,
     image_id:image_id
   };
+  console.log(unit)
 
   let deleteUnit = async () => {
+
     // console.log("delete");
     let response, data;
     try {

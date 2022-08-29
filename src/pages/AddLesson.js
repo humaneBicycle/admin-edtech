@@ -160,7 +160,7 @@ export default function AddLesson() {
           role="tabpanel"
           aria-labelledby="ex1-tab-1"
         >
-          <AllLessonVideo />
+          <AllLessonVideo lessons={lessons}/>
         </div>
         <div
           class="tab-pane fade"
@@ -176,7 +176,7 @@ export default function AddLesson() {
           role="tabpanel"
           aria-labelledby="ex1-tab-3"
         >
-          <AllLessonAssignment />
+          <AllLessonAssignment lessons={lessons}/>
         </div>
         <div
           class="tab-pane fade"

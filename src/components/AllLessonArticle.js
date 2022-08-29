@@ -34,7 +34,7 @@ export default function AllLessonArticle(props) {
       ...article,
       prerequisite: { ...article.prerequisite, on: lesson._id },
     });
-    console.log(article);
+    // console.log(article);
   };
 
   let uploadArticle = async () => {
@@ -59,6 +59,7 @@ export default function AllLessonArticle(props) {
         return;
       }
     }
+    // console.log(article);
     let response, data;
     try {
       response = await fetch(LinkHelper.getLink() + "/admin/lesson/create", {
@@ -279,7 +280,7 @@ export default function AllLessonArticle(props) {
           </div>
 
           <button className="btn btn-primary my-2" onClick={uploadArticle}>
-            Submit
+            Add Lesson
           </button>
         </div>
       </>

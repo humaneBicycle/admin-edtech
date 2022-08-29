@@ -53,7 +53,7 @@ export default function AddUnit() {
     });
   };
   async function addUnit(event, unit) {
-    // console.log(unit);
+    
     if (
       unit.creator == undefined ||
       unit.description == undefined ||
@@ -76,6 +76,7 @@ export default function AddUnit() {
             return;
           }
         }
+        // console.log(unit);
     setSpinner(true);
     event.preventDefault();
 

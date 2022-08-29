@@ -17,17 +17,21 @@ let credentials = {
 let videoUId;
 let thumbnailFile;
 let thimbnailUId;
-export default function AllLessonVideo() {
+export default function AllLessonVideo(props) {
   
+  let [hasPrerequisite,setHasPrerequisite] = useState(true);
   let [progress, setProgress] = useState(-1);
   const location = useLocation();
   let {unit} = location.state;
+  let lessons = props.lessons;
 
   let [activeLessonVideo, setActiveLessonVideo] = useState({
     admin_id: StorageHelper.get("admin_id"),
     type: "video",
     unit_id: unit.unit_id,
-    video_id: "fasdfd"
+    prerequisite: {
+      has_prerequisite: true,
+    },
   });
   
 
@@ -49,6 +53,14 @@ export default function AllLessonVideo() {
       setActiveLessonVideo({ ...activeLessonVideo, mode: val });
     }
   };
+  let prerequisiteItemClick = (e, lesson) => {
+    console.log(lesson);
+    setActiveLessonVideo({
+      ...activeLessonVideo,
+      prerequisite: { ...activeLessonVideo.prerequisite, on: lesson._id },
+    });
+    console.log(activeLessonVideo);
+  };
 
   let addLesson = async (event, lesson) => {
     event.preventDefault();
@@ -56,13 +68,26 @@ export default function AllLessonVideo() {
       lesson.video == null ||
       lesson.thumbnail_url == undefined ||
       lesson.title == undefined ||
-      lesson.description == undefined 
+      lesson.description == undefined ||
+      activeLessonVideo.prerequisite.has_prerequisite
     ) {
-      alert("please complete the form");
-      return;
+
+      if (activeLessonVideo.prerequisite.has_prerequisite) {
+        if (
+          activeLessonVideo.prerequisite.on == undefined ||
+          activeLessonVideo.prerequisite.time == undefined ||
+          activeLessonVideo.prerequisite.message == undefined
+        ) {
+          alert("Please fill all the fields");
+          return;
+        }
+      } else {
+        alert("Please fill all the fields");
+        return;
+      }
     }
-    // console.log(activeLessonVideo);
-    uploadVideo(lesson.video);
+    console.log(activeLessonVideo);
+    // uploadVideo(lesson.video);
   };
   let uploadVideo = async (video) => {
     
@@ -613,6 +638,145 @@ export default function AllLessonVideo() {
           />
           <label htmlFor="floatingInput">Description</label>
         </div>
+        <>
+            <div className="form-check">
+              <input
+                className="form-check-input"
+                type="radio"
+                name="flexRadioDefault"
+                id="flexRadioDefault1"
+                onChange={() => {
+                  setActiveLessonVideo({ ...activeLessonVideo, completetion: "manual" });
+                }}
+              />
+              <label className="form-check-label" htmlFor="flexRadioDefault1">
+                Completion Manual
+              </label>
+            </div>
+            <div className="form-check">
+              <input
+                className="form-check-input"
+                type="radio"
+                name="flexRadioDefault"
+                id="flexRadioDefault2"
+                defaultChecked="true"
+                onChange={() => {
+                  setActiveLessonVideo({ ...activeLessonVideo, completetion: "auto" });
+                }}
+              />
+              <label className="form-check-label" htmlFor="flexRadioDefault2">
+                Completion Auto
+              </label>
+            </div>
+          </>
+          <div className="prerequisites">
+            <div className="form-check form-switch">
+              <input
+                className="form-check-input"
+                type="checkbox"
+                role="switch"
+                id="flexSwitchCheckChecked"
+                defaultChecked="true"
+                onChange={(event) => {
+                  // article.prerequisite.has_prerequisite=!hasPrerequisite
+                  setActiveLessonVideo({
+                    ...activeLessonVideo,
+                    prerequisite: {
+                      ...activeLessonVideo.prerequisite,
+                      has_prerequisite: !hasPrerequisite,
+                    },
+                  });
+                  setHasPrerequisite(!hasPrerequisite);
+                }}
+              />
+              <label
+                className="form-check-label"
+                htmlFor="flexSwitchCheckChecked"
+                checked
+              >
+                Has Pre-requisites
+              </label>
+            </div>
+            {hasPrerequisite ? (
+              <>
+                <>
+                  <div className="dropdown">
+                    <button
+                      className="btn btn-primary dropdown-toggle"
+                      type="button"
+                      id="dropdownMenuButton"
+                      data-mdb-toggle="dropdown"
+                      aria-expanded="false"
+                    >
+                      On Lesson
+                    </button>
+                    <ul
+                      className="dropdown-menu"
+                      aria-labelledby="dropdownMenuButton"
+                    >
+                      {lessons.length !== 0 ? (
+                        lessons.map((lesson) => {
+                          return (
+                            <li
+                              onClick={(e) => {
+                                prerequisiteItemClick(e, lesson);
+                              }}
+                            >
+                              {lesson.title}
+                            </li>
+                          );
+                        })
+                      ) : (
+                        <li>No Lessons Found. Can't set Prerequisite</li>
+                      )}
+                    </ul>
+                  </div>
+                  <>
+                    <label htmlFor="inputPassword5" className="form-label">
+                      After Time in Seconds
+                    </label>
+                    <input
+                      id="inputPassword5"
+                      className="form-control"
+                      aria-describedby="passwordHelpBlock"
+                      type="number"
+                      value={activeLessonVideo.prerequisite.time}
+                      onChange={(event) => {
+                        setActiveLessonVideo({
+                          ...activeLessonVideo,
+                          prerequisite: {
+                            ...activeLessonVideo.prerequisite,
+                            time: event.target.value,
+                          },
+                        });
+                      }}
+                    />
+
+                    <label htmlFor="inputPassword5" className="form-label">
+                      Prerequisite Message
+                    </label>
+                    <input
+                      id="inputPassword5"
+                      className="form-control"
+                      aria-describedby="passwordHelpBlock"
+                      value={activeLessonVideo.prerequisite.message}
+                      onChange={(event) => {
+                        setActiveLessonVideo({
+                          ...activeLessonVideo,
+                          prerequisite: {
+                            ...activeLessonVideo.prerequisite,
+                            message: event.target.value,
+                          },
+                        });
+                      }}
+                    />
+                  </>
+                </>
+              </>
+            ) : (
+              <></>
+            )}
+          </div>
 
         <>
           <button
