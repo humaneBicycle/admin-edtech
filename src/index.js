@@ -30,6 +30,7 @@ root.render(
       <Route exact element={<PrivateRoute />}>
         <Route exact path="/" element={<App />} />
         <Route path="/students" element={<Students />} />
+        <Route path="/students/profile" element={<StudentProfile />} />
         <Route path="/events" element={<Events />} />
         <Route path="/analytics" element={<Analytics />} />
         <Route path="/notifications" element={<Notifications />} />
@@ -41,7 +42,6 @@ root.render(
         <Route path="/course/edit-unit" element={<EditUnit />} />
         <Route path="/course/add-lesson" element={<AddLesson />} />
         <Route path="/course/lessons" element={<Lessons />} />
-        <Route path="/student/profile" element={<StudentProfile />} />
       </Route>
       
 
