@@ -1,11 +1,68 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Navbar from "../components/Navbar";
 import { useLocation } from "react-router-dom";
-
+import LinkHelper from "../utils/LinkHelper";
+import StorageHelper from "../utils/StorageHelper";
 export default function StudentProfile() {
   let location = useLocation();
   let { user } = location.state;
   console.log(user);
+
+  let [state,setState]=React.useState({
+    spinner:true,
+
+  })
+
+  useEffect(async()=>{
+    let response,data;
+    try{
+      response = await fetch(LinkHelper.getLink()+"admin/user-information",{
+        method:"POST",
+        headers:{
+          "Content-Type":"application/json",
+          "authorization":"Bearer " +StorageHelper.get("token")
+        },
+        body:JSON.stringify({
+          user_id:user._id,
+          admin_id:StorageHelper.get("admin_id")
+        })
+      });
+      try{
+        data = await response.json();
+        console.log(data);
+        if(data.success){
+          setState({
+            ...state,
+            spinner:false,
+            student:data.data
+          })
+        }else{
+      alert("Error "+data.message);
+      setState({
+        ...state,
+        spinner:false,
+        student:data.data
+      })
+        }
+      }catch(err){
+      alert("Error ",err);
+        
+        setState({
+          ...state,
+          spinner:false,
+          student:data.data
+        })
+      }
+    }catch(err){
+      setState({
+        ...state,
+        spinner:false,
+        student:data.data
+      })
+      alert("Error ",err);
+      console.log(err);
+    }
+  },[])
 
   return (
     <div className="row">

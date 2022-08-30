@@ -26,7 +26,6 @@ export default function AllLessonVideo(props) {
   let lessons = props.lessons;
   let [isAWSLoaded,setisAWSLoaded]=useState(false);
   useEffect(()=>{
-    console.log("useEffect");
     getAWSCredentials();
   },[])
 
@@ -45,8 +44,9 @@ export default function AllLessonVideo(props) {
       })
       try{
         data = await response.json();
-        console.log(data);
-        if(data.succuss){
+
+        if(data.success){
+          console.log(data);
           setisAWSLoaded(true);
         }else{
           setisAWSLoaded(false);

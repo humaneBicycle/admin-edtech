@@ -58,6 +58,7 @@ export default function Settings() {
   }
 
   let setAWSCredentials = async(e)=>{
+    setState({...state,isSpinner:true});
     e.preventDefault();
     if(state.credentials.accessKeyId==undefined||state.credentials.secretAccessKey==undefined){
       alert("please complete all the feilds")
@@ -67,9 +68,9 @@ export default function Settings() {
     let response,data;
     try{
       console.log(state.credentials)
-      response = await fetch(LinkHelper.getLink()+"admin/aws/create",{
+      response = await fetch(LinkHelper.getLink()+"admin/aws/update",{
         
-        method:"POST",
+        method:"PUT",
         headers:{
           "authorization": "Bearer " + StorageHelper.get("token"),
           "Content-Type":"application/json",
@@ -79,11 +80,17 @@ export default function Settings() {
       data = await response.json();
       if(data.success){
         alert("set success")
+    setState({...state,isSpinner:false});
+
       }else{
         alert("error setting")
+    setState({...state,isSpinner:false});
+
       }
     }catch(err){
       console.log(err)
+    setState({...state,isSpinner:false});
+
     }
   }
   let createAdmin = async()=>{
@@ -93,7 +100,7 @@ export default function Settings() {
     }
     let response,data;
     try{
-      response = await fetch(LinkHelper.getLink()+"admin/create",{
+      response = await fetch(LinkHelper.getLink()+"admin/new-admin",{
         method:"POST",
         headers:{
           "authorization": "Bearer " + StorageHelper.get("token"),
@@ -105,14 +112,58 @@ export default function Settings() {
         data = await response.json();
         if(data.success){
           alert("admin created")
+          window.location.reload();
         }else{
           alert("error creating admin")
         }
       }catch(err){
+        alert("error creating admin ",err)
         console.log(err);
       }
     }catch(err){
       console.log(err);
+      alert("error creating admin ",err)
+
+    }
+  }
+  let deleteAdmin = async(sec_admin_id)=>{
+    setState({...state,isSpinner:true})
+    console.log(sec_admin_id);
+    let response,data;
+    try{
+      response = await fetch (LinkHelper.getLink()+"admin/remove-admin",{
+        method:"POST",
+        headers:{
+          "authorization": "Bearer " + StorageHelper.get("token"),
+          "Content-Type":"application/json",
+        },
+        body:JSON.stringify({
+          admin_id:StorageHelper.get("admin_id"),
+          sec_admin_id:sec_admin_id,
+        })
+      })
+      try{
+        data = await response.json();
+        if(data.success){
+          alert("admin deleted")
+    setState({...state,isSpinner:false})
+
+          window.location.reload();
+        }else{
+          alert("error deleting admin")
+    setState({...state,isSpinner:false})
+
+        }
+      }catch(err){
+        console.log(err);
+    setState({...state,isSpinner:false})
+
+      }
+
+    }catch(err){
+      console.log(err);
+    setState({...state,isSpinner:false})
+
     }
   }
   
@@ -126,14 +177,13 @@ export default function Settings() {
       <div className="col-md-9">
         {!state.isSpinner ? (
           <>
+          <h1>List of Admins</h1>
           {state.admins.map((admin,index)=>{
             if(admin._id==StorageHelper.get("admin_id")){
               return(
                 //id of logged in admin
                 <>
-                <div key={index}>
-                  <h1>List of Admins</h1>
-                  <button className="btn btn-primary" onClick={createAdmin}>Create Admin</button>
+                <div key={index} className="border">
                   <h3>{admin.email}</h3>
                   <h6>created at {admin.created_at}</h6>
                   <h6>Role:  {admin.role}</h6>
@@ -145,11 +195,10 @@ export default function Settings() {
               return(
                //id of all other admins
                 <div key={index}>
-                  <h1>List of Admins</h1>
                   <h3>{admin.email}</h3>
                   <h6>created at {admin.created_at}</h6>
                   <h6>Role:  {admin.role}</h6>
-                  <button className="btn btn-danger">Delete Admin</button>
+                  <button className="btn btn-danger" onClick={(e)=>{e.preventDefault();deleteAdmin(admin._id)}}>Delete Admin</button>
                 </div>
               )
 
