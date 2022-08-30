@@ -21,7 +21,7 @@ export default function AddLesson() {
   let getLessons = async () => {
     let response, data;
     try {
-      response = await fetch(LinkHelper.getLink() + "/admin/lessons", {
+      response = await fetch(LinkHelper.getLink() + "admin/lessons", {
         method: "POST",
         headers: {
           "authorization": "Bearer " + StorageHelper.get("token"),

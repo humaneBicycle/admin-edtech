@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Upload } from "@aws-sdk/lib-storage";
 import { S3Client, S3 } from "@aws-sdk/client-s3";
 import MediaConvert from "aws-sdk/clients/mediaconvert";
@@ -24,6 +24,43 @@ export default function AllLessonVideo(props) {
   const location = useLocation();
   let {unit} = location.state;
   let lessons = props.lessons;
+  let [isAWSLoaded,setisAWSLoaded]=useState(false);
+  useEffect(()=>{
+    console.log("useEffect");
+    getAWSCredentials();
+  },[])
+
+  let getAWSCredentials=async ()=>{
+    let response,data;
+    try{
+      response = await fetch(LinkHelper.getLink()+"admin/aws/read",{
+        method:"POST",
+        headers:{
+          authorization:"Bearer "+StorageHelper.get("token"),
+          "content-type":"application/json"
+        },
+        body:JSON.stringify({
+          admin_id:StorageHelper.get("admin_id")
+        })
+      })
+      try{
+        data = await response.json();
+        console.log(data);
+        if(data.succuss){
+          setisAWSLoaded(true);
+        }else{
+          setisAWSLoaded(false);
+        }
+      }catch(err){
+        console.log(err);
+        setisAWSLoaded(false);
+
+      }
+    }catch(err){
+      console.log("error",err);
+      setisAWSLoaded(false);  
+    }
+  }
 
   let [activeLessonVideo, setActiveLessonVideo] = useState({
     admin_id: StorageHelper.get("admin_id"),
@@ -86,8 +123,8 @@ export default function AllLessonVideo(props) {
         return;
       }
     }
-    console.log(activeLessonVideo);
-    // uploadVideo(lesson.video);
+    // console.log(activeLessonVideo);
+    uploadVideo(lesson.video);
   };
   let uploadVideo = async (video) => {
     
@@ -572,7 +609,8 @@ export default function AllLessonVideo(props) {
   }
 
   return (
-    <div>
+    <>
+    {isAWSLoaded?<>
       <>
         {progress != -1 ? (
           <div class="progress">
@@ -791,7 +829,12 @@ export default function AllLessonVideo(props) {
           </button>
         </>
       </>
-    </div>
+
+      </>:<>
+            ERROR LOADING AWS KEYS. PLEASE RELOAD.
+      </>}
+    
+    </>
   );
 }
 

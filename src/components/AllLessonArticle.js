@@ -153,7 +153,7 @@ export default function AllLessonArticle(props) {
                 name="flexRadioDefault"
                 id="flexRadioDefault1"
                 onChange={() => {
-                  setArticle({ ...article, completetion: "manual" });
+                  setArticle({ ...article, completion: "manual" });
                 }}
               />
               <label className="form-check-label" htmlFor="flexRadioDefault1">
@@ -168,7 +168,7 @@ export default function AllLessonArticle(props) {
                 id="flexRadioDefault2"
                 defaultChecked="true"
                 onChange={() => {
-                  setArticle({ ...article, completetion: "auto" });
+                  setArticle({ ...article, completion: "auto" });
                 }}
               />
               <label className="form-check-label" htmlFor="flexRadioDefault2">

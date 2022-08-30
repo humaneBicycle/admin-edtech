@@ -18,15 +18,13 @@ export default function Lessons() {
   lessonJsonToUpdate.unit_id=unit.unit_id;
   let [isLessonOrderChanged, setIsLessonOrderChanged] = React.useState(false);
   
-
-
   useEffect(() => {
     getLessons();
   }, []);
 
   let getLessons = async () => {
     try {
-      response = await fetch(LinkHelper.getLink() + "/admin/lessons", {
+      response = await fetch(LinkHelper.getLink() + "admin/unit", {
         method: "POST",
         headers: {
           authorization: "Bearer " + StorageHelper.get("token"),
@@ -40,8 +38,8 @@ export default function Lessons() {
       });
       try {
         data = await response.json();
-
-        setLessons(data.data);
+        console.log(data.data.lessons)
+        setLessons(data.data.lessons);
         setIsLoaded(true);
       } catch {
         console.log("error");
@@ -67,6 +65,7 @@ export default function Lessons() {
         data = await response.json();
         console.log(data);
         if(data.success){
+          // console.log(data)
           setIsLessonOrderChanged(false);
         }else{
           alert("Error");
@@ -91,7 +90,7 @@ export default function Lessons() {
     lessonJsonToUpdate.lessons=[];
     items.map((lesson,index)=>{
       lessonJsonToUpdate.lessons.push({
-        lesson_id:lesson._id,
+        lesson_id:lesson.lesson_id,
         index:index
       })
     })
@@ -145,8 +144,8 @@ export default function Lessons() {
                       {lessons.length > 0 ? (
                         lessons.map((lesson, index) => (
                           <Draggable
-                            key={lesson._id}
-                            draggableId={lesson._id}
+                            key={lesson.lesson_id}
+                            draggableId={lesson.lesson_id}
                             index={index}
                           >
                             {(provided) => (
@@ -183,7 +182,7 @@ export default function Lessons() {
                                                 </p>
                                                 <p className="card-text">
                                                   <small className="text-muted">
-                                                    id:{lesson._id}
+                                                    id:{lesson.lesson_id}
                                                   </small>
                                                 </p>
                                               </div>
@@ -221,7 +220,7 @@ export default function Lessons() {
                                                 </p>
                                                 <p className="card-text">
                                                   <small className="text-muted">
-                                                    id:{lesson._id}
+                                                    id:{lesson.lesson_id}
                                                   </small>
                                                 </p>
                                               </div>
@@ -259,7 +258,7 @@ export default function Lessons() {
                                                 </p>
                                                 <p className="card-text">
                                                   <small className="text-muted">
-                                                    id:{lesson._id}
+                                                    id:{lesson.lesson_id}
                                                   </small>
                                                 </p>
                                               </div>
