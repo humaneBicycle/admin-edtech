@@ -1,8 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import StorageHelper from "../utils/StorageHelper";
 let logo = require("../images/logo_edtech.png");
 
 export default function Navbar() {
+  
   return (
     <>
       <div className="">
@@ -11,19 +13,14 @@ export default function Navbar() {
             className="bg-image hover-overlay ripple p-3 border-bottom "
             data-mdb-ripple-color="light"
           >
-            {/* <img
-              className="img-fluid"
-              
-              src="https://www.google.com/images/branding/googlelogo/2x/googlelogo_dark_color_92x30dp.png"
-              alt="admin"
-            /> */}
+            <Link to="/">
             <img
               className="img-fluid "
               style={{"position":"fixed","top":"1rem","left":"1rem","width":"13rem","height":"7rem"}}
               src={logo}
               alt="admin"
             />
-            <Link to="/">
+            
               <div className="mask"></div>
             </Link>
           </div>

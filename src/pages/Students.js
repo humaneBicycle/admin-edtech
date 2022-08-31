@@ -86,7 +86,7 @@ export default function Students() {
             {users.map((user, index) => (
               // console.log(user);
               <>
-              <Link to="/students/profile" state={{user:user}} style={{"text-decoration": "none","color": "inherit"}}>
+              <Link to="/students/profile" state={{currentUser:user}} style={{"text-decoration": "none","color": "inherit"}}>
                 <div className="card" key={user._id}>
                   <div className="card-header"><h1>{user.name}</h1></div>
                   <div className="card-body">

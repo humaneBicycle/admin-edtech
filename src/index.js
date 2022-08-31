@@ -20,6 +20,7 @@ import StudentProfile from "./pages/StudentProfile";
 import Notifications from "./pages/Notifications";
 import PrivateRoute from "./utils/PrivateRoute";
 import PathNotFound from "./pages/PathNotFound";
+import AnswerThisQuestion from "./pages/AnswerThisQuestion";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -40,6 +41,7 @@ root.render(
         <Route path="/course/edit-unit" element={<EditUnit />} />
         <Route path="/course/add-lesson" element={<AddLesson />} />
         <Route path="/course/lessons" element={<Lessons />} />
+        <Route path="/admin/forum/add-answer" element={<AnswerThisQuestion />} />
       </Route>
       
 

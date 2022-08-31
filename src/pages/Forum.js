@@ -2,37 +2,38 @@ import React, { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import LinkHelper from "../utils/LinkHelper";
 import StorageHelper from "../utils/StorageHelper";
+import { Link } from "react-router-dom";
 
-let questions=[];
-let answers=[];
+let questions = [];
+let answers = [];
 export default function Discussion() {
-  let [loadedPageQuestion , setLoadedPageQuestion] = useState(1);
+  let [loadedPageQuestion, setLoadedPageQuestion] = useState(1);
   let [isLoaded, setIsLoaded] = useState(false);
   let [isAnswerLoaded, setIsAnswerLoaded] = useState(false);
   let [activeQuestionIndex, setActiveQuestionIndex] = useState(0);
   let [activeAnswerIndex, setActiveAnswerIndex] = useState(0);
   let [spinner, setSpinner] = useState(false);
-  let [isAllQuestionLoaded,setIsAllQuestionLoaded] = useState(false);
+  let [isAllQuestionLoaded, setIsAllQuestionLoaded] = useState(false);
+  console.log(questions);
   useEffect(() => {
     getQuestions(1);
-
   }, []);
 
   let getQuestions = async () => {
     console.log(loadedPageQuestion);
     let response, data;
     try {
-      let json={
+      let json = {
         admin_id: StorageHelper.get("admin_id"),
-        page:loadedPageQuestion
-      }
+        page: loadedPageQuestion,
+      };
       // console.log(json)
       response = await fetch(
         LinkHelper.getLink() + "/admin/forum/getAllQuestion",
         {
           method: "POST",
           headers: {
-          "authorization": "Bearer " + StorageHelper.get("token"),
+            authorization: "Bearer " + StorageHelper.get("token"),
 
             "Content-Type": "application/json",
           },
@@ -44,25 +45,25 @@ export default function Discussion() {
         if (data.success) {
           questions.push(...data.data.questions);
           setIsLoaded(true);
-          setLoadedPageQuestion(loadedPageQuestion+1);
-          console.log(data.pages,loadedPageQuestion);
-          if(data.pages===loadedPageQuestion){
+          setLoadedPageQuestion(loadedPageQuestion + 1);
+          console.log(data.pages, loadedPageQuestion);
+          if (data.pages === loadedPageQuestion) {
             // console.log("if reached")
             setIsAllQuestionLoaded(true);
           }
           console.log(loadedPageQuestion);
           console.log(questions);
-          getAnswers(data.data.questions._id, 0);
+          getAnswers(data.data.questions[0]._id, 0);
         } else {
           throw new Error(data.message);
         }
       } catch {
-        alert("Error"+data.message);
+        alert("Error" + data.message);
         console.log("error");
       }
     } catch (error) {
       console.log(error);
-      alert("Error"+data.message);
+      alert("Error" + data.message);
     }
   };
 
@@ -77,7 +78,7 @@ export default function Discussion() {
       response = await fetch(LinkHelper.getLink() + "/admin/forum/question", {
         method: "POST",
         headers: {
-          "authorization": "Bearer " + StorageHelper.get("token"),
+          authorization: "Bearer " + StorageHelper.get("token"),
 
           "Content-Type": "application/json",
         },
@@ -118,7 +119,7 @@ export default function Discussion() {
         {
           method: "DELETE",
           headers: {
-          "authorization": "Bearer " + StorageHelper.get("token"),
+            authorization: "Bearer " + StorageHelper.get("token"),
 
             "Content-Type": "application/json",
           },
@@ -153,7 +154,7 @@ export default function Discussion() {
     }
   };
   return (
-    < >
+    <>
       <div className="row ">
         <div className="col-md-2 border-end">
           <Navbar />
@@ -221,6 +222,13 @@ export default function Discussion() {
                             >
                               Delete
                             </div>
+                            <Link
+                            className="btn btn-success mx-4"
+                            to="/admin/forum/add-answer"
+                            state={{question:question}}
+                          >
+                            Answer This Question
+                          </Link>
                           </li>
                         ) : (
                           <li
@@ -246,17 +254,19 @@ export default function Discussion() {
                       </>
                     ))}
                   </ul>
-                  
-                  <button className="btn btn-primary mx-4 my-4" onClick={() => {
-                    if(!isAllQuestionLoaded){
 
-                      getQuestions(loadedPageQuestion+1);
-                    }else{
-                      alert("All questions are loaded");
-                    }
-                    
-                  
-                  }}>Load More Questions</button>
+                  <button
+                    className="btn btn-primary mx-4 my-4"
+                    onClick={() => {
+                      if (!isAllQuestionLoaded) {
+                        getQuestions(loadedPageQuestion + 1);
+                      } else {
+                        alert("All questions are loaded");
+                      }
+                    }}
+                  >
+                    Load More Questions
+                  </button>
                 </div>
                 <div className="col-md-7">
                   <h2>Answers</h2>
@@ -267,13 +277,18 @@ export default function Discussion() {
                           {answers.map((answer, index) => (
                             <>
                               <li class="list-group-item" aria-current="true">
-                                {index + 1 + ". " + answer.head}
+                                {index + 1 + ". " + answer.head}<br></br>
+                                {answer.body}
+                                
                               </li>
                             </>
                           ))}
                         </>
                       ) : (
-                        <>No answers found!</>
+                        <>
+                          
+                          No answers found!
+                        </>
                       )}
                     </>
                   ) : (
@@ -305,6 +320,7 @@ export default function Discussion() {
           )}
         </div>
       </div>
+      
     </>
   );
 }
