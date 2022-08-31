@@ -8,14 +8,15 @@ export default function Notifications() {
     spinner:true,
     notification:{
       admin_id:StorageHelper.get("admin_id"),
-    }
+    },
+    notifications:[],
   })
   let getNotifications = async()=>{
 
     let response,data;
     try{
       response = await fetch(LinkHelper.getLink()+"admin/notification/list",{
-        method:"GET",
+        method:"POST",
         headers:{
           "Content-Type":"application/json",
           "Authorization":"Bearer " +StorageHelper.get("token")
@@ -50,7 +51,7 @@ export default function Notifications() {
 
   }
 
-  useEffect(getNotifications,[]);
+  useEffect(()=>{getNotifications()},[]);
 
 
   let sendNotification = async()=>{
@@ -121,6 +122,7 @@ export default function Notifications() {
           </div>
           {
             !state.spinner?
+            <>
           <form>
                 <div className="mb-3">
                   <label htmlFor="exampleInputEmail1" className="form-label">
@@ -161,7 +163,11 @@ export default function Notifications() {
                 <button type="submit" className="btn btn-primary" onClick={(e)=>{e.preventDefault();sendNotification()}}>
                   Send Notification to all users.
                 </button>
-              </form>:<>
+              </form>
+              {
+
+              }
+              </>:<>
               <div class="d-flex">
               <div class="spinner-grow text-primary m-auto  my-5" role="status">
                 <span class="visually-hidden">Loading...</span>

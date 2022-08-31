@@ -21,8 +21,6 @@ import Notifications from "./pages/Notifications";
 import PrivateRoute from "./utils/PrivateRoute";
 import PathNotFound from "./pages/PathNotFound";
 
-// let [isLogin, setIsLogin] = useState(false);
-
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <BrowserRouter>
@@ -51,10 +49,6 @@ root.render(
 
       
     </Routes>
-
-    {/* <BrowserRouter>
-    <App />
-    </BrowserRouter> */}
   </BrowserRouter>
 );
 
