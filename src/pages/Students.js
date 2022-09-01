@@ -80,6 +80,7 @@ export default function Students() {
             </div>
           </div>
         </div>
+        <Link className="btn btn-primary" to="/students/blocked-users">List Block users</Link>
         
         {isLoaded ? (
           <>
@@ -94,8 +95,8 @@ export default function Students() {
                     <p className="card-text">
                       Tests given = {user.test_given}<br></br>
                       Created On = {user.created}<br></br>
-                      Is Anonymous Sign In = {user.is_anonymous.toString()}<br></br>
-                      Is Educator = {user.educator.toString()}<br></br>
+                      {/* Is Anonymous Sign In = {user.is_anonymous.toString()}<br></br>
+                      Is Educator = {user.educator.toString()}<br></br> */}
                     </p>
                    
                   </div>

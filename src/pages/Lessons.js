@@ -4,6 +4,8 @@ import Navbar from "../components/Navbar";
 import LinkHelper from "../utils/LinkHelper";
 import StorageHelper from "../utils/StorageHelper";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+import { Link } from "react-router-dom";
+
 
 let data, response;
 let lessonJsonToUpdate = {
@@ -117,9 +119,6 @@ export default function Lessons() {
                 <span className="py-1 ps-4">
                   Do you want to save this sort ?
                 </span>
-                {/* <button className="btn btn-outline-primary me-3 ms-auto">
-                        Cancel
-                      </button> */}
                 <button
                   className="btn btn-primary me-3"
                   onClick={updateChangedLessonOrder}
@@ -149,6 +148,8 @@ export default function Lessons() {
                             index={index}
                           >
                             {(provided) => (
+                              <Link to="lesson"
+                              state={{lesson:lesson}}>
                               <li
                                 className="row"
                                 {...provided.draggableProps}
@@ -274,6 +275,7 @@ export default function Lessons() {
                                   {lesson.type === "event" ? <></> : <></>}
                                 </div>
                               </li>
+                              </Link>
                             )}
                           </Draggable>
                         ))

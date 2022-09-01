@@ -67,6 +67,7 @@ export default function AllLessonVideo(props) {
     prerequisite: {
       has_prerequisite: true,
     },
+    completion:"auto"
   });
 
   let updateUI = (e, mode) => {
@@ -84,7 +85,7 @@ export default function AllLessonVideo(props) {
     } else {
       activeLessonVideo[mode] = val;
 
-      setActiveLessonVideo({ ...activeLessonVideo, mode: val });
+      setActiveLessonVideo({ ...activeLessonVideo});
     }
   };
   let prerequisiteItemClick = (e, lesson) => {
@@ -537,7 +538,7 @@ export default function AllLessonVideo(props) {
   let uploadResult = async () => {
     // console.log(uid)
     let resposnse, jsonData;
-    // console.log("Success ", data);
+    console.log("Success ", activeLessonVideo);
     try {
       resposnse = await fetch(LinkHelper.getLink() + "admin/lesson/create", {
         method: "POST",
@@ -605,7 +606,6 @@ export default function AllLessonVideo(props) {
                 placeholder="name@example.com"
                 onChange={(event) => {
                   updateUI(event, "video");
-                  // getVideoFile(event);
                 }}
                 type="file"
                 accept="video/*"
@@ -665,7 +665,7 @@ export default function AllLessonVideo(props) {
                   onChange={() => {
                     setActiveLessonVideo({
                       ...activeLessonVideo,
-                      completetion: "auto",
+                      completion: "auto",
                     });
                   }}
                 />

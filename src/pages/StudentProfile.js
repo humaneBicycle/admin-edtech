@@ -22,7 +22,7 @@ export default function StudentProfile() {
           authorization: "Bearer " + StorageHelper.get("token"),
         },
         body: JSON.stringify({
-          user_id: currentUser._id,
+          user_id: currentUser.user_id,
           admin_id: StorageHelper.get("admin_id"),
         }),
       });
@@ -63,6 +63,61 @@ export default function StudentProfile() {
   useEffect(() => {
     getUser();
   }, []);
+
+  let blockUser = async () => {
+    setState({...state,spinner:true});
+    let response, data;
+    let json = {
+      
+      user_id: currentUser.user_id,
+      admin_id: StorageHelper.get("admin_id"),
+    }
+    console.log(json)
+    try {
+      console.log(json);
+      response = await fetch(LinkHelper.getLink() + "admin/user/block", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: "Bearer " + StorageHelper.get("token"),
+        },
+        body: JSON.stringify(json)
+      });
+      try {
+        data = await response.json();
+        console.log(data);
+        if (data.success) {
+          alert("User blocked successfully");
+          setState({
+            ...state,
+            spinner: false,
+            student: data.data
+          });
+        } else {
+          setState({
+            ...state,
+            spinner: false,
+          });
+          alert("err: "+data.message)
+        }
+      } catch (err) {
+
+        setState({
+          ...state,
+          spinner: false,
+        });
+        alert("err: "+data.message)
+
+      }
+    } catch (err) {
+      setState({
+        ...state,
+        spinner: false,
+      });
+      alert("err: "+data.message)
+
+    }
+  }
 
   return (
     <div className="row">
@@ -127,14 +182,11 @@ export default function StudentProfile() {
                 })} */}
                 <br></br>
                 Upcoming Events Subscribed:
-                {/* {state.user.upcommingeventsubbed.map((element) => {
-                  return element.title;
-                })} */}
                 <br></br>
                 <h1>display this json obj in UI</h1>
               </div>
               <div className="col-md-4">
-                <button className="btn btn-danger my-4 mx-4">Block User</button>
+                <button className="btn btn-danger my-4 mx-4" onClick={blockUser}>Block User</button>
                 <button className="btn btn-success my-4 mx-4">
                   Send personalised Notification
                 </button>

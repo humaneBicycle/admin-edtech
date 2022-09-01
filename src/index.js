@@ -21,6 +21,8 @@ import Notifications from "./pages/Notifications";
 import PrivateRoute from "./utils/PrivateRoute";
 import PathNotFound from "./pages/PathNotFound";
 import AnswerThisQuestion from "./pages/AnswerThisQuestion";
+import Lesson from "./pages/Lesson";
+import BlockedUsers from "./pages/BlockedUsers";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -30,6 +32,7 @@ root.render(
         <Route exact path="/" element={<App />} />
         <Route path="/students" element={<Students />} />
         <Route path="/students/profile" element={<StudentProfile />} />
+        <Route path="/students/blocked-users" element={<BlockedUsers />} />
         <Route path="/events" element={<Events />} />
         <Route path="/analytics" element={<Analytics />} />
         <Route path="/notifications" element={<Notifications />} />
@@ -41,6 +44,7 @@ root.render(
         <Route path="/course/edit-unit" element={<EditUnit />} />
         <Route path="/course/add-lesson" element={<AddLesson />} />
         <Route path="/course/lessons" element={<Lessons />} />
+        <Route path="/course/lessons/lesson" element={<Lesson />} />
         <Route path="/admin/forum/add-answer" element={<AnswerThisQuestion />} />
       </Route>
       

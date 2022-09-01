@@ -159,9 +159,10 @@ export default function Discussion() {
         <div className="col-md-2 border-end">
           <Navbar />
         </div>
+        
 
         <div className="col-md-9">
-          <div className="Navbar  d-flex justify-content-start mt-3 mb-4 border-bottom">
+        <div className="Navbar  d-flex justify-content-start mt-3 mb-4 border-bottom">
             <div className="NavHeading ms-4">
               <h2>Forum</h2>
             </div>
@@ -181,6 +182,7 @@ export default function Discussion() {
               </div>
             </div>
           </div>
+          
           {spinner ? (
             <>
               <div class="d-flex">
