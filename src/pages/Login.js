@@ -38,7 +38,7 @@ export default function Login() {
           // console.log(data)
           StorageHelper.set("admin_id",data.data.admin_id);
           StorageHelper.set("token",data.data.token);
-          window.location.href = "/";
+          window.location.href = "/course";
         }
 
       } catch (err) {
