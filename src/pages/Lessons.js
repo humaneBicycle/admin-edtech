@@ -6,7 +6,7 @@ import StorageHelper from "../utils/StorageHelper";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { Link } from "react-router-dom";
 
-
+//the array of lessons is fetched and are stored in the lessons array. console.log to see the json object and replresent it in appropriate form
 let data, response;
 let lessonJsonToUpdate = {
   admin_id: StorageHelper.get("admin_id"),
@@ -148,6 +148,7 @@ export default function Lessons() {
                             index={index}
                           >
                             {(provided) => (
+
                               <Link to="lesson"
                               state={{lesson:lesson}}>
                               <li

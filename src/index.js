@@ -23,6 +23,7 @@ import PathNotFound from "./pages/PathNotFound";
 import AnswerThisQuestion from "./pages/AnswerThisQuestion";
 import Lesson from "./pages/Lesson";
 import BlockedUsers from "./pages/BlockedUsers";
+import LeaderBoard from "./pages/LeaderBoard";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -36,6 +37,7 @@ root.render(
         <Route path="/events" element={<Events />} />
         <Route path="/analytics" element={<Analytics />} />
         <Route path="/notifications" element={<Notifications />} />
+        <Route path="/leaderboard" element={<LeaderBoard />} />
         <Route path="/forum" element={<Discussion />} />
         <Route path="/course" element={<Courses />} />
         <Route path="/settings" element={<Settings />} />

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import { useLocation } from "react-router-dom";
 import LinkHelper from "../utils/LinkHelper";
+import AddLessonTest from "../components/AddLessonTest";
 
 import AllLessonArticle from "../components/AllLessonArticle";
 import AllLessonVideo from "../components/AllLessonVideo";
@@ -149,6 +150,19 @@ export default function AddLesson() {
               Payment
             </a>
           </li>
+          <li class="nav-item" role="presentation">
+            <a
+              class="nav-link"
+              id="ex1-tab-6"
+              data-mdb-toggle="tab"
+              href="#ex1-tabs-6"
+              role="tab"
+              aria-controls="ex1-tabs-6"
+              aria-selected="false"
+            >
+              Test
+            </a>
+          </li>
         </ul>
       
 
@@ -193,6 +207,14 @@ export default function AddLesson() {
           aria-labelledby="ex1-tab-5"
         >
           <Payment />
+        </div>
+        <div
+          class="tab-pane fade"
+          id="ex1-tabs-6"
+          role="tabpanel"
+          aria-labelledby="ex1-tab-6"
+        >
+          <AddLessonTest />
         </div>
       </div>
           

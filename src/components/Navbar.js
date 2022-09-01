@@ -55,6 +55,11 @@ export default function Navbar() {
               <i class="fas fa-bullhorn"></i> Notifications
               </li> 
             </Link>
+            <Link to="/leaderboard">
+              <li className="sidenav-link">
+              <i class="fas fa-user-friends"></i> LeaderBoard
+              </li> 
+            </Link>
           </ul>
           <div className=" myicons_container  mx-4">
             <Link to="/settings" className="badge badge-info me-3">
