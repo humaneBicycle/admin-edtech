@@ -3,6 +3,10 @@ import Navbar from "../components/Navbar";
 import { useLocation } from "react-router-dom";
 import LinkHelper from "../utils/LinkHelper";
 import StorageHelper from "../utils/StorageHelper";
+import * as AWSManager from "../utils/AWSManager";
+
+
+let image;
 
 export default function EditUnit() {
   const location = useLocation();
@@ -73,7 +77,7 @@ export default function EditUnit() {
     }
   };
 
-  
+
 
   async function editUnit(e) {
     e.preventDefault();
@@ -170,16 +174,21 @@ export default function EditUnit() {
                 <label htmlFor="floatingInput">Name</label>
               </div>
               <div className="form-floating mb-3">
+                <img src={state.activeUnit.image_url} alt="No Image" ></img>
                 <input
                   className="form-control"
                   id="floatingInput"
-                  value={state.activeUnit.image_url}
-                  onChange={(event) => {
+                  type = "file"
+                  accept="image/*"
+                  onChange={(e) => {
+                    image = e.target.files[0];
+                    let imageId="imageId"+new Date().getTime()+"."+image.name.split(".")[1];
+                    let imageIdurl= AWSManager.getImageBucketLink()+imageId;
                     setState({
                       ...state,
                       activeUnit: {
                         ...state.activeUnit,
-                        image_url: event.target.value,
+                        image_url: imageIdurl,
                       },
                     });
                   }}

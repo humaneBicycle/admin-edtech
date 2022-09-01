@@ -121,7 +121,6 @@ export default function AddUnit() {
       Body: image,
 
     }
-    // console.log(params);
     try {
       const parallelUploads3 = new Upload({
         client:

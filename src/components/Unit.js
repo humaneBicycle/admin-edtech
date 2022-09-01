@@ -14,7 +14,7 @@ export default function Unit({
   is_paid,
   is_locked,
   unit_id,
-  image_id
+  image_url
 }) {
   function editUnit(e) {
     e.preventDefault();
@@ -28,7 +28,7 @@ export default function Unit({
     is_paid: is_paid,
     is_locked: is_locked,
     unit_id: unit_id,
-    image_id:image_id
+    image_url:image_url
   };
   console.log(unit)
 
@@ -76,7 +76,7 @@ export default function Unit({
             <div className="row g-0">
               <div className="col-md-4 ">
                 <img
-                  src={unit.image_id}
+                  src={unit.image_url}
                   
                   className="img-fluid rounded-2 me-2"
                 />
