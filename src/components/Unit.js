@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import LinkHelper from "../utils/LinkHelper";
 import StorageHelper from "../utils/StorageHelper";
+import SnackBar from "../components/snackbar";
 
 export default function Unit({
   has_prerequisite,
@@ -16,9 +17,9 @@ export default function Unit({
   unit_id,
   image_url
 }) {
-  function editUnit(e) {
-    e.preventDefault();
-  }
+  // function editUnit(e) {
+  //   e.preventDefault();
+  // }
   let unit = {
     has_prerequisite: has_prerequisite,
     message: message,
@@ -28,7 +29,7 @@ export default function Unit({
     is_paid: is_paid,
     is_locked: is_locked,
     unit_id: unit_id,
-    image_url:image_url
+    image_url: image_url
   };
   console.log(unit)
 
@@ -55,8 +56,9 @@ export default function Unit({
 
         if (data.success) {
           window.location.reload();
-        }else{
-          alert("failed")
+        } else {
+          // alert("failed")
+          SnackBar("Failed", 1500, "OK")
         }
       } catch (error) {
         console.log(error);
@@ -67,87 +69,130 @@ export default function Unit({
   };
 
   return (
-    <div className="mb-3" key={unit_id}>
-      {/* <Link to="lessons" state={{ unit: unit }}> */}
-      
-        <div className="card">
-        <Link to="lessons" state={{ unit: unit }}>
-          <div className="card-body p-2">
-            <div className="row g-0">
-              <div className="col-md-4 ">
-                <img
-                  src={unit.image_url}
-                  
-                  className="img-fluid rounded-2 me-2"
-                />
-              </div>
-              
-              <div className="col-md-8">
-                <div className="card-body py-0 pt-2">
-                  <h5 className="card-title">{unit_name}</h5>
-                  <h6>
-                    <span className="badge badge-primary ms-auto me-2">
-                      {type}{" "}
-                    </span>
-                    <span className="badge badge-info me-2">
-                      {total_lessons} Lessons
-                    </span>
-                  </h6>
-                  <p className="card-text">{unit_id}</p>
-                  <p className="card-text">{message}</p>
-                  
-                  <div className="d-flex ">
-                    {is_paid ? (
-                      <span className="badge badge-success me-2">Paid</span>
-                    ) : (
-                      <span className="badge badge-danger me-2">Not-paid</span>
-                    )}
 
-                    {is_locked ? (
-                      <span className="badge bg-light me-2">
-                        <i className=" text-success fas fa-unlock"></i>
-                      </span>
-                    ) : (
-                      <span className="badge bg-light me-2">
-                        <i className=" text-danger fas fa-lock"></i>
-                      </span>
-                    )}
-                  </div>
+    <div className="row justify-content-center mb-3" key={unit_id}>
+      <div className="col-md-12 col-xl-10 link-dark">
+        <div className="card shadow-0 border rounded-3">
+          <div className="card-body">
+            <div className="row">
+              <div className="col-md-12 col-lg-3 col-xl-3 mb-4 mb-lg-0">
+                <div className="bg-image hover-zoom ripple rounded ripple-surface">
+                  <img src={unit.image_url} className="w-100" alt="Course" />
+                  <a href="#!">
+                    <div className="hover-overlay">
+                      <div className="mask" style={{ backgroundColor: 'rgba(253, 253, 253, 0.15)' }} />
+                    </div>
+                  </a>
                 </div>
               </div>
-              
+              <div className="col-md-6 col-lg-6 col-xl-6">
+                <h3> <Link to="lessons" state={{ unit: unit }}>{unit_name}</Link></h3>
+                <div className="d-flex flex-row">
+                  <div className="text-danger mb-1 me-2">
+                    <i className="fa fa-star" />
+                    <i className="fa fa-star" />
+                    <i className="fa fa-star" />
+                    <i className="fa fa-star" />
+                  </div>
+                  <span>310</span>
+                </div>
+                <div className="mt-1 mb-0 text-muted small">
+                  {tags.map((tag, index) => (
+                    <>
+                      <span className="text-primary me-1" id={index}>
+                        {index === 0 ? (<></>) : (<>•</>)}
+                        {tag}</span>
+                    </>
+                  ))}
+                  <span><br /></span>
+                </div>
+
+                <p className="text-truncate mb-4 mb-md-0">
+                  {message}
+                </p>
+                <div className="d-flex flex-row">
+                  Course contains :  {total_lessons} Lessons
+                </div>
+              </div>
+              <div className="col-md-6 col-lg-3 col-xl-3 border-sm-start-none border-start">
+                <div className="d-flex flex-row flex-wrap align-items-center mb-1">
+                  <small>
+                    {is_locked ? (
+                      <span className="badge bg-light ">
+                        <svg xmlns="http://www.w3.org/2000/svg" width={18} height={18} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="text-success"><rect x={3} y={11} width={18} height={11} rx={2} ry={2} /><path d="M7 11V7a5 5 0 0 1 9.9-1" /></svg>
+                      </span>
+                    ) : (
+                      <span className="badge bg-light ">
+                        <svg xmlns="http://www.w3.org/2000/svg" width={18} height={18} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="text-danger"><rect x={3} y={11} width={18} height={11} rx={2} ry={2} /><path d="M7 11V7a5 5 0 0 1 10 0v4" /></svg>
+
+                      </span>
+                    )}
+                    {is_paid ? (
+                      <span className="badge badge-success ms-2 mb-2">Paid</span>
+                    ) : (
+                      <span className="badge badge-danger ms-2 mb-2">Not-paid</span>
+                    )}
+                    <br />
+
+                    Type : <span className="badge badge-primary mb-2">{type}</span>
+                  </small>
+
+
+
+
+
+                </div>
+
+
+                <div className="d-flex flex-column mt-4">
+                  <Link
+                    className="btn btn-primary btn-sm"
+                    to="add-lesson"
+                    state={{ unit: unit }}>      Add lesson</Link>
+                  <button className="btn btn-outline-danger btn-sm mt-2" type="button" onClick={deleteUnit}>
+                    <span>Delete</span>
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
-          <div class="card-footer border-0 bg-light p-2 d-flex justify-content-between">
-            <div>
-              {tags.map((tag) => (
-                <>
-                  <span className="badge badge-primary me-2">{tag}</span>
-                </>
-              ))}
-            </div>
-            <Link
-              className="btn btn-primary btn-sm  me-2 ms-auto "
-              to="edit-unit"
-              state={{ unit: unit }}
-            >
-              Edit Unit<i className="far fa-edit mx-2"></i>
-            </Link>
-            <Link
-              className="btn btn-outline-primary btn-sm  me-2 "
-              to="add-lesson"
-              state={{ unit: unit }}
-            >
-              Add lesson<i className="fas fa-plus ms-2"></i>
-            </Link>
-          </div>
-          </Link>
-      <button type="button" className="btn btn-danger" onClick={deleteUnit}>
-        <span>Delete</span>
-      </button>
         </div>
-     
-      {/* </Link> */}
+      </div>
     </div>
+
+
+
+
+    //     <div class="card-footer border-0 bg-light p-2 d-flex justify-content-between">
+    //       <div>
+    //         {tags.map((tag) => (
+    //           <>
+    //             <span className="badge badge-primary me-2">{tag}</span>
+    //           </>
+    //         ))}
+    //       </div>
+    //       <Link
+    //         className="btn btn-primary btn-sm  me-2 ms-auto "
+    //         to="edit-unit"
+    //         state={{ unit: unit }}
+    //       >
+    //         Edit Unit<i className="far fa-edit mx-2"></i>
+    //       </Link>
+    //       <Link
+    //         className="btn btn-outline-primary btn-sm  me-2 "
+    //         to="add-lesson"
+    //         state={{ unit: unit }}
+    //       >
+    //         Add lesson<i className="fas fa-plus ms-2"></i>
+    //       </Link>
+    //     </div>
+    //   </Link>
+    //   <button type="button" className="btn btn-danger" onClick={deleteUnit}>
+    //     <span>Delete</span>
+    //   </button>
+    // </div>
+
+
+
   );
 }

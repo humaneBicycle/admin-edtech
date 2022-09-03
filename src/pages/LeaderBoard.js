@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Navbar from "../components/Navbar";
-
+import classes from "../pages/classes.module.css";
+import Header from "../components/Header";
 export default function LeaderBoard() {
   let [state,setState]=useState({
     spinner:true
@@ -10,7 +11,7 @@ export default function LeaderBoard() {
   }
 
   return (
-    <div>
+    <>
       <div className="row">
         <div className="col-md-2">
           <Navbar />
@@ -28,6 +29,7 @@ export default function LeaderBoard() {
           </>)}
         </div>
       </div>
-    </div>
+
+    </>
   );
 }

@@ -3,7 +3,10 @@ import Navbar from "../components/Navbar";
 import { useLocation } from "react-router-dom";
 import LinkHelper from "../utils/LinkHelper";
 import StorageHelper from "../utils/StorageHelper";
-
+import Loader from "../components/Loader";
+import classes from "../pages/classes.module.css";
+import SnackBar from "../components/snackbar";
+import Header from "../components/Header";
 export default function StudentProfile() {
   let location = useLocation();
   let { currentUser } = location.state;
@@ -34,13 +37,13 @@ export default function StudentProfile() {
             ...state,
             spinner: false,
             student: data.data,
-            user:data.data.user
+            user: data.data.user
           });
         } else {
           setState({
             ...state,
             spinner: false,
-            isError:true,
+            isError: true,
           });
         }
       } catch (err) {
@@ -48,14 +51,14 @@ export default function StudentProfile() {
         setState({
           ...state,
           spinner: false,
-          isError:true,
+          isError: true,
         });
       }
     } catch (err) {
       setState({
         ...state,
         spinner: false,
-        isError:true,
+        isError: true,
       });
     }
   };
@@ -65,10 +68,10 @@ export default function StudentProfile() {
   }, []);
 
   let blockUser = async () => {
-    setState({...state,spinner:true});
+    setState({ ...state, spinner: true });
     let response, data;
     let json = {
-      
+
       user_id: currentUser.user_id,
       admin_id: StorageHelper.get("admin_id"),
     }
@@ -98,7 +101,7 @@ export default function StudentProfile() {
             ...state,
             spinner: false,
           });
-          alert("err: "+data.message)
+          alert("err: " + data.message)
         }
       } catch (err) {
 
@@ -106,7 +109,7 @@ export default function StudentProfile() {
           ...state,
           spinner: false,
         });
-        alert("err: "+data.message)
+        alert("err: " + data.message)
 
       }
     } catch (err) {
@@ -114,111 +117,75 @@ export default function StudentProfile() {
         ...state,
         spinner: false,
       });
-      alert("err: "+data.message)
+      alert("err: " + data.message)
 
     }
   }
 
   return (
-    <div className="row">
-      <div className="col-md-2 border-end">
-        <Navbar />
-      </div>
-      <div className="col-md-9">
-        <div className="Navbar  d-flex justify-content-start mt-3 mb-4 border-bottom">
-          <div className="NavHeading ms-4">
-            <h2>Student</h2>
-          </div>
+    <>
+      <Navbar />
 
-          <div className=" ms-5 me-auto NavSearch">
-            <div className="input-group rounded d-flex flex-nowrap">
-              <input
-                type="search"
-                className="form-control rounded w-100"
-                placeholder="Search"
-                aria-label="Search"
-                aria-describedby="search-addon"
-              />
-              <span className="input-group-text border-0" id="search-addon">
-                <i className="fas fa-search"></i>
-              </span>
-            </div>
-          </div>
-        </div>
-        {!state.isError?(<>
-        <div className="row">
-          {!state.spinner ? (
+
+      <div className={classes.MainContent}>
+        <Header PageTitle={"Students' Profile || Admin Panel"} />
+
+        <div className={classes.MainInnerContainer}>
+          {!state.isError ? (
             <>
-              <div className="col-md-5">
-                <h1>{state.user.name}</h1>
-                id: {state.user._id}
-                <br></br>
-                is The User Anonymous? {}
-                <br></br>
-                Registered Number: {state.user.phone_number}
-                <br></br>
-                Analysis:
-                {state.user.analysis.map((element) => {
-                  element.toString();
-                })}
-                <br></br>
-                Average percentage in tests: {state.user.avg_percentage_test}
-                <br></br>
-                User Created on: {state.user.created}
-                <br></br>
-                Is the User Educator: {state.user.educator.toString()}
-                <br></br>
-                Last Lesson: {state.user.last_lesson.title}
-                <br></br>
-                Lesson Completed: {state.user.lessons_completed}
-                <br></br>
-                Last Unit: {state.user.last_unit.title}
-                <br></br>
-                Tests Given: {state.user.test_given}
-                <br></br>
-                Completed Units:
-                {/* {state.user.units_completed.map((element) => {
-                  return element.title;
-                })} */}
-                <br></br>
-                Upcoming Events Subscribed:
-                <br></br>
-                <h1>display this json obj in UI</h1>
-              </div>
-              <div className="col-md-4">
-                <button className="btn btn-danger my-4 mx-4" onClick={blockUser}>Block User</button>
-                <button className="btn btn-success my-4 mx-4">
-                  Send personalised Notification
-                </button>
-                <div className="mx-4 my-4">
-                  Last Seen:<br></br>
-                  On Device:<br></br>
+              {!state.spinner ? (<div className="Card " style={{ "max-width": "600px", "margin": "auto" }}>
+
+                <>
+                  <div className="FlexBoxColumn  Gap1 FlexStart ">
+                    <h1 className="CardTitle d-flex justify-content-between">{state.user.name} {state.user.isis_anonymous ? (<span className="badge badge-info ms-auto me-2">Anonymous</span>) : (<span className="badge badge-info">Not Anonymous</span>)}</h1>
+                    <h5 className="CardSubtitle">Email : {state.user.email}</h5>
+
+
+
+                    <ul className="list-group list-group-light">
+                      <li className="list-group-item  d-flex justify-content-between"> Registered Number:   <span className="badge badge-info rounded-pill"> {state.user.phone_number}</span></li>
+                      <li className="list-group-item  d-flex justify-content-between">  Average percentage in tests:<span class="badge badge-primary rounded-pill"> {state.user.avg_percentage_test}</span></li>
+                      <li className="list-group-item  d-flex justify-content-between">   User Created on: <span class="badge badge-primary rounded-pill">{state.user.created}</span></li>
+                      <li className="list-group-item  d-flex justify-content-between">Is the User Educator: <span class="badge badge-primary rounded-pill">{state.user.educator.toString()}</span></li>
+                      <li className="list-group-item  d-flex justify-content-between"> Last Lesson: <span class="badge badge-primary rounded-pill">{state.user.last_lesson.title}</span></li>
+                      <li className="list-group-item  d-flex justify-content-between">   Lesson Completed: <span class="badge badge-primary rounded-pill">{state.user.lessons_completed}</span></li>
+                      <li className="list-group-item  d-flex justify-content-between">   Last Unit: <span class="badge badge-primary rounded-pill">{state.user.last_unit.title}</span></li>
+                      <li className="list-group-item  d-flex justify-content-between">    Tests Given: <span class="badge badge-primary rounded-pill">{state.user.test_given}</span></li>
+                    </ul>
+
+
+                  </div>
+                  <div className="d-flex  justify-content-between g-2 flex-wrap">
+                    <div className="w-100">
+
+                      <button className="btn btn-danger my-4 mx-4" onClick={blockUser}>Block User</button>
+                      <button className="btn btn-success my-4 mx-4">
+                        Send personalised Notification
+                      </button>
+                    </div>
+                    <div className="mx-4 my-4">
+                      Last Seen:<br />
+                      On Device:
+                    </div>
+                  </div>
+                </>
+              </div>) : (
+                <>
+                  <Loader />
+                </>
+              )}
+
+
+            </>) : (<>
+              <div className="row">
+                <div className="col-md-5">
+                  <h1>Error</h1>
                 </div>
               </div>
-            </>
-          ) : (
-            <>
-              <div className="d-flex">
-                <div
-                  className="spinner-grow text-primary m-auto  my-5"
-                  role="status"
-                >
-                  <span className="visually-hidden">Loading...</span>
-                </div>
-              </div>
-            </>
-          )}
-        </div>
-          
-        </>):(<>
-        <div className="row">
-          <div className="col-md-5">
-            <h1>Error</h1>
-            </div>
-            </div>
 
-        </>)}
+            </>)}
+        </div>
       </div>
-    </div>
+    </>
   );
 }

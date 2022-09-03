@@ -5,13 +5,16 @@ import StorageHelper from "../utils/StorageHelper";
 import Unit from "../components/Unit";
 import { Link } from "react-router-dom";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
-
+import Loader from "../components/Loader";
+import classes from "../pages/classes.module.css";
+import SnackBar from "../components/snackbar";
+import Header from "../components/Header";
 // let isLoaded;
 let updatedUnits;
 let unitJsonToUpdate = {
   admin_id: StorageHelper.get("admin_id"),
-  units:[
-    
+  units: [
+
   ]
 };
 
@@ -20,7 +23,7 @@ export default function Courses() {
   const [progressVisibility, isVisible] = React.useState(true);
   const [course, setCourses] = React.useState({});
   const [isError, setErrorStaus] = React.useState(false);
-  
+
 
   const [isEditCourseModalVisible, setEditCourseModalVisibility] =
     React.useState(false);
@@ -30,11 +33,11 @@ export default function Courses() {
 
   function updateUI(course) {
     isVisible(false);
-    unitJsonToUpdate.units=course.units.map(unit=>{
+    unitJsonToUpdate.units = course.units.map(unit => {
       return {
-        id:unit.id,
-        name:unit.name,
-        order:unit.order
+        id: unit.id,
+        name: unit.name,
+        order: unit.order
       }
     });
     setCourses(course);
@@ -65,6 +68,7 @@ export default function Courses() {
         updateUI(data.data);
       } catch (err) {
         // alert("Invalid Response! Please Reload");
+        SnackBar("Invalid Response! Please Reload", 1500, "OK")
         // updateUI(null);
         loadFailed(err);
         // console.log(progressVisibility);
@@ -73,6 +77,8 @@ export default function Courses() {
       console.log(err);
       loadFailed(err);
       // alert("Something went wrong! Please Reload");
+      SnackBar("Something went wrong! Please Reload", 1500, "OK")
+
       // updateUI(null);
     }
   };
@@ -85,35 +91,35 @@ export default function Courses() {
   };
 
   let handleOnDragEvent = (result) => {
-    if(!result.destination)return;
+    if (!result.destination) return;
     // console.log(result);
     let updateChangedUnitOrder = Array.from(course.units);
-    updateChangedUnitOrder[result.source.index].index=result.destination.index;
+    updateChangedUnitOrder[result.source.index].index = result.destination.index;
     const [reOrderedItems] = updateChangedUnitOrder.splice(result.source.index, 1);
     updateChangedUnitOrder.splice(result.destination.index, 0, reOrderedItems);
     setCourses({ ...course, units: updateChangedUnitOrder });
-    let i=0
+    let i = 0
     updateChangedUnitOrder.forEach(unit => {
-      unit.index=i;
+      unit.index = i;
       i++;
     });
-    unitJsonToUpdate.units=updateChangedUnitOrder.map(unit=>{
+    unitJsonToUpdate.units = updateChangedUnitOrder.map(unit => {
       return {
-        unit_id:unit.unit_id,
-        index:unit.index
+        unit_id: unit.unit_id,
+        index: unit.index
       }
     })
     setCourses({ ...course, units: updateChangedUnitOrder });
-    
+
     console.log(unitJsonToUpdate)
     setIsUnitOrderChanged(true);
   };
 
   let updateChangedUnitOrder = async (event) => {
     console.log(unitJsonToUpdate)
-      
-    let response,data;
-    try{
+
+    let response, data;
+    try {
       response = await fetch(LinkHelper.getLink() + "admin/unit/update/position", {
         method: "PUT",
         headers: {
@@ -123,25 +129,31 @@ export default function Courses() {
         },
         body: JSON.stringify(unitJsonToUpdate)
       })
-      try{
+      try {
         data = await response.json();
         console.log(data);
-        if(data.success){
-          alert("Successfully Updated");
+        if (data.success) {
+          // alert("Successfully Updated");
+          SnackBar("Successfully Updated", 1500, "OK")
+
           setIsUnitOrderChanged(false);
-        }else{
-          alert("Something went wrong! Please Retry");
+        } else {
+          // alert("Something went wrong! Please Retry");
+          SnackBar("Something went wrong! Please Retry", 1500, "OK")
+
         }
         setIsUnitOrderChanged(false);
       }
-      catch(err){
+      catch (err) {
         console.log(err)
-        alert("Something went wrong! Please Retry");
+        // alert("Something went wrong! Please Retry");
+        SnackBar("Something went wrong! Please Retry", 1500, "OK")
         setIsUnitOrderChanged(false);
       }
-    }catch(err){
+    } catch (err) {
       console.log(err);
-      alert("Something went wrong! Please Retry");
+      // alert("Something went wrong! Please Retry");
+      SnackBar("Something went wrong! Please Retry", 1500, "OK")
       setIsUnitOrderChanged(false);
     }
   }
@@ -149,166 +161,139 @@ export default function Courses() {
 
   return (
     <>
-      <div className="row">
-        <div className="col-md-2 border-end">
-          <Navbar />
-        </div>
-        <div className="col-md-9">
-          <div className="Navbar  d-flex justify-content-start mt-3 mb-4 border-bottom">
-            <div className="NavHeading ms-4">
-              <h2>Course</h2>
-            </div>
+      <Navbar />
 
-            <div className=" ms-5 me-auto NavSearch">
-              <div className="input-group rounded d-flex flex-nowrap">
-                <input
-                  type="search"
-                  className="form-control rounded w-100"
-                  placeholder="Search"
-                  aria-label="Search"
-                  aria-describedby="search-addon"
-                />
-                <span className="input-group-text border-0" id="search-addon">
-                  <i className="fas fa-search"></i>
-                </span>
-              </div>
-            </div>
-          </div>
+
+      <div className={classes.MainContent}>
+        <Header PageTitle={"Courses || Admin Panel"} />
+
+        <div className={classes.MainInnerContainer}>
 
           {progressVisibility ? (
-            <div class="d-flex">
-              <div class="spinner-grow text-primary m-auto  my-5" role="status">
-                <span class="visually-hidden">Loading...</span>
-              </div>
-            </div>
+            <Loader />
           ) : // course model have been loaded. populate the views
-          !isError ? (
-            <>
-              <div className="row g-3 ">
+            !isError ? (
+              <>
                 {isUnitOrderChanged ? (
-                  <div className="row ">
-                    <div className="col-12 d-flex bg-light p-2 rounded-3 ">
-                      <span className="py-1 ps-4">
-                        Do you want to save this sort ?
-                      </span>
-                      {/* <button className="btn btn-outline-primary me-3 ms-auto">
+                  <div className="note ">
+                    <span>
+                      Do you want to save this sort ?
+                    </span>
+                    {/* <button className="btn btn-outline-primary me-3 ms-auto">
                         Cancel
                       </button> */}
-                      <button className="btn btn-primary me-3" onClick={updateChangedUnitOrder}>Save</button>
-                    </div>
+                    <button className="btn btn-primary me-3" onClick={updateChangedUnitOrder}>Save</button>
                   </div>
                 ) : (
                   <></>
                 )}
-                <div className="col-md-5">
-                  <div className="card w-100">
-                    {/* <div className="card-header my_course">
-                     
-                    </div>
-                    <div className="card-header">
-                      {"Course id " + course._id}
-                    </div> */}
-                    <div className="card-body">
-                      <h2 className="card-title mb-2">{course.name}</h2>
-                      <h6 className="card-subtitle text-muted mb-2">
-                        {" "}
-                        {"Course id " + course._id}{" "}
-                      </h6>
-                      <small className="card-subtitle text-muted mb-3">
-                        {" "}
-                        {"Created on " + course.created}{" "}
-                      </small>
-                      <p className="card-text">
-                        {"description: " + course.description}
-                      </p>
-                      <div className="card-text">
-                        {"quote: " + course.quote}
-                      </div>
-                      <div className="card-text">
-                        {"heading: " + course.headline}
-                      </div>
-                      <div className="d-flex flex-row justify-content-end mt-3">
-                        <Link
-                          className="btn btn-primary btn-sm"
-                          to="add-unit"
-                          state={{ course: course }}
-                        >
-                          Add Unit <i className="fas fa-plus ms-2"></i>
-                        </Link>
-                        <Link
-                          className="btn btn-outline-primary btn-sm ms-auto me-2"
-                          to="editCourse"
-                          state={{ course: course }}
-                        >
-                          Edit Course <i className="far fa-edit ms-2"></i>
-                        </Link>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-md-7">
-                  <div className="d-flex flex-column">
-                    <DragDropContext onDragEnd={handleOnDragEvent}>
-                      <Droppable droppableId="droppable">
-                        {(provided) => (
-                          <ul
-                            className="list-group mx-4"
-                            {...provided.droppableProps}
-                            ref={provided.innerRef}
+                <div className="d-flex flex-wrap justify-content-start align-items-stretch">
+
+                  <div className=" Flex50 Height100">
+                    <div className="card w-100">
+
+                      <div className="card-body">
+                        <h2 className="card-title mb-2">{course.name}</h2>
+                        <h6 className="card-subtitle text-muted mb-2">
+                          {" "}
+                          {"Course id " + course._id}{" "}
+                        </h6>
+                        <small className="card-subtitle text-muted mb-3">
+                          {" "}
+                          {console.log(course)}
+                          {"Created on " + course.created}{" "}
+                        </small>
+                        <p className="card-text">
+                          {"description: " + course.description}
+                        </p>
+                        <div className="card-text">
+                          {"quote: " + course.quote}
+                        </div>
+                        <div className="card-text">
+                          {"heading: " + course.headline}
+                        </div>
+                        <div className="d-flex flex-row justify-content-end mt-3">
+                          <Link
+                            className="btn btn-primary btn-sm"
+                            to="add-unit"
+                            state={{ course: course }}
                           >
-                            {course.units != null ? (
-                              course.units.map((unit, index) => (
+                            Add Unit <i className="fas fa-plus ms-2"></i>
+                          </Link>
+                          <Link
+                            className="btn btn-outline-primary btn-sm ms-auto me-2"
+                            to="editCourse"
+                            state={{ course: course }}
+                          >
+                            Edit Course <i className="far fa-edit ms-2"></i>
+                          </Link>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="Flex50 sticky-md-top">
+                    <div className="d-flex flex-column">
+                      <DragDropContext onDragEnd={handleOnDragEvent}>
+                        <Droppable droppableId="droppable">
+                          {(provided) => (
+                            <ul
+                              className="list-group mx-4"
+                              {...provided.droppableProps}
+                              ref={provided.innerRef}
+                            >
+                              {course.units != null ? (
+                                course.units.map((unit, index) => (
+                                  <>
+                                    <Draggable
+                                      key={unit.unit_id}
+                                      draggableId={unit.unit_id}
+                                      index={index}
+                                    >
+                                      {(provided) => (
+                                        <li
+                                          {...provided.draggableProps}
+                                          ref={provided.innerRef}
+                                          {...provided.dragHandleProps}
+                                        >
+
+                                          <Unit
+                                            key={unit.unit_id}
+                                            image_url={unit.image_url}
+                                            has_prerequisite={unit.prerequisite.has_prerequisite.toString()}
+                                            type={unit.prerequisite.type}
+                                            time={unit.prerequisite.time}
+                                            message={unit.prerequisite.message}
+                                            unit_name={unit.unit_title}
+                                            tags={unit.tags}
+                                            total_lessons={unit.total_lessons}
+                                            is_paid={unit.is_paid}
+                                            is_locked={unit.is_locked}
+                                            unit_id={unit.unit_id}
+                                          />
+
+                                        </li>
+                                      )}
+                                    </Draggable>
+                                  </>
+                                ))
+                              ) : (
                                 <>
-                                  <Draggable
-                                    key={unit.unit_id}
-                                    draggableId={unit.unit_id}
-                                    index={index}
-                                  >
-                                    {(provided) => (
-                                      <li
-                                        {...provided.draggableProps}
-                                        ref={provided.innerRef}
-                                        {...provided.dragHandleProps}
-                                      >
-                                        
-                                        <Unit
-                                          key={unit.unit_id}
-                                          image_url={unit.image_url}
-                                          has_prerequisite={unit.prerequisite.has_prerequisite.toString()}
-                                          type={unit.prerequisite.type}
-                                          time={unit.prerequisite.time}
-                                          message={unit.prerequisite.message}
-                                          unit_name={unit.unit_title}
-                                          tags={unit.tags}
-                                          total_lessons={unit.total_lessons}
-                                          is_paid={unit.is_paid}
-                                          is_locked={unit.is_locked}
-                                          unit_id={unit.unit_id}
-                                        />
-                                        
-                                      </li>
-                                    )}
-                                  </Draggable>
+                                  <div>No Units found</div>
                                 </>
-                              ))
-                            ) : (
-                              <>
-                                <div>No Units found</div>
-                              </>
-                            )}
-                          </ul>
-                        )}
-                      </Droppable>
-                    </DragDropContext>
+                              )}
+                            </ul>
+                          )}
+                        </Droppable>
+                      </DragDropContext>
+                    </div>
                   </div>
                 </div>
+              </>
+            ) : (
+              <div className="d-flex justify-content-center">
+                Error Loading Content. Please Reload. Backend problem
               </div>
-            </>
-          ) : (
-            <div className="d-flex justify-content-center">
-              Error Loading Content. Please Reload. Backend problem
-            </div>
-          )}
+            )}
         </div>
       </div>
     </>

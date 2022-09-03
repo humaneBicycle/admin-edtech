@@ -25,6 +25,8 @@ import Lesson from "./pages/Lesson";
 import BlockedUsers from "./pages/BlockedUsers";
 import LeaderBoard from "./pages/LeaderBoard";
 
+export const Title = "Admin Panel";
+document.title = "Admin Panel";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <BrowserRouter>
@@ -49,13 +51,13 @@ root.render(
         <Route path="/course/lessons/lesson" element={<Lesson />} />
         <Route path="/admin/forum/add-answer" element={<AnswerThisQuestion />} />
       </Route>
-      
+
 
       <Route exact path="/login" element={<Login />} />
       <Route path="*" element={<PathNotFound />} />
       <Route />
 
-      
+
     </Routes>
   </BrowserRouter>
 );
