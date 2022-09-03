@@ -316,3 +316,31 @@ button.sideMenuLink {
     position: sticky;
     top: 0;
 }
+
+.Section {
+    width: 100%;
+    margin: 2rem auto;
+       max-width: 50rem;
+    padding: 1rem;
+}
+
+.SectionHeader {
+    border: solid 1px #ccc;
+    border-radius: 8px 8px 0 0;
+    overflow: hidden;
+}
+
+.SectionHeader a {
+    border-color: #616161;
+}
+
+.SectionBody {
+    border: solid 1px #ccc;
+    border-radius: 0 0 8px 8px;
+    overflow: hidden;
+    padding: 0.75rem;
+    border-top: 0;
+}
+@media (min-width: 500px) {
+    .Section{min-width: 30rem;}
+}

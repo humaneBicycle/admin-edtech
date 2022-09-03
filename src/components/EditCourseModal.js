@@ -6,7 +6,10 @@ import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { s3Client } from "../libs/s3Clients"; // Helper function that creates an Amazon S3 service client module.
 import S3FileUpload from 'react-s3';
 import StorageHelper from "../utils/StorageHelper";
-
+import Loader from "../components/Loader";
+import classes from "../pages/classes.module.css";
+// import SnackBar from "../components/snackbar";
+import Header from "../components/Header";
 const config = {
   bucketName: 'quasar-edtech',
   dirName: 'photos', /* optional */
@@ -18,7 +21,7 @@ const config = {
 var videoFile;
 
 export default function EditCourseModal() {
-  
+
   let [activeCourse, setActiveCourse] = useState({});
 
   const location = useLocation();
@@ -27,7 +30,7 @@ export default function EditCourseModal() {
 
   function updateUI(e, name) {
     let val = e.target.value;
-    if (name == "is_paid") {
+    if (name === "is_paid") {
       if (e.target.value == "on") {
         val = true;
       } else {
@@ -44,34 +47,21 @@ export default function EditCourseModal() {
   }
 
   return (
-    <div>
-      <div className="row">
-        <div className="col-md-2 border-end">
-          <Navbar />
-        </div>
-        <div className="col-md-9">
-          <div className="Navbar  d-flex justify-content-start mt-3 mb-4 border-bottom">
-            <div className="NavHeading ms-4">
-              <h2>Course</h2>
-            </div>
+    <>
+      <Navbar />
 
-            <div className=" ms-5 me-auto NavSearch">
-              <div className="input-group rounded d-flex flex-nowrap">
-                <input
-                  type="search"
-                  className="form-control rounded w-100"
-                  placeholder="Search"
-                  aria-label="Search"
-                  aria-describedby="search-addon"
-                />
-                <span className="input-group-text border-0" id="search-addon">
-                  <i className="fas fa-search"></i>
-                </span>
-              </div>
+
+      <div className={classes.MainContent}>
+        <Header PageTitle={"Edit Course || Admin Panel"} />
+
+        <div className={classes.MainInnerContainer}>
+          <div className={classes.Section}>
+            <div className={[classes.SectionHeader, "pt-3"].join(" ")}>
+              <h2 className="title">Edit Course :-</h2>
+
             </div>
-          </div>
-          <div className="page-position-default ">
-            <>
+            <div className={classes.SectionBody}>
+
               <div className="form-floating mb-3">
                 <input
                   className="form-control"
@@ -157,8 +147,8 @@ export default function EditCourseModal() {
                 />
                 <label htmlFor="floatingInput">Description</label>
               </div>
-              <>
-                <div className="form-check">
+              <div className="d-flex align-items-center justify-content-start p-2 mb-4 flex-wrap">
+                <div className="form-check me-2">
                   <input
                     className="form-check-input"
                     type="radio"
@@ -195,21 +185,24 @@ export default function EditCourseModal() {
                     Free(price will be 0)
                   </label>
                 </div>
-                <button
-                  type="button"
-                  className="btn btn-primary"
-                  onClick={(event) => {
-                    updateCourse(event, activeCourse);
-                  }}
-                >
-                  Update Course
-                </button>
-              </>
-            </>
+                <div className="w-100 mt-4">
+                  <button
+                    type="button"
+                    className="btn btn-primary btn-lg"
+                    onClick={(event) => {
+                      updateCourse(event, activeCourse);
+                    }}
+                  >
+                    Update Course
+                  </button>
+                </div>
+
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 

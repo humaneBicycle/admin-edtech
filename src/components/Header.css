@@ -2,7 +2,7 @@ header {
     width: 100%;
     padding: 0.75rem 1rem;
     box-shadow:
-    0px 0px 80px rgba(0, 0, 0, 0.03);
+        0px 0px 80px rgba(0, 0, 0, 0.03);
     border-bottom: #ddd solid 2px;
     position: sticky;
     background: #fbfbfb;
@@ -10,8 +10,8 @@ header {
     z-index: 5;
     margin-bottom: 1rem;
     display: flex;
-  justify-content: space-between;
-  align-items: center;
+    justify-content: space-between;
+    align-items: center;
 }
 
 nav {
@@ -29,4 +29,11 @@ nav {
     text-transform: capitalize;
     margin-inline: 0.5rem auto;
     margin-block: auto;
+
+}
+
+@media screen and (max-width: 840px) {
+    .PageTitle {
+        margin-left: 2.25rem;
+    }
 }

@@ -4,6 +4,10 @@ import { useLocation } from "react-router-dom";
 import LinkHelper from "../utils/LinkHelper";
 import StorageHelper from "../utils/StorageHelper";
 import * as AWSManager from "../utils/AWSManager";
+import Loader from "../components/Loader";
+import classes from "../pages/classes.module.css";
+import SnackBar from "../components/snackbar";
+import Header from "../components/Header";
 
 
 let image;
@@ -17,7 +21,7 @@ export default function EditUnit() {
     activeUnit: {
 
       ...unit,
-      progress:-1,
+      progress: -1,
       prerequisite: {
         has_prerequisite: false,
       },
@@ -56,20 +60,24 @@ export default function EditUnit() {
             units: data.data,
           });
         } else {
-          alert("Something went wrong: ", data.message);
+          // alert("Something went wrong: ", data.message);
+          SnackBar("Something went wrong: " + data.message, 1500, "OK")
         }
       } catch (err) {
-        alert("Something went wrong: ", err);
+        // alert("Something went wrong: ", err);
 
+        SnackBar("Something went wrong: " + err, 1500, "OK")
         console.log(err);
         setState({
+
           ...state,
           spinner: false,
         });
       }
     } catch (err) {
       console.log(err);
-      alert("Something went wrong: ", err);
+      SnackBar("Something went wrong: " + err, 1500, "OK")
+      // alert("Something went wrong: ", err);
       setState({
         ...state,
         spinner: false,
@@ -111,15 +119,14 @@ export default function EditUnit() {
   }
 
   return (
-    <div className="row">
-      <div className="col-md-2">
-        <Navbar />
-      </div>
-      <div className="col-md-10">
-        <div className="Navbar  d-flex justify-content-start mt-3 mb-4 border-bottom">
-          <div className="NavHeading ms-4">
-            <h2>Edit Unit</h2>
-          </div>
+    <>
+      <Navbar />
+
+
+      <div className={classes.MainContent}>
+        <Header PageTitle={"Edit Unit || Admin Panel"} />
+
+        <div className={classes.MainInnerContainer}>
           {state.progress !== -1 ? (
             <>
               <div className="progress" style={{ height: 20 }}>
@@ -138,20 +145,7 @@ export default function EditUnit() {
             <></>
           )}
 
-          <div className=" ms-5 me-auto NavSearch">
-            <div className="input-group rounded d-flex flex-nowrap">
-              <input
-                type="search"
-                className="form-control rounded w-100"
-                placeholder="Search"
-                aria-label="Search"
-                aria-describedby="search-addon"
-              />
-              <span className="input-group-text border-0" id="search-addon">
-                <i className="fas fa-search"></i>
-              </span>
-            </div>
-          </div>
+
         </div>
         {!state.spinner ? (
           <>
@@ -178,12 +172,12 @@ export default function EditUnit() {
                 <input
                   className="form-control"
                   id="floatingInput"
-                  type = "file"
+                  type="file"
                   accept="image/*"
                   onChange={(e) => {
                     image = e.target.files[0];
-                    let imageId="imageId"+new Date().getTime()+"."+image.name.split(".")[1];
-                    let imageIdurl= AWSManager.getImageBucketLink()+imageId;
+                    let imageId = "imageId" + new Date().getTime() + "." + image.name.split(".")[1];
+                    let imageIdurl = AWSManager.getImageBucketLink() + imageId;
                     setState({
                       ...state,
                       activeUnit: {
@@ -403,14 +397,10 @@ export default function EditUnit() {
           </>
         ) : (
           <>
-            <div class="d-flex">
-              <div class="spinner-grow text-primary m-auto  my-5" role="status">
-                <span class="visually-hidden">Loading...</span>
-              </div>
-            </div>
+            <Loader />
           </>
         )}
       </div>
-    </div>
+    </>
   );
 }

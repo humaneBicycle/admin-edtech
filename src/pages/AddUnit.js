@@ -7,7 +7,10 @@ import { S3Client, S3 } from "@aws-sdk/client-s3";
 import * as AWSManager from "../utils/AWSManager";
 import StorageHelper from "../utils/StorageHelper";
 // require("dotenv").config();
-
+import Loader from "../components/Loader";
+import classes from "../pages/classes.module.css";
+import SnackBar from "../components/snackbar";
+import Header from "../components/Header";
 let image;
 let imageId;
 let credentials = {
@@ -26,20 +29,20 @@ export default function AddUnit() {
     prerequisite: {
       has_prerequisite: false,
     },
-    tags:[]
+    tags: []
   });
-  let [spinner,setSpinner]=useState(false);
+  let [spinner, setSpinner] = useState(false);
 
   function updateUI(e, type) {
     let val = e.target.value;
-    if (type == "is_paid") {
-      if (e.target.value == "on") {
+    if (type === "is_paid") {
+      if (e.target.value === "on") {
         val = true;
       } else {
         val = false;
       }
     }
-    if(type=="tags"){
+    if (type === "tags") {
       val = val.split(",");
     }
     unit[type] = val;
@@ -53,39 +56,42 @@ export default function AddUnit() {
     });
   };
   async function addUnit(event, unit) {
-    
+
     if (
-      unit.creator == undefined ||
-      unit.description == undefined ||
-      unit.unit_name == undefined ||
-      unit.image_url ==undefined||
+      unit.creator === undefined ||
+      unit.description === undefined ||
+      unit.unit_name === undefined ||
+      unit.image_url === undefined ||
       unit.prerequisite.has_prerequisite
-      ) {
-        // console.log(unit.prerequisite.has_prerequisite)
-        if (unit.prerequisite.has_prerequisite) {
-          if (
-            unit.prerequisite.on == undefined ||
-            unit.prerequisite.time == undefined ||
-            unit.prerequisite.message == undefined
-            ) {
-              alert("Please fill all the fields");
-              return;
-            }
-          } else {
-            alert("Please fill all the fields");
-            return;
-          }
+    ) {
+      // console.log(unit.prerequisite.has_prerequisite)
+      if (unit.prerequisite.has_prerequisite) {
+        if (
+          unit.prerequisite.on === undefined ||
+          unit.prerequisite.time === undefined ||
+          unit.prerequisite.message === undefined
+        ) {
+          // alert("Please fill all the fields");
+          SnackBar("Please fill all the fields", 1000, "OK");
+          return;
         }
-        // console.log(unit);
+      } else {
+        // alert("Please fill all the fields");
+        SnackBar("Please fill all the fields", 1000, "OK");
+
+        return;
+      }
+    }
+    // console.log(unit);
     setSpinner(true);
     event.preventDefault();
 
     uploadImageToS3();
 
     // console.log(unit);
-    
+
   }
-  let UploadUnitInfo =async (event)=>{
+  let UploadUnitInfo = async (event) => {
     // console.log("adding unit");
     var response, data;
     try {
@@ -101,7 +107,8 @@ export default function AddUnit() {
       try {
         data = await response.json();
         if (data.success) {
-          alert("Unit added successfully");
+          SnackBar("Unit added successfully", 1800, "OK");
+          // alert("Unit added successfully");
           setSpinner(false);
           window.location.href = "/course";
         }
@@ -115,7 +122,7 @@ export default function AddUnit() {
     }
   }
   let uploadImageToS3 = async () => {
-    let params={
+    let params = {
       Bucket: "quasaredtech-adminuploads",
       Key: imageId,
       Body: image,
@@ -126,7 +133,7 @@ export default function AddUnit() {
         client:
           new S3({ region: "us-east-1", credentials: credentials }) ||
           new S3Client({}),
-          params: params,
+        params: params,
 
         tags: [
           /*...*/
@@ -144,299 +151,296 @@ export default function AddUnit() {
 
       await parallelUploads3.done();
       UploadUnitInfo();
-    }catch(error){
+    } catch (error) {
       console.log(error)
-      alert("Error uploading image");
+      // alert("Error uploading image");
+      SnackBar("Error uploading image", 1000, "OK");
       setSpinner(false);
     }
   }
 
   return (
-    <div className="row">
-      <div className="col-md-2">
-        <Navbar />
-      </div>
-      <div className="col-md-10">
-        <div className="Navbar  d-flex justify-content-start mt-3 mb-4 border-bottom">
-          <div className="NavHeading ms-4">
-            <h2>Unit</h2>
-          </div>
+    <>
+      <Navbar />
 
-          <div className=" ms-5 me-auto NavSearch">
-            <div className="input-group rounded d-flex flex-nowrap">
-              <input
-                type="search"
-                className="form-control rounded w-100"
-                placeholder="Search"
-                aria-label="Search"
-                aria-describedby="search-addon"
-              />
-              <span className="input-group-text border-0" id="search-addon">
-                <i className="fas fa-search"></i>
-              </span>
-            </div>
-          </div>
-        </div>
-        <div className="">
-          {spinner?<>
-            <div className="d-flex">
-                        <div
-                          className="spinner-grow text-primary m-auto  my-5"
-                          role="status"
-                        >
-                          <span className="visually-hidden">Loading...</span>
-                        </div>
-                      </div>
-          </>:<>
-          
-          </>}
-          <>
-            <div className="form-floating mb-3">
-              <input
-                className="form-control"
-                id="floatingInput"
-                placeholder="name@example.com"
-                value={unit.unit_name}
-                onChange={(e) => {
-                  updateUI(e, "unit_name");
-                }}
-              />
-              <label htmlFor="floatingInput">Unit Name</label>
-            </div>
-            <div className="form-floating mb-3">
-              <input
-                className="form-control"
-                id="floatingPassword"
-                placeholder="Password"
-                value={unit.creator}
-                onChange={(e) => {
-                  updateUI(e, "creator");
-                }}
-              />
-              <label htmlFor="floatingInput">Creator</label>
-            </div>
-            <div className="form-floating mb-3">
-            <input
-                className="form-control"
-                id="floatingInput"
-                placeholder="name@example.com"
-                value={unit.tags}
-                onChange={(e) => {
-                  updateUI(e, "tags");
-                }}
-              />
-              <label htmlFor="floatingInput">Tags(Seperated by Commas, No Space)</label>
+
+      <div className={classes.MainContent}>
+        <Header PageTitle={"Add Unit || Admin Panel"} />
+
+        <div className={classes.MainInnerContainer}>
+          {spinner ? <>
+            <Loader />
+          </> : <>
+            <div className={classes.Section}>
+              <div className={[classes.SectionHeader, "pt-3"].join(" ")}>
+                <h2 className="title">Edit Unit :-</h2>
+
               </div>
-            <div className="form-floating mb-3">
-              
-              
-              
-
-            </div>
-            <div className="form-check">
-              <input
-                className="form-check-input"
-                type="radio"
-                name="flexRadioDefault2"
-                id="flexRadioDefault3"
-                onChange={()=>{
-                  setUnit({...unit,completetion:"manual"});
-                }}/>
-              <label className="form-check-label" htmlFor="flexRadioDefault1">
-                Completion Manual
-              </label>
-            </div>
-            <div className="form-check">
-              <input
-                className="form-check-input"
-                type="radio"
-                name="flexRadioDefault2"
-                id="flexRadioDefault4"
-                defaultChecked="true"
-                onChange={()=>{
-                  setUnit({...unit,completetion:"auto"});
-                }}/>
-              <label className="form-check-label" htmlFor="flexRadioDefault2">
-                Completion Auto
-              </label>
-            </div>
-            <div className="form-floating mb-3">
-              <input
-                className="form-control"
-                id="floatingInput"
-                placeholder="name@example.com"
-                type="file"
-                accept="image/*"
-                onChange={(e) => {
-                  image = e.target.files[0];
-                  imageId="imageId"+new Date().getTime()+"."+image.name.split(".")[1];
-                  let imageIdurl= AWSManager.getImageBucketLink()+imageId;
-                  setUnit({...unit,image_url:imageIdurl});
-                }}
-              />
-              <label htmlFor="floatingInput">Thumbnail Image</label>
-            </div>
-
-            <div className="form-floating mb-3">
-              <input
-                className="form-control"
-                id="floatingInput"
-                placeholder="name@example.com"
-                value={unit.description}
-                onChange={(e) => {
-                  updateUI(e, "description");
-                }}
-              />
-              <label htmlFor="floatingInput">Description</label>
-            </div>
-            <>
-              <div className="form-check">
-                <input
-                  className="form-check-input"
-                  type="radio"
-                  name="flexRadioDefault"
-                  id="flexRadioDefault1"
-                  checked={unit.is_paid === true}
-                  onChange={(e) => {
-                    updateUI(e, "is_paid");
-                  }}
-                />
-                <label className="form-check-label" htmlFor="flexRadioDefault1">
-                  Paid
-                </label>
-              </div>
-              <div className="form-check">
-                <input
-                  className="form-check-input"
-                  type="radio"
-                  name="flexRadioDefault"
-                  id="flexRadioDefault2"
-                  defaultChecked=""
-                  checked={unit.is_paid === false}
-                  value={unit.is_paid}
-                  onChange={(e) => {
-                    updateUI(e, "is_paid");
-                  }}
-                />
-                <label className="form-check-label" htmlFor="flexRadioDefault2">
-                  Free(price will be 0)
-                </label>
-                <div className="form-check form-switch">
+              <div className={classes.SectionBody}>
+                <div className="form-floating mb-3">
                   <input
-                    className="form-check-input"
-                    type="checkbox"
-                    role="switch"
-                    id="flexSwitchCheckChecked"
-                    checked={hasPrerequisite}
-                    onChange={(event) => {
-                      // article.prerequisite.has_prerequisite=!hasPrerequisite
-
-                      setUnit({
-                        ...unit,
-                        prerequisite: {
-                          ...unit.prerequisite,
-                          has_prerequisite: !hasPrerequisite,
-                        },
-                      });
-                      setHasPrerequisite(!hasPrerequisite);
+                    className="form-control"
+                    id="floatingInput"
+                    placeholder="name@example.com"
+                    value={unit.unit_name}
+                    onChange={(e) => {
+                      updateUI(e, "unit_name");
                     }}
                   />
-                  <label
-                    className="form-check-label"
-                    htmlFor="flexSwitchCheckChecked"
-                  >
-                    Has Pre-requisites
-                  </label>
+                  <label htmlFor="floatingInput">Unit Name</label>
                 </div>
-                {hasPrerequisite ? (
-                  <>
-                    <>
-                      <div className="dropdown">
-                        <button
-                          className="btn btn-primary dropdown-toggle"
-                          type="button"
-                          id="dropdownMenuButton"
-                          data-mdb-toggle="dropdown"
-                          aria-expanded="false"
-                        >
-                          On Unit
-                        </button>
-                        <ul
-                          className="dropdown-menu"
-                          aria-labelledby="dropdownMenuButton"
-                        >
-                          {units.map((unit) => {
-                            return (
-                              <li
-                                onClick={(e) => {
-                                  prerequisiteItemClick(e, unit);
-                                }}
-                              >
-                                {unit.unit_title}
-                              </li>
-                            );
-                          })}
-                        </ul>
-                      </div>
-                      <>
-                        <label htmlFor="inputPassword5" className="form-label">
-                          After Time in Seconds
-                        </label>
-                        <input
-                          id="inputPassword5"
-                          className="form-control"
-                          aria-describedby="passwordHelpBlock"
-                          type="number"
-                          value={unit.prerequisite.time}
-                          onChange={(event) => {
-                            setUnit({
-                              ...unit,
-                              prerequisite: {
-                                ...unit.prerequisite,
-                                time: event.target.value,
-                              },
-                            });
-                          }}
-                        />
+                <div className="form-floating mb-3">
+                  <input
+                    className="form-control"
+                    id="floatingPassword"
+                    placeholder="Password"
+                    value={unit.creator}
+                    onChange={(e) => {
+                      updateUI(e, "creator");
+                    }}
+                  />
+                  <label htmlFor="floatingInput">Creator</label>
+                </div>
+                <div className="form-floating mb-3">
+                  <input
+                    className="form-control"
+                    id="floatingInput"
+                    placeholder="name@example.com"
+                    value={unit.tags}
+                    onChange={(e) => {
+                      updateUI(e, "tags");
+                    }}
+                  />
+                  <label htmlFor="floatingInput">Tags(Seperated by Commas, No Space)</label>
+                </div>
 
-                        <label htmlFor="inputPassword5" className="form-label">
-                          Prerequisite Message
-                        </label>
-                        <input
-                          id="inputPassword5"
-                          className="form-control"
-                          aria-describedby="passwordHelpBlock"
-                          value={unit.prerequisite.message}
-                          onChange={(event) => {
-                            setUnit({
-                              ...unit,
-                              prerequisite: {
-                                ...unit.prerequisite,
-                                message: event.target.value,
-                              },
-                            });
-                          }}
-                        />
+                <div className="d-flex align-items-center justify-content-start p-2 mb-2 flex-wrap">
+                  <div className="form-check me-2">
+                    <input
+                      className="form-check-input"
+                      type="radio"
+                      name="flexRadioDefault2"
+                      id="flexRadioDefault3"
+                      onChange={() => {
+                        setUnit({ ...unit, completetion: "manual" });
+                      }} />
+                    <label className="form-check-label" htmlFor="flexRadioDefault1">
+                      Completion Manual
+                    </label>
+                  </div>
+                  <div className="form-check">
+                    <input
+                      className="form-check-input"
+                      type="radio"
+                      name="flexRadioDefault2"
+                      id="flexRadioDefault4"
+                      defaultChecked="true"
+                      onChange={() => {
+                        setUnit({ ...unit, completetion: "auto" });
+                      }} />
+                    <label className="form-check-label" htmlFor="flexRadioDefault2">
+                      Completion Auto
+                    </label>
+                  </div>
+                </div>
+                <div className="form-floating mb-3">
+                  <input
+                    className="form-control"
+                    id="floatingInput"
+                    placeholder="name@example.com"
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => {
+                      image = e.target.files[0];
+                      imageId = "imageId" + new Date().getTime() + "." + image.name.split(".")[1];
+                      let imageIdurl = AWSManager.getImageBucketLink() + imageId;
+                      setUnit({ ...unit, image_url: imageIdurl });
+                    }}
+                  />
+                  <label htmlFor="floatingInput">Thumbnail Image</label>
+                </div>
+                <div className="form-floating mb-3">
+                  <input
+                    className="form-control"
+                    id="floatingInput"
+                    placeholder="name@example.com"
+                    value={unit.description}
+                    onChange={(e) => {
+                      updateUI(e, "description");
+                    }}
+                  />
+                  <label htmlFor="floatingInput">Description</label>
+                </div>
+
+
+                <div className="d-flex align-items-center justify-content-around p-2 mb-2 flex-wrap">
+                  <div className="d-flex align-items-center justify-content-around p-2 mb-2 flex-wrap w-100">
+
+                    <div className="form-check mb-2">
+                      <input
+                        className="form-check-input"
+                        type="radio"
+                        name="flexRadioDefault"
+                        id="flexRadioDefault1"
+                        checked={unit.is_paid === true}
+                        onChange={(e) => {
+                          updateUI(e, "is_paid");
+                        }}
+                      />
+                      <label className="form-check-label" htmlFor="flexRadioDefault1">
+                        Paid
+                      </label>
+                    </div>
+                    <div className="form-check mb-2">
+                      <input
+                        className="form-check-input"
+                        type="radio"
+                        name="flexRadioDefault"
+                        id="flexRadioDefault2"
+                        defaultChecked=""
+                        checked={unit.is_paid === false}
+                        value={unit.is_paid}
+                        onChange={(e) => {
+                          updateUI(e, "is_paid");
+                        }}
+                      />
+                      <label className="form-check-label" htmlFor="flexRadioDefault2">
+                        Free(price will be 0)
+                      </label>
+                    </div>
+
+                    <div className="form-check form-switch mb-2">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        role="switch"
+                        id="flexSwitchCheckChecked"
+                        checked={hasPrerequisite}
+                        onChange={(event) => {
+                          // article.prerequisite.has_prerequisite=!hasPrerequisite
+
+                          setUnit({
+                            ...unit,
+                            prerequisite: {
+                              ...unit.prerequisite,
+                              has_prerequisite: !hasPrerequisite,
+                            },
+                          });
+                          setHasPrerequisite(!hasPrerequisite);
+                        }}
+                      />
+                      <label
+                        className="form-check-label"
+                        htmlFor="flexSwitchCheckChecked"
+                      >
+                        Has Pre-requisites
+                      </label>
+                    </div>
+                  </div>
+
+                  {hasPrerequisite ? (
+                    <>
+                      <>
+                        <div className="dropdown w-100">
+                          <button
+                            className="btn btn-primary dropdown-toggle btn-sm"
+                            type="button"
+                            id="dropdownMenuButton"
+                            data-mdb-toggle="dropdown"
+                            aria-expanded="false"
+                          >
+                            On Unit
+                          </button>
+                          <ul
+                            className="dropdown-menu"
+                            aria-labelledby="dropdownMenuButton"
+                          >
+                            {units.map((unit) => {
+                              return (
+                                <li className="dropdown-item"
+                                  onClick={(e) => {
+                                    prerequisiteItemClick(e, unit);
+                                  }}
+                                >
+                                  {unit.unit_title}
+                                </li>
+                              );
+                            })}
+                          </ul>
+                        </div>
+                        <div className="d-flex align-items-center justify-content-around p-2 mb-2 flex-wrap w-100">
+
+
+                          <div class="form-floating mb-4">
+
+
+                            <input
+                              id="inputPassword5"
+                              className="form-control"
+                              type="number"
+                              placeholder="Enter Time"
+
+                              value={unit.prerequisite.time}
+                              onChange={(event) => {
+                                setUnit({
+                                  ...unit,
+                                  prerequisite: {
+                                    ...unit.prerequisite,
+                                    time: event.target.value,
+                                  },
+                                });
+                              }}
+                            /><label htmlFor="inputPassword5" >
+                              After Time in Seconds
+                            </label>
+                          </div>
+                          <div className="form-floating  mb-4">
+
+
+                            <input
+                              id="inputPassword5"
+                              className="form-control"
+                              placeholder="Enter Prerequisite Message"
+                              value={unit.prerequisite.message}
+                              onChange={(event) => {
+                                setUnit({
+                                  ...unit,
+                                  prerequisite: {
+                                    ...unit.prerequisite,
+                                    message: event.target.value,
+                                  },
+                                });
+                              }}
+                            /><label htmlFor="inputPassword5" className="form-label">
+                              Prerequisite Message
+                            </label>
+                          </div>
+                        </div>
                       </>
                     </>
-                  </>
-                ) : (
-                  <></>
-                )}
+                  ) : (
+                    <></>
+                  )}
+                  <div className="w-100">
+
+                    <button
+                      type="button"
+                      className="btn btn-primary btn-lg"
+                      onClick={(e) => {
+                        addUnit(e, unit);
+                      }}
+                    >
+                      Add Unit
+                    </button>
+                  </div>
+                </div>
               </div>
-              <button
-                type="button"
-                className="btn btn-primary"
-                onClick={(e) => {
-                  addUnit(e, unit);
-                }}
-              >
-                Add Unit
-              </button>
-            </>
-          </>
+            </div>
+
+
+          </>}
         </div>
       </div>
-    </div>
+    </>
   );
 }

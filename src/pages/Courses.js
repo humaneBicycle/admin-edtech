@@ -175,14 +175,14 @@ export default function Courses() {
             !isError ? (
               <>
                 {isUnitOrderChanged ? (
-                  <div className="note ">
-                    <span>
+                  <div className="rounded-4 py-3 g-4 px-3 bg-info mw-75 w-auto d-flex justify-content-between align-items-baseline">
+                    <h3>
                       Do you want to save this sort ?
-                    </span>
+                    </h3>
                     {/* <button className="btn btn-outline-primary me-3 ms-auto">
                         Cancel
                       </button> */}
-                    <button className="btn btn-primary me-3" onClick={updateChangedUnitOrder}>Save</button>
+                    <button className="btn btn-primary mx-3" onClick={updateChangedUnitOrder}>Save</button>
                   </div>
                 ) : (
                   <></>
@@ -190,9 +190,9 @@ export default function Courses() {
                 <div className="d-flex flex-wrap justify-content-start align-items-stretch">
 
                   <div className=" Flex50 Height100">
-                    <div className="card w-100">
+                    <div className="card w-100 border">
 
-                      <div className="card-body">
+                      <div className="card-body p-2 pt-3 ps-4">
                         <h2 className="card-title mb-2">{course.name}</h2>
                         <h6 className="card-subtitle text-muted mb-2">
                           {" "}
@@ -203,6 +203,8 @@ export default function Courses() {
                           {console.log(course)}
                           {"Created on " + course.created}{" "}
                         </small>
+                        <div className="card-body">
+
                         <p className="card-text">
                           {"description: " + course.description}
                         </p>
@@ -212,7 +214,8 @@ export default function Courses() {
                         <div className="card-text">
                           {"heading: " + course.headline}
                         </div>
-                        <div className="d-flex flex-row justify-content-end mt-3">
+                        </div>
+                        <div className="d-flex flex-row justify-content-end mt-3 card-footer">
                           <Link
                             className="btn btn-primary btn-sm"
                             to="add-unit"

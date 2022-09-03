@@ -5,7 +5,8 @@ import MediaConvert from "aws-sdk/clients/mediaconvert";
 import LinkHelper from "../utils/LinkHelper";
 import { useLocation } from "react-router";
 import StorageHelper from "../utils/StorageHelper";
-
+import Loader from "../components/Loader";
+import SnackBar from "../components/snackbar";
 var videoFile;
 
 let uid;
@@ -67,12 +68,12 @@ export default function AllLessonVideo(props) {
     prerequisite: {
       has_prerequisite: true,
     },
-    completion:"auto"
+    completion: "auto"
   });
 
   let updateUI = (e, mode) => {
     let val;
-    if (mode != "video_id") {
+    if (mode !== "video_id") {
       val = e.target.value;
     }
 
@@ -85,7 +86,7 @@ export default function AllLessonVideo(props) {
     } else {
       activeLessonVideo[mode] = val;
 
-      setActiveLessonVideo({ ...activeLessonVideo});
+      setActiveLessonVideo({ ...activeLessonVideo });
     }
   };
   let prerequisiteItemClick = (e, lesson) => {
@@ -101,22 +102,24 @@ export default function AllLessonVideo(props) {
     event.preventDefault();
     if (
       lesson.video == null ||
-      lesson.thumbnail_url == undefined ||
-      lesson.title == undefined ||
-      lesson.description == undefined ||
+      lesson.thumbnail_url === undefined ||
+      lesson.title === undefined ||
+      lesson.description === undefined ||
       activeLessonVideo.prerequisite.has_prerequisite
     ) {
       if (activeLessonVideo.prerequisite.has_prerequisite) {
         if (
-          activeLessonVideo.prerequisite.on == undefined ||
-          activeLessonVideo.prerequisite.time == undefined ||
-          activeLessonVideo.prerequisite.message == undefined
+          activeLessonVideo.prerequisite.on === undefined ||
+          activeLessonVideo.prerequisite.time === undefined ||
+          activeLessonVideo.prerequisite.message === undefined
         ) {
-          alert("Please fill all the fields");
+          // alert("Please fill all the fields");
+          SnackBar("Please fill all the fields", 1000, "OK")
           return;
         }
       } else {
-        alert("Please fill all the fields");
+        // alert("Please fill all the fields");
+        SnackBar("Please fill all the fields", 1000, "OK")
         return;
       }
     }
@@ -555,7 +558,9 @@ export default function AllLessonVideo(props) {
       try {
         jsonData = await resposnse.json();
         if (jsonData.succuss) {
-          alert("success");
+          // alert("success");
+
+          SnackBar("Success", 1800, "OK")
         }
         console.log("response", jsonData);
       } catch (e) {
@@ -563,7 +568,9 @@ export default function AllLessonVideo(props) {
       }
     } catch (err) {
       console.log(err);
-      alert("Something went wrong" + err.message);
+      // alert("Something went wrong" + err.message);
+      SnackBar("Something went wrong" + err.message, 1800, "OK")
+
     }
   };
 
@@ -572,17 +579,8 @@ export default function AllLessonVideo(props) {
       {isAWSLoaded ? (
         <>
           <>
-            {progress != -1 ? (
-              <div class="progress">
-                <div
-                  class="progress-bar"
-                  role="progressbar"
-                  style="width: 75%;"
-                  aria-valuenow="75"
-                  aria-valuemin="0"
-                  aria-valuemax="100"
-                ></div>
-              </div>
+            {progress !== -1 ? (
+              <Loader />
             ) : (
               <></>
             )}
@@ -637,8 +635,8 @@ export default function AllLessonVideo(props) {
               />
               <label htmlFor="floatingInput">Description</label>
             </div>
-            <>
-              <div className="form-check">
+            <div className="d-flex align-items-center justify-content-start p-2 mb-2 flex-wrap">
+              <div className="form-check me-2">
                 <input
                   className="form-check-input"
                   type="radio"
@@ -655,7 +653,7 @@ export default function AllLessonVideo(props) {
                   Completion Manual
                 </label>
               </div>
-              <div className="form-check">
+              <div className="form-check me-2">
                 <input
                   className="form-check-input"
                   type="radio"
@@ -673,8 +671,6 @@ export default function AllLessonVideo(props) {
                   Completion Auto
                 </label>
               </div>
-            </>
-            <div className="prerequisites">
               <div className="form-check form-switch">
                 <input
                   className="form-check-input"
@@ -702,12 +698,15 @@ export default function AllLessonVideo(props) {
                   Has Pre-requisites
                 </label>
               </div>
+            </div>
+            <div className="prerequisites">
+
               {hasPrerequisite ? (
                 <>
                   <>
                     <div className="dropdown">
                       <button
-                        className="btn btn-primary dropdown-toggle"
+                        className="btn btn-primary btn-sm dropdown-toggle"
                         type="button"
                         id="dropdownMenuButton"
                         data-mdb-toggle="dropdown"
@@ -722,7 +721,7 @@ export default function AllLessonVideo(props) {
                         {lessons.length !== 0 ? (
                           lessons.map((lesson) => {
                             return (
-                              <li
+                              <li className="dropdown-item"
                                 onClick={(e) => {
                                   prerequisiteItemClick(e, lesson);
                                 }}
@@ -736,46 +735,50 @@ export default function AllLessonVideo(props) {
                         )}
                       </ul>
                     </div>
-                    <>
-                      <label htmlFor="inputPassword5" className="form-label">
-                        After Time in Seconds
-                      </label>
-                      <input
-                        id="inputPassword5"
-                        className="form-control"
-                        aria-describedby="passwordHelpBlock"
-                        type="number"
-                        value={activeLessonVideo.prerequisite.time}
-                        onChange={(event) => {
-                          setActiveLessonVideo({
-                            ...activeLessonVideo,
-                            prerequisite: {
-                              ...activeLessonVideo.prerequisite,
-                              time: event.target.value,
-                            },
-                          });
-                        }}
-                      />
+                    <div className="d-flex align-items-center justify-content-between p-2 mb-2 flex-wrap">
+                      <div className="form-floating me-2">
 
-                      <label htmlFor="inputPassword5" className="form-label">
-                        Prerequisite Message
-                      </label>
-                      <input
-                        id="inputPassword5"
-                        className="form-control"
-                        aria-describedby="passwordHelpBlock"
-                        value={activeLessonVideo.prerequisite.message}
-                        onChange={(event) => {
-                          setActiveLessonVideo({
-                            ...activeLessonVideo,
-                            prerequisite: {
-                              ...activeLessonVideo.prerequisite,
-                              message: event.target.value,
-                            },
-                          });
-                        }}
-                      />
-                    </>
+                        <input
+                          id="inputPassword5"
+                          className="form-control"
+                          placeholder="Enter The Time"
+                          type="number"
+                          value={activeLessonVideo.prerequisite.time}
+                          onChange={(event) => {
+                            setActiveLessonVideo({
+                              ...activeLessonVideo,
+                              prerequisite: {
+                                ...activeLessonVideo.prerequisite,
+                                time: event.target.value,
+                              },
+                            });
+                          }}
+                        />
+                        <label htmlFor="inputPassword5" className="form-label">
+                          After Time in Seconds
+                        </label>
+                      </div>
+                      <div className="form-floating me-2">
+
+                        <input
+                          id="inputPassword5"
+                          className="form-control"
+                          placeholder="Enter the Message"
+                          value={activeLessonVideo.prerequisite.message}
+                          onChange={(event) => {
+                            setActiveLessonVideo({
+                              ...activeLessonVideo,
+                              prerequisite: {
+                                ...activeLessonVideo.prerequisite,
+                                message: event.target.value,
+                              },
+                            });
+                          }}
+                        />   <label htmlFor="inputPassword5" className="form-label">
+                          Prerequisite Message
+                        </label>
+                      </div>
+                    </div>
                   </>
                 </>
               ) : (
