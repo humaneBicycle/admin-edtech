@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
 import LinkHelper from "../utils/LinkHelper";
 import StorageHelper from "../utils/StorageHelper";
+import Loader from "../components/Loader";
+import SnackBar from "../components/snackbar";
 
 export default function AllLessonArticle(props) {
   let location = useLocation();
@@ -40,22 +42,24 @@ export default function AllLessonArticle(props) {
   let uploadArticle = async () => {
     console.log("done", article);
     if (
-      article.body == undefined ||
-      article.head == undefined ||
-      article.title == undefined ||
+      article.body === undefined ||
+      article.head === undefined ||
+      article.title === undefined ||
       article.prerequisite.has_prerequisite
     ) {
       if (article.prerequisite.has_prerequisite) {
         if (
-          article.prerequisite.on == undefined ||
-          article.prerequisite.time == undefined ||
-          article.prerequisite.message == undefined
+          article.prerequisite.on === undefined ||
+          article.prerequisite.time === undefined ||
+          article.prerequisite.message === undefined
         ) {
-          alert("Please fill all the fields");
+          // alert("Please fill all the fields");
+          SnackBar("Please fill all the fields", 1000, "OK")
           return;
         }
       } else {
-        alert("Please fill all the fields");
+        // alert("Please fill all the fields");
+        SnackBar("Please fill all the fields", 1000, "OK");
         return;
       }
     }
@@ -82,14 +86,18 @@ export default function AllLessonArticle(props) {
           throw new Error(data.message);
         }
       } catch {
-        alert("Error");
+        // alert("Error");
+        SnackBar("Error", 1000, "OK");
+
         console.log("error");
         setSpinner(false);
 
       }
     } catch (error) {
       console.log(error);
-      alert("Error");
+      // alert("Error");
+      SnackBar("Error", 1000, "OK");
+
       setSpinner(false);
 
     }
@@ -100,11 +108,7 @@ export default function AllLessonArticle(props) {
       <>
         <div className="mb-3">
           {spinner ? (
-            <div class="d-flex">
-              <div class="spinner-grow text-primary m-auto  my-5" role="status">
-                <span class="visually-hidden">Loading...</span>
-              </div>
-            </div>
+            <Loader />
           ) : (
             <></>
           )}
@@ -145,8 +149,8 @@ export default function AllLessonArticle(props) {
               handleArticleChange("body", event);
             }}
           />
-          <>
-            <div className="form-check">
+          <div className="d-flex align-items-center justify-content-start p-2 mb-2 flex-wrap">
+            <div className="form-check me-2">
               <input
                 className="form-check-input"
                 type="radio"
@@ -160,7 +164,7 @@ export default function AllLessonArticle(props) {
                 Completion Manual
               </label>
             </div>
-            <div className="form-check">
+            <div className="form-check me-2">
               <input
                 className="form-check-input"
                 type="radio"
@@ -175,8 +179,6 @@ export default function AllLessonArticle(props) {
                 Completion Auto
               </label>
             </div>
-          </>
-          <div className="prerequisites">
             <div className="form-check form-switch">
               <input
                 className="form-check-input"
@@ -204,12 +206,15 @@ export default function AllLessonArticle(props) {
                 Has Pre-requisites
               </label>
             </div>
+          </div>
+          <div className="prerequisites">
+
             {hasPrerequisite ? (
               <>
                 <>
                   <div className="dropdown">
                     <button
-                      className="btn btn-primary dropdown-toggle"
+                      className="btn btn-primary btn-sm dropdown-toggle"
                       type="button"
                       id="dropdownMenuButton"
                       data-mdb-toggle="dropdown"
@@ -224,7 +229,7 @@ export default function AllLessonArticle(props) {
                       {lessons.length !== 0 ? (
                         lessons.map((lesson) => {
                           return (
-                            <li
+                            <li className="dropdown-item"
                               onClick={(e) => {
                                 prerequisiteItemClick(e, lesson);
                               }}
@@ -238,46 +243,51 @@ export default function AllLessonArticle(props) {
                       )}
                     </ul>
                   </div>
-                  <>
-                    <label htmlFor="inputPassword5" className="form-label">
-                      After Time in Seconds
-                    </label>
-                    <input
-                      id="inputPassword5"
-                      className="form-control"
-                      aria-describedby="passwordHelpBlock"
-                      type="number"
-                      value={article.prerequisite.time}
-                      onChange={(event) => {
-                        setArticle({
-                          ...article,
-                          prerequisite: {
-                            ...article.prerequisite,
-                            time: event.target.value,
-                          },
-                        });
-                      }}
-                    />
+                  <div className="d-flex align-items-center justify-content-between p-2 mb-2 flex-wrap">
+                    <div className="form-floating me-2">
 
-                    <label htmlFor="inputPassword5" className="form-label">
-                      Prerequisite Message
-                    </label>
-                    <input
-                      id="inputPassword5"
-                      className="form-control"
-                      aria-describedby="passwordHelpBlock"
-                      value={article.prerequisite.message}
-                      onChange={(event) => {
-                        setArticle({
-                          ...article,
-                          prerequisite: {
-                            ...article.prerequisite,
-                            message: event.target.value,
-                          },
-                        });
-                      }}
-                    />
-                  </>
+                      <input
+                        id="inputPassword5"
+                        className="form-control"
+                        placeholder="Enter The Time"
+                        type="number"
+                        value={article.prerequisite.time}
+                        onChange={(event) => {
+                          setArticle({
+                            ...article,
+                            prerequisite: {
+                              ...article.prerequisite,
+                              time: event.target.value,
+                            },
+                          });
+                        }}
+                      />
+                      <label htmlFor="inputPassword5" className="form-label">
+                        After Time in Seconds
+                      </label>
+                    </div>
+                    <div className="form-floating me-2">
+                      <input
+                        id="inputPassword5"
+                        className="form-control"
+                        placeholder="Enter the Message"
+                        value={article.prerequisite.message}
+                        onChange={(event) => {
+                          setArticle({
+                            ...article,
+                            prerequisite: {
+                              ...article.prerequisite,
+                              message: event.target.value,
+                            },
+                          });
+                        }}
+                      />
+                      <label htmlFor="inputPassword5" className="form-label">
+                        Prerequisite Message
+                      </label>
+
+                    </div>
+                  </div>
                 </>
               </>
             ) : (
@@ -285,7 +295,7 @@ export default function AllLessonArticle(props) {
             )}
           </div>
 
-          <button className="btn btn-primary my-2" onClick={uploadArticle}>
+          <button className="btn btn-primary  btn-lg my-2" onClick={uploadArticle}>
             Add Lesson
           </button>
         </div>
