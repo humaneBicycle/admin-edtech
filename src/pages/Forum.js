@@ -145,7 +145,9 @@ export default function Discussion() {
         data = await response.json();
         if (data.success) {
           console.log(data);
-          alert("Question deleted successfully");
+          // alert("Question deleted successfully");
+          SnackBar("Question deleted successfully", 1500, "OK");
+
           setSpinner(false);
           window.location.reload();
         } else {
@@ -153,7 +155,9 @@ export default function Discussion() {
           throw new Error(data.message);
         }
       } catch (err) {
-        alert("Error");
+        // alert("Error");
+        SnackBar("Question deleted successfully", 1500, "OK");
+
         setSpinner(false);
         setSpinner(false);
 
@@ -162,7 +166,9 @@ export default function Discussion() {
     } catch (err) {
       setSpinner(false);
 
-      console.log(err);
+      // console.log(err);
+      SnackBar(err, 1500, "OK");
+
     }
   };
   return (
