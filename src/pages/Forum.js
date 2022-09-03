@@ -3,6 +3,11 @@ import Navbar from "../components/Navbar";
 import LinkHelper from "../utils/LinkHelper";
 import StorageHelper from "../utils/StorageHelper";
 import { Link } from "react-router-dom";
+import Loader from "../components/Loader";
+import classes from "../pages/classes.module.css";
+import SnackBar from "../components/snackbar";
+import Header from "../components/Header";
+
 
 let questions = [];
 let answers = [];
@@ -58,12 +63,16 @@ export default function Discussion() {
           throw new Error(data.message);
         }
       } catch {
-        alert("Error" + data.message);
+        // alert("Error" + data.message);
+        SnackBar("Error" + data.message, 1500, "OK");
+
         console.log("error");
       }
     } catch (error) {
       console.log(error);
-      alert("Error" + data.message);
+      // alert("Error" + data.message);
+      SnackBar("Error" + data.message, 1500, "OK");
+
     }
   };
 
@@ -98,12 +107,15 @@ export default function Discussion() {
           throw new Error(data.message);
         }
       } catch {
-        alert("Error");
+        SnackBar("Error", 1500, "OK");
+
+        // alert("Error");
         console.log("error");
       }
     } catch (error) {
       console.log(error);
-      alert("Error");
+      SnackBar("Error", 1500, "OK");
+      // alert("Error");
     }
   };
 
@@ -155,94 +167,78 @@ export default function Discussion() {
   };
   return (
     <>
-      <div className="row ">
-        <div className="col-md-2 border-end">
-          <Navbar />
-        </div>
-        
+      <Navbar />
 
-        <div className="col-md-9">
-        <div className="Navbar  d-flex justify-content-start mt-3 mb-4 border-bottom">
-            <div className="NavHeading ms-4">
-              <h2>Forum</h2>
-            </div>
 
-            <div className=" ms-5 me-auto NavSearch">
-              <div className="input-group rounded d-flex flex-nowrap">
-                <input
-                  type="search"
-                  className="form-control rounded w-100"
-                  placeholder="Search"
-                  aria-label="Search"
-                  aria-describedby="search-addon"
-                />
-                <span className="input-group-text border-0" id="search-addon">
-                  <i className="fas fa-search"></i>
-                </span>
-              </div>
-            </div>
-          </div>
-          
+      <div className={classes.MainContent}>
+        <Header PageTitle={"Forum || Admin Panel"} />
+
+        <div className={classes.MainInnerContainer}>
+
           {spinner ? (
             <>
-              <div class="d-flex">
-                <div
-                  class="spinner-grow text-primary m-auto  my-5"
-                  role="status"
-                >
-                  <span class="visually-hidden">Loading...</span>
-                </div>
-              </div>
+              <Loader />
             </>
           ) : (
             <></>
           )}
           {isLoaded ? (
             <>
-              <div className="row">
-                <div className="col-md-5">
-                  <ul class="list-group">
-                    <h2>Questions</h2>
+              <h2 className="title">Questions</h2>
+              <div className="FlexBoxRow FlexWrap">
+                <div className="Flex50">
+                  <div class="ListBlock">
                     {questions.map((question, index) => (
                       <>
-                        {activeQuestionIndex == index ? (
-                          <li
-                            className="list-group-item active"
+                        {activeQuestionIndex === index ? (
+                          <div
+                            className="ListItem active"
                             aria-current="true"
                             onClick={() => {
                               handleQuestionClick(question, index);
                             }}
                           >
-                            <h5>{index + 1 + ". " + question.head}</h5>
-                            {question.body}
-                            <h6>{"Total Likes: " + question.total_likes}</h6>
-                            <div
-                              className="btn btn-danger"
-                              onClick={(event) => {
-                                deleteQuestion(question._id, event);
-                              }}
-                            >
-                              Delete
+                            <div className="FlexBoxColumn">
+                              <h3 className="ListItemTitle">{index + 1 + ". " + question.head}</h3>
+                              <p>{question.body}</p>
+                              <h6 className="ListItemSubtitle">{"Total Likes: " + question.total_likes}</h6>
                             </div>
-                            <Link
-                            className="btn btn-success mx-4"
-                            to="/admin/forum/add-answer"
-                            state={{question:question}}
-                          >
-                            Answer This Question
-                          </Link>
-                          </li>
+
+                            <div className="FlexBoxColumn ListItemButtons">
+
+                              <span className={classes.AdminDelete} onClick={(event) => {
+                                deleteQuestion(question._id, event);
+                              }}>
+
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" ><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                              </span>
+                              <Link
+
+                                to="/admin/forum/add-answer"
+                                state={{ question: question }}
+                                className="ListItemButton"
+                              >
+
+
+
+                                <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" style={{ transform: 'rotateZ(90deg)' }}><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" /><polyline points="16 6 12 2 8 6" /><line x1={12} y1={2} x2={12} y2={15} /></svg>
+                              </Link>
+                            </div>
+                          </div>
                         ) : (
-                          <li
-                            class="list-group-item"
+                          <div
+                            class="ListItem"
                             aria-current="true"
                             onClick={() => {
                               handleQuestionClick(question, index);
                             }}
                           >
-                            <h5>{index + 1 + ". " + question.head}</h5>
-                            {question.body}
-                            <h6>{"Total Likes: " + question.total_likes}</h6>
+                            <div className="FlexBoxColumn">
+                              <h3 className="ListItemTitle">{index + 1 + ". " + question.head}</h3>
+                              <p>{question.body}</p>
+                              <h6 className="ListItemSubtitle">{"Total Likes: " + question.total_likes}</h6>
+                            </div>
+
                             {/* <div
                               className="btn btn-danger"
                               onClick={(event) => {
@@ -251,58 +247,59 @@ export default function Discussion() {
                             >
                               Delete
                             </div> */}
-                          </li>
+                          </div>
                         )}
                       </>
                     ))}
-                  </ul>
+                  </div>
+                  <div className="FlexCenter">
 
-                  <button
-                    className="btn btn-primary mx-4 my-4"
-                    onClick={() => {
-                      if (!isAllQuestionLoaded) {
-                        getQuestions(loadedPageQuestion + 1);
-                      } else {
-                        alert("All questions are loaded");
-                      }
-                    }}
-                  >
-                    Load More Questions
-                  </button>
+                    <button
+                      className="actionButton"
+                      onClick={() => {
+                        if (!isAllQuestionLoaded) {
+                          getQuestions(loadedPageQuestion + 1);
+                        } else {
+                          // alert("All questions are loaded");
+                          SnackBar("All questions are loaded", 1500, "OK");
+                        }
+
+                      }}
+                    >
+                      Load More Questions
+                    </button>
+                  </div>
                 </div>
-                <div className="col-md-7">
-                  <h2>Answers</h2>
+                <div className="Flex50">
+                  <h2 className="title">Answers</h2>
+                  <hr />
                   {isAnswerLoaded ? (
                     <>
                       {answers.length > 0 ? (
-                        <>
+                        <div class="ListBlock">
+
                           {answers.map((answer, index) => (
                             <>
-                              <li class="list-group-item" aria-current="true">
+                              <li className="ListItem active" aria-current="true">
                                 {index + 1 + ". " + answer.head}<br></br>
                                 {answer.body}
-                                
+
                               </li>
                             </>
                           ))}
-                        </>
+                        </div>
                       ) : (
                         <>
-                          
+
                           No answers found!
+                          {SnackBar("  No answers found! ", 1500, "OK")}
+
                         </>
                       )}
                     </>
                   ) : (
                     <>
-                      <div className="d-flex">
-                        <div
-                          className="spinner-grow text-primary m-auto  my-5"
-                          role="status"
-                        >
-                          <span className="visually-hidden">Loading...</span>
-                        </div>
-                      </div>
+                      <Loader />
                     </>
                   )}
                 </div>
@@ -310,19 +307,12 @@ export default function Discussion() {
             </>
           ) : (
             <>
-              <div class="d-flex">
-                <div
-                  class="spinner-grow text-primary m-auto  my-5"
-                  role="status"
-                >
-                  <span class="visually-hidden">Loading...</span>
-                </div>
-              </div>
+              <Loader />
             </>
           )}
         </div>
       </div>
-      
+
     </>
   );
 }
