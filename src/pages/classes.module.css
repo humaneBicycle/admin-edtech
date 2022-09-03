@@ -311,3 +311,8 @@ button.sideMenuLink {
     flex-wrap: wrap;
     width: 100%;
 }
+
+.StickyTop {
+    position: sticky;
+    top: 0;
+}
