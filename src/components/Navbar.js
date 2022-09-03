@@ -17,7 +17,7 @@ export default function Navbar() {
   // const [visible, setVisibility] = useState(true);
   // visible ? sideMenu.current.classList.add("show") : sideMenu.current.classList.remove("show");
   let ToggleSidenav = () => {
-    console.log("clicked toggle");
+    // console.log("clicked toggle");
     sideMenu.current.classList.toggle('show');
     toggle.current.classList.toggle('active');
     // setVisibility(a => !a);

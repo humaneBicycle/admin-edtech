@@ -94,7 +94,7 @@ export default function Unit({
                     <i className="fa fa-star" />
                     <i className="fa fa-star" />
                   </div>
-                  <span>310</span>
+                  <span></span>
                 </div>
                 <div className="mt-1 mb-0 text-muted small">
                   {tags.map((tag, index) => (
@@ -149,6 +149,13 @@ export default function Unit({
                     className="btn btn-primary btn-sm"
                     to="add-lesson"
                     state={{ unit: unit }}>      Add lesson</Link>
+                    <Link
+            className="btn btn-light btn-sm  my-2"
+            to="edit-unit"
+            state={{ unit: unit }}
+          >
+            Edit Unit<i className="far fa-edit mx-2"></i>
+          </Link>
                   <button className="btn btn-outline-danger btn-sm mt-2" type="button" onClick={deleteUnit}>
                     <span>Delete</span>
                   </button>
