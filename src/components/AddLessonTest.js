@@ -50,8 +50,8 @@ export default function AddLessonTest(props) {
       state.activeQuestion.options.c == "" ||
       state.activeQuestion.options.d == undefined ||
       state.activeQuestion.options.d == "" ||
-      state.activeQuestion.options.correct_option == undefined ||
-      state.activeQuestion.options.correct_option == "" ||
+      state.activeQuestion.correct_option == undefined ||
+      state.activeQuestion.correct_option == "" ||
       state.activeQuestion.image == undefined ||
       state.activeQuestion.image == null
     ) {
@@ -159,21 +159,24 @@ export default function AddLessonTest(props) {
       });
       try {
         data = await response.json();
+        console.log(data);
         if (data.success) {
-          SnackBar("success", data.message);
-          setState({ ...initState, spinner: false });
-          imageRef.current.value="";
+          SnackBar("success", 1500);
+          setState({ ...initState, spinner: false, lesson:{...state.lesson,questions:[]} });
         } else {
           SnackBar("error ", data.message);
           console.log(data);
           setState({ ...state, spinner: false });
         }
       } catch (err) {
-        SnackBar("Something went wrong ", err);
+        console.log(err)
+        SnackBar("Something went wrong ");
         setState({ ...state, spinner: false });
       }
     } catch (err) {
-      SnackBar("Something went wrong ", err);
+      console.log(err)
+
+      SnackBar("Something went wrong ");
       setState({ ...state, spinner: false });
     }
   };
@@ -184,16 +187,17 @@ export default function AddLessonTest(props) {
         <>
           <div className="mb-3">
             <label htmlFor="exampleFormControlInput1" className="form-label">
-              Name
+              Title
             </label>
             <input
-              value={state.lesson.name}
+              value={state.lesson.title}
               className="form-control"
               onChange={(event) => {
                 setState({
                   ...state,
-                  name: event.target.value,
-                });
+                  lesson:{...state.lesson,
+                    title: event.target.value,
+                }});
               }}
             />
             <label htmlFor="exampleFormControlInput1" className="form-label">
@@ -206,8 +210,9 @@ export default function AddLessonTest(props) {
               onChange={(event) => {
                 setState({
                   ...state,
+                  lesson:{...state.lesson,
                   time_allowed: event.target.value,
-                });
+                }});
               }}
             />
             <label htmlFor="exampleFormControlInput1" className="form-label">
