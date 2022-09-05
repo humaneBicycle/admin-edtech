@@ -142,15 +142,15 @@ export default function StudentProfile() {
                       <li className="list-group-item  d-flex justify-content-between"> Registered Number:   <span className="badge badge-info rounded-pill"> {state.user.phone_number}</span></li>
                       <li className="list-group-item  d-flex justify-content-between">  Average percentage in tests:<span className="badge badge-primary rounded-pill"> {state.user.avg_percentage_test}</span></li>
                       <li className="list-group-item  d-flex justify-content-between">   User Created on: <span className="badge badge-primary rounded-pill">{state.user.created}</span></li>
-                      <li className="list-group-item  d-flex justify-content-between">Is the User Educator: <span className="badge badge-primary rounded-pill">{state.user.educator.toString()}</span></li>
                       <li className="list-group-item  d-flex justify-content-between"> Last Lesson: <span className="badge badge-primary rounded-pill">{state.user.last_lesson.title}</span></li>
                       <li className="list-group-item  d-flex justify-content-between">   Lesson Completed: <span className="badge badge-primary rounded-pill">{state.user.lessons_completed}</span></li>
                       <li className="list-group-item  d-flex justify-content-between">   Last Unit: <span className="badge badge-primary rounded-pill">{state.user.last_unit.title}</span></li>
                       <li className="list-group-item  d-flex justify-content-between">    Tests Given: <span className="badge badge-primary rounded-pill">{state.user.test_given}</span></li>
-                      <li className="list-group-item  d-flex justify-content-between">    Forum Answers given by this user: <span className="badge badge-primary rounded-pill">{state.student.forum_answers.map(answer=>{return(<>{answer.toString()}</>)})}</span></li>
-                      <li className="list-group-item  d-flex justify-content-between">    Forum questions asked by this user: <span className="badge badge-primary rounded-pill">{state.student.forum_questions.map(question=>{return(<>{question.toString()}</>)})}</span></li>
-                      <li className="list-group-item  d-flex justify-content-between">    Manual Lesson: <span className="badge badge-primary rounded-pill">{state.student.manual_lessons.map(lesson=>{return(<>{lesson.toString()}</>)})}</span></li>
-                      <li className="list-group-item  d-flex justify-content-between">    Uploaded Assignments: <span className="badge badge-primary rounded-pill">{state.student.uploaded_assignment.map(lesson=>{return(<>{lesson.toString()}</>)})}</span></li>
+                      {/* <li className="list-group-item  d-flex justify-content-between">Is the User Educator: <span className="badge badge-primary rounded-pill">{state.user.educator}</span></li> */}
+                      {/* <li className="list-group-item  d-flex justify-content-between">    Forum Answers given by this user: <span className="badge badge-primary rounded-pill">{state.student.forum_answers.map(answer=>{return(<>{answer}</>)})}</span></li>
+                      <li className="list-group-item  d-flex justify-content-between">    Forum questions asked by this user: <span className="badge badge-primary rounded-pill">{state.student.forum_questions.map(question=>{return(<>{question}</>)})}</span></li>
+                      <li className="list-group-item  d-flex justify-content-between">    Manual Lesson: <span className="badge badge-primary rounded-pill">{state.student.manual_lessons.map(lesson=>{return(<>{lesson}</>)})}</span></li>
+                      <li className="list-group-item  d-flex justify-content-between">    Uploaded Assignments: <span className="badge badge-primary rounded-pill">{state.student.uploaded_assignment.map(lesson=>{return(<>{lesson}</>)})}</span></li> */}
                     </ul>
 
 

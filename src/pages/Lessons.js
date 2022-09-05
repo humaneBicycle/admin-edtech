@@ -288,6 +288,40 @@ export default function Lessons() {
                                       )}
                                       {lesson.type === "payment" ? <></> : <></>}
                                       {lesson.type === "event" ? <></> : <></>}
+                                      {lesson.type === "test" ? <>
+                                      <div>
+                                            <div
+                                              className="card mb-3"
+                                              style={{ maxHeight: 270 }}
+                                            >
+                                              <div className="row g-0">
+                                                <div className="col-md-2">
+                                                  <img
+                                                    src="https://mdbcdn.b-cdn.net/wp-content/uploads/2020/06/vertical.webp"
+                                                    alt="Trendy Pants and Shoes"
+                                                    className="img-fluid rounded-start"
+                                                    style={{ maxHeight: 250 }}
+                                                  />
+                                                </div>
+                                                <div className="col-md-8">
+                                                  <div className="card-body">
+                                                    <h5 className="card-title">
+                                                      {lesson.title}
+                                                    </h5>
+                                                    <p className="card-text">
+                                                      Type: {lesson.type}
+                                                    </p>
+                                                    <p className="card-text">
+                                                      <small className="text-muted">
+                                                        id:{lesson.lesson_id}
+                                                      </small>
+                                                    </p>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </div>
+                                      </> : <></>}
                                     </div>
                                   </li>
                                 </Link>
