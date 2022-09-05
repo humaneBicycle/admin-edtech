@@ -19,6 +19,7 @@ export default function EditUnit() {
     spinner: true,
     units: [],
     activeUnit: {
+      admin_id:StorageHelper.get("admin_id"),
 
       ...unit,
       progress: -1,
@@ -91,31 +92,40 @@ export default function EditUnit() {
     e.preventDefault();
     console.log(state);
     let response, data;
-    // try {
-    //   response = await fetch(LinkHelper.getLink() + "admin/unit/update", {
-    //     method: "PUT",
-    //     headers: {
-    //       authorization: "Bearer " + StorageHelper.get("token"),
+    try {
+      response = await fetch(LinkHelper.getLink() + "admin/unit/update", {
+        method: "PUT",
+        headers: {
+          authorization: "Bearer " + StorageHelper.get("token"),
 
-    //       "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify(unit11),
-    //   });
-    //   try {
-    //     data = await response.json();
-    //     if (data.success) {
-    //       alert("Unit Edited Successfully");
-    //       window.location.href = "/course";
-    //     } else {
-    //       alert("Error Editing Unit");
-    //     }
-    //   } catch (err) {
-    //     console.log(err);
-    //   }
-    // } catch (err) {
-    //   console.log(err);
-    //   alert("Something went wrong");
-    // }
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(state.activeUnit),
+      });
+      try {
+        data = await response.json();
+        if (data.success) {
+          SnackBar("Unit updated successfully", 1500, "OK")
+          console.log(data)
+          window.location.href = "/course";
+        } else {
+          console.log(data)
+
+          SnackBar("Unit updated failed", 1500, "OK")
+        }
+      } catch (err) {
+        console.log(data)
+
+        SnackBar("Unit updated failed", 1500, "OK")
+
+        console.log(err);
+      }
+    } catch (err) {
+      
+      SnackBar("Unit updated failed", 1500, "OK")
+
+      console.log(err);
+    }
   }
 
   return (

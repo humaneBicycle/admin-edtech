@@ -221,7 +221,7 @@ export default function AddLesson() {
                     role="tabpanel"
                     aria-labelledby="ex1-tab-4"
                   >
-                    <Event />
+                    <Event  lessons={lessons}/>
                   </div>
                   <div
                     class="tab-pane fade"
