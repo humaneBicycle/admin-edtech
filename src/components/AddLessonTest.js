@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useRef } from "react";
 import { useLocation } from "react-router-dom";
 import LinkHelper from "../utils/LinkHelper";
 import SnackBar from "./snackbar";
@@ -33,6 +33,7 @@ export default function AddLessonTest(props) {
     lessons: [],
   };
   let [state, setState] = useState(initState);
+  let imageRef=useRef(null);
   // console.log(state)
 
   let prerequisiteItemClick = async (e) => {};
@@ -49,12 +50,15 @@ export default function AddLessonTest(props) {
       state.activeQuestion.options.c == "" ||
       state.activeQuestion.options.d == undefined ||
       state.activeQuestion.options.d == "" ||
+      state.activeQuestion.options.correct_option == undefined ||
+      state.activeQuestion.options.correct_option == "" ||
       state.activeQuestion.image == undefined ||
       state.activeQuestion.image == null
     ) {
       SnackBar("Please fill all the fields");
       return;
     }
+    imageRef.current.value="";
     setState({
       ...state,
       lesson: {
@@ -158,6 +162,7 @@ export default function AddLessonTest(props) {
         if (data.success) {
           SnackBar("success", data.message);
           setState({ ...initState, spinner: false });
+          imageRef.current.value="";
         } else {
           SnackBar("error ", data.message);
           console.log(data);
@@ -225,6 +230,7 @@ export default function AddLessonTest(props) {
               Image
             </label>
             <input
+            ref={imageRef}
               className="form-control"
               type="file"
               accept="image/*"
