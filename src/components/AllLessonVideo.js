@@ -10,10 +10,7 @@ import SnackBar from "../components/snackbar";
 var videoFile;
 
 let uid;
-let credentials = {
-  accessKeyId: process.env.REACT_APP_ACCESS_KEY_ID,
-  secretAccessKey: process.env.REACT_APP_ACCESS_KEY_SECRET,
-};
+let credentials;
 
 let videoUId;
 let thumbnailFile;
@@ -24,42 +21,43 @@ export default function AllLessonVideo(props) {
   const location = useLocation();
   let { unit } = location.state;
   let lessons = props.lessons;
-  let [isAWSLoaded, setisAWSLoaded] = useState(false);
-  useEffect(() => {
-    getAWSCredentials();
-  }, []);
+  credentials = props.awsCredentials;
+  let [isAWSLoaded, setisAWSLoaded] = useState(true);
+  // useEffect(() => {
+  //   getAWSCredentials();
+  // }, []);
 
-  let getAWSCredentials = async () => {
-    let response, data;
-    try {
-      response = await fetch(LinkHelper.getLink() + "admin/aws/read", {
-        method: "POST",
-        headers: {
-          authorization: "Bearer " + StorageHelper.get("token"),
-          "content-type": "application/json",
-        },
-        body: JSON.stringify({
-          admin_id: StorageHelper.get("admin_id"),
-        }),
-      });
-      try {
-        data = await response.json();
+  // let getAWSCredentials = async () => {
+  //   let response, data;
+  //   try {
+  //     response = await fetch(LinkHelper.getLink() + "admin/aws/read", {
+  //       method: "POST",
+  //       headers: {
+  //         authorization: "Bearer " + StorageHelper.get("token"),
+  //         "content-type": "application/json",
+  //       },
+  //       body: JSON.stringify({
+  //         admin_id: StorageHelper.get("admin_id"),
+  //       }),
+  //     });
+  //     try {
+  //       data = await response.json();
 
-        if (data.success) {
-          console.log(data);
-          setisAWSLoaded(true);
-        } else {
-          setisAWSLoaded(false);
-        }
-      } catch (err) {
-        console.log(err);
-        setisAWSLoaded(false);
-      }
-    } catch (err) {
-      console.log("error", err);
-      setisAWSLoaded(false);
-    }
-  };
+  //       if (data.success) {
+  //         console.log(data);
+  //         setisAWSLoaded(true);
+  //       } else {
+  //         setisAWSLoaded(false);
+  //       }
+  //     } catch (err) {
+  //       console.log(err);
+  //       setisAWSLoaded(false);
+  //     }
+  //   } catch (err) {
+  //     console.log("error", err);
+  //     setisAWSLoaded(false);
+  //   }
+  // };
 
   let [activeLessonVideo, setActiveLessonVideo] = useState({
     admin_id: StorageHelper.get("admin_id"),

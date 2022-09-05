@@ -3,7 +3,6 @@ import Navbar from "../components/Navbar";
 import { useLocation } from "react-router-dom";
 import LinkHelper from "../utils/LinkHelper";
 import AddLessonTest from "../components/AddLessonTest";
-
 import AllLessonArticle from "../components/AllLessonArticle";
 import AllLessonVideo from "../components/AllLessonVideo";
 import AllLessonAssignment from "../components/AllLessonAssignment";
@@ -14,6 +13,10 @@ import Loader from "../components/Loader";
 import classes from "../pages/classes.module.css";
 import SnackBar from "../components/snackbar";
 import Header from "../components/Header";
+
+
+let credentials;
+
 export default function AddLesson() {
   let [isLoaded, setIsLoaded] = useState(false);
   let [lessons, setLessons] = useState([]);
@@ -39,19 +42,49 @@ export default function AddLesson() {
       });
       try {
         data = await response.json();
-        console.log(data);
-
-        // lessons.push(...data.data);
         setLessons([...lessons, ...data.data])
-        // console.log(lessons);
-        setIsLoaded(true);
+        getAWSCredentials()
       } catch {
         console.log("error");
       }
     } catch (error) {
       console.log(error);
-      // alert("Error");
       SnackBar("Error", 1500, "OK")
+    }
+  };
+
+  let getAWSCredentials = async () => {
+    let response, data;
+    try {
+      response = await fetch(LinkHelper.getLink() + "admin/aws/read", {
+        method: "POST",
+        headers: {
+          authorization: "Bearer " + StorageHelper.get("token"),
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({
+          admin_id: StorageHelper.get("admin_id"),
+        }),
+      });
+      try {
+        data = await response.json();
+
+        if (data.success) {
+          credentials = data.data;
+          setIsLoaded(true)
+        } else {
+          setIsLoaded(true)
+          
+        }
+      } catch (err) {
+        console.log(err);
+        setIsLoaded(true)
+        
+      }
+    } catch (err) {
+      console.log("error", err);
+      setIsLoaded(true)
+      
     }
   };
 
@@ -164,7 +197,7 @@ export default function AddLesson() {
                     role="tabpanel"
                     aria-labelledby="ex1-tab-1"
                   >
-                    <AllLessonVideo lessons={lessons} />
+                    <AllLessonVideo lessons={lessons} awsCredentials={credentials} />
                   </div>
                   <div
                     class="tab-pane fade"
@@ -204,7 +237,7 @@ export default function AddLesson() {
                     role="tabpanel"
                     aria-labelledby="ex1-tab-6"
                   >
-                    <AddLessonTest />
+                    <AddLessonTest lessons={lessons} awsCredentials = {credentials}/>
                   </div>
                 </div>
               </div>

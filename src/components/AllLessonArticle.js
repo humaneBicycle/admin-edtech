@@ -67,7 +67,7 @@ export default function AllLessonArticle(props) {
     // console.log(article);
     let response, data;
     try {
-      response = await fetch(LinkHelper.getLink() + "/admin/lesson/create", {
+      response = await (LinkHelper.getLink() + "/admin/lesson/create", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
