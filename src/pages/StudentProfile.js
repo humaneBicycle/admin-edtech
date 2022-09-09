@@ -31,20 +31,25 @@ export default function StudentProfile() {
       });
       try {
         data = await response.json();
-        if (data.success) {
+        if(data.success){
           setState({
             ...state,
             spinner: false,
             student: data.data,
             user: data.data.user
           });
-        } else {
+        }else if (data.message==="Token is not valid please login again"){
+          SnackBar("Token is not valid please login again");
+          window.location.href = "/login";
+        }else{
+          SnackBar("Something went wrong");
           setState({
             ...state,
             spinner: false,
             isError: true,
           });
         }
+        
       } catch (err) {
 
         setState({

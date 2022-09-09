@@ -1,12 +1,68 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
-import classes from "../pages/classes.module.css";
-import Header from "../components/Header";
+import SnackBar from "../components/snackbar";
+import LinkHelper from "../utils/LinkHelper";
+import StorageHelper from "../utils/StorageHelper";
+import Loader from "../components/Loader";
 export default function LeaderBoard() {
   let [state,setState]=useState({
     spinner:true
   });
+
+  useEffect(()=>{
+    getLeaderBoard();
+  },[])
   let getLeaderBoard = async () => {
+    let response, data;
+    try {
+      response = await fetch(LinkHelper.getLink() + "admin/leaderboard/read", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: "Bearer " + StorageHelper.get("token"),
+        },
+        body: JSON.stringify({
+          admin_id: StorageHelper.get("admin_id"),
+        }),
+      });
+      try {
+        data = await response.json();
+        console.log(data)
+        if(data.success){
+          setState({
+            ...state,
+            spinner: false,
+            leaderBoard: data.data,
+          });
+        }else if (data.message==="Token is not valid please login again"){
+          SnackBar("Token is not valid please login again");
+          window.location.href = "/login";
+        }else{
+          SnackBar("Something went wrong");
+          setState({
+            ...state,
+            spinner: false,
+            isError: true,
+          });
+        }
+        
+      } catch (err) {
+      SnackBar("Error", 1500, "OK")
+
+        setState({
+          ...state,
+          spinner: false,
+          isError: true,
+        });
+      }
+    }catch(err){
+      setState({
+        ...state,
+        spinner: false,
+        isError: true,
+      });
+      SnackBar("Error", 1500, "OK")
+    }
     
   }
 
@@ -24,8 +80,10 @@ export default function LeaderBoard() {
           </div>
           {!state.spinner?(<>
             
+            jfla
+
           </>):(<>
-            
+            <Loader/>
           </>)}
         </div>
       </div>

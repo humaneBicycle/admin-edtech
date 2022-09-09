@@ -51,9 +51,7 @@ export default function AddLessonTest(props) {
       state.activeQuestion.options.d == undefined ||
       state.activeQuestion.options.d == "" ||
       state.activeQuestion.correct_option == undefined ||
-      state.activeQuestion.correct_option == "" ||
-      state.activeQuestion.image == undefined ||
-      state.activeQuestion.image == null
+      state.activeQuestion.correct_option == ""
     ) {
       SnackBar("Please fill all the fields");
       return;
@@ -259,7 +257,6 @@ export default function AddLessonTest(props) {
               }}
             />
 
-            <div>Only one can Image of Video be selected</div>
             <label htmlFor="exampleFormControlInput1" className="form-label">
               Option A
             </label>

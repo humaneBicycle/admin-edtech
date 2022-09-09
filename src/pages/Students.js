@@ -37,7 +37,7 @@ export default function Students() {
       });
       try {
         data = await response.json();
-        if (data.success) {
+        if(data.success){
           users = data.data.users;
           console.log(data);
           if (data.pages === loadedPageStudent) {
@@ -46,9 +46,13 @@ export default function Students() {
           }
           setLoadedPageStudent(loadedPageStudent + 1);
           setIsLoaded(true);
-        } else {
-          throw new Error(data.message);
+        }else if (data.message==="Token is not valid please login again"){
+          SnackBar("Token is not valid please login again");
+          window.location.href = "/login";
+        }else{
+          SnackBar("Something went wrong");
         }
+        
       } catch {
         alert("Error");
         console.log("error");

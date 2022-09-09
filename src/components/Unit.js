@@ -54,11 +54,13 @@ export default function Unit({
         data = await response.json();
         console.log(data)
 
-        if (data.success) {
+        if(data.success){
           window.location.reload();
-        } else {
-          // alert("failed")
-          SnackBar("Failed", 1500, "OK")
+        }else if (data.message==="Token is not valid please login again"){
+          SnackBar("Token is not valid please login again");
+          window.location.href = "/login";
+        }else{
+          SnackBar("Something went wrong");
         }
       } catch (error) {
         console.log(error);

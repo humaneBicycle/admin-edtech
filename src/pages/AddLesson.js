@@ -156,7 +156,7 @@ export default function AddLesson() {
                       aria-controls="ex1-tabs-4"
                       aria-selected="false"
                     >
-                      Event
+                      Events
                     </a>
                   </li>
                   <li class="nav-item" role="presentation">
