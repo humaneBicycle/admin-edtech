@@ -8,7 +8,6 @@ import classes from "../pages/classes.module.css";
 import SnackBar from "../components/snackbar";
 import Header from "../components/Header";
 
-
 let questions = [];
 let answers = [];
 export default function Discussion() {
@@ -21,21 +20,18 @@ export default function Discussion() {
   let [spinner, setSpinner] = useState(false);
   let [isAllQuestionLoaded, setIsAllQuestionLoaded] = useState(false);
   let [isAllAnswerLoaded, setIsAllAnswerLoaded] = useState(false);
-  let [activeQuestionId,setActiveQuestionId] = useState(0);
-  console.log(questions);
+  let [activeQuestionId, setActiveQuestionId] = useState(0);
   useEffect(() => {
     getQuestions(1);
   }, []);
 
   let getQuestions = async () => {
-    console.log(loadedPageQuestion);
     let response, data;
     try {
       let json = {
         admin_id: StorageHelper.get("admin_id"),
         page: loadedPageQuestion,
       };
-      // console.log(json)
       response = await fetch(
         LinkHelper.getLink() + "/admin/forum/getAllQuestion",
         {
@@ -50,64 +46,66 @@ export default function Discussion() {
       );
       try {
         data = await response.json();
-        if(data.success){
+        if (data.success) {
           questions.push(...data.data.questions);
           setIsLoaded(true);
           setLoadedPageQuestion(loadedPageQuestion + 1);
-          console.log(data.pages, loadedPageQuestion);
           if (data.pages === loadedPageQuestion) {
-            // console.log("if reached")
             setIsAllQuestionLoaded(true);
           }
-          console.log(loadedPageQuestion);
-          console.log(questions);
-          setActiveQuestionId(data.data.questions[0]._id)
-          getAnswers(data.data.questions[0]._id, 0,1);
-        }else if (data.message==="Token is not valid please login again"){
+          setActiveQuestionId(data.data.questions[0]._id);
+          getAnswers(data.data.questions[0]._id, 0, 1);
+        } else if (data.message === "Token is not valid please login again") {
           SnackBar("Token is not valid please login again");
           window.location.href = "/login";
-        }else{
+        } else {
           SnackBar("Something went wrong");
         }
-        
       } catch {
         SnackBar("Error" + data.message, 1500, "OK");
       }
     } catch (error) {
       console.log(error);
       SnackBar("Error" + data.message, 1500, "OK");
-
     }
   };
 
   let handleQuestionClick = async (question, index) => {
+    setLoadedPageAnswer(1);
     setActiveQuestionIndex(index);
     setIsAnswerLoaded(false);
     getAnswers(question._id, index);
   };
-  
-  let getAnswers = async (id, index,page) => {
+
+  let getAnswers = async (id, index) => {
+    console.log(id, index, loadedPageAnswer);
     let response, data;
     try {
-      response = await fetch(LinkHelper.getLink() + "/admin/forum/question", {
-        method: "POST",
-        headers: {
-          authorization: "Bearer " + StorageHelper.get("token"),
+      response = await fetch(
+        LinkHelper.getLink() + "admin/forum/listOfAnswer",
+        {
+          method: "POST",
+          headers: {
+            authorization: "Bearer " + StorageHelper.get("token"),
 
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          question_id: id,
-          admin_id: StorageHelper.get("admin_id"),
-          page:page,
-        }),
-      });
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            question_id: id,
+            admin_id: StorageHelper.get("admin_id"),
+            page: loadedPageAnswer,
+          }),
+        }
+      );
       try {
         data = await response.json();
         if (data.success) {
-          answers = data.data.answers;
+          answers.push(...data.data);
           setActiveAnswerIndex(index);
           setIsAnswerLoaded(true);
+          if (data.pages === loadedPageAnswer) {
+            setIsAllAnswerLoaded(true);
+          }
         } else {
           throw new Error(data.message);
         }
@@ -123,10 +121,8 @@ export default function Discussion() {
   };
 
   let deleteQuestion = async (id, event) => {
-    // console.log(id,event)
     setSpinner(true);
     event.preventDefault();
-    console.log(id);
     let response, data;
     try {
       response = await fetch(
@@ -147,8 +143,6 @@ export default function Discussion() {
       try {
         data = await response.json();
         if (data.success) {
-          console.log(data);
-          // alert("Question deleted successfully");
           SnackBar("Question deleted successfully", 1500, "OK");
 
           setSpinner(false);
@@ -169,12 +163,11 @@ export default function Discussion() {
     } catch (err) {
       setSpinner(false);
 
-      // console.log(err);
+      console.log(err);
       SnackBar(err, 1500, "OK");
-
     }
   };
-  let deleteAnswer = async(question_id,answer_id, event)=>{
+  let deleteAnswer = async (question_id, answer_id, event) => {
     setSpinner(true);
     let response, data;
     try {
@@ -190,7 +183,7 @@ export default function Discussion() {
           body: JSON.stringify({
             admin_id: StorageHelper.get("admin_id"),
             question_id: question_id,
-            answer_id:answer_id,
+            answer_id: answer_id,
           }),
         }
       );
@@ -201,10 +194,10 @@ export default function Discussion() {
 
           setSpinner(false);
           window.location.reload();
-        } else if(data.message==="Token is not valid please login again"){
+        } else if (data.message === "Token is not valid please login again") {
           SnackBar("Token is not valid please login again");
           window.location.href = "/login";
-        }else {
+        } else {
           setSpinner(false);
           throw new Error(data.message);
         }
@@ -216,19 +209,16 @@ export default function Discussion() {
     } catch (err) {
       setSpinner(false);
       SnackBar(err, 1500, "OK");
-
     }
-  }
+  };
   return (
     <>
       <Navbar />
-
 
       <div className={classes.MainContent}>
         <Header PageTitle={"Forum || Admin Panel"} />
 
         <div className={classes.MainInnerContainer}>
-
           {spinner ? (
             <>
               <Loader />
@@ -253,29 +243,58 @@ export default function Discussion() {
                             }}
                           >
                             <div className="FlexBoxColumn">
-                              <h3 className="ListItemTitle">{index + 1 + ". " + question.head}</h3>
+                              <h3 className="ListItemTitle">
+                                {index + 1 + ". " + question.head}
+                              </h3>
                               <p>{question.body}</p>
-                              <h6 className="ListItemSubtitle">{"Total Likes: " + question.total_likes}</h6>
+                              <h6 className="ListItemSubtitle">
+                                {"Total Likes: " + question.total_likes}
+                              </h6>
                             </div>
 
                             <div className="FlexBoxColumn ListItemButtons">
-
-                              <span className={classes.AdminDelete} onClick={(event) => {
-                                deleteQuestion(question._id, event);
-                              }}>
-
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" ><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                              <span
+                                className={classes.AdminDelete}
+                                onClick={(event) => {
+                                  deleteQuestion(question._id, event);
+                                }}
+                              >
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="24"
+                                  height="24"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  strokeWidth="2"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                >
+                                  <polyline points="3 6 5 6 21 6"></polyline>
+                                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                </svg>
                               </span>
                               <Link
-
                                 to="/admin/forum/add-answer"
                                 state={{ question: question }}
                                 className="ListItemButton"
                               >
-
-
-
-                                <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" style={{ transform: 'rotateZ(90deg)' }}><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" /><polyline points="16 6 12 2 8 6" /><line x1={12} y1={2} x2={12} y2={15} /></svg>
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width={24}
+                                  height={24}
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  strokeWidth={2}
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  style={{ transform: "rotateZ(90deg)" }}
+                                >
+                                  <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" />
+                                  <polyline points="16 6 12 2 8 6" />
+                                  <line x1={12} y1={2} x2={12} y2={15} />
+                                </svg>
                               </Link>
                             </div>
                           </div>
@@ -288,9 +307,13 @@ export default function Discussion() {
                             }}
                           >
                             <div className="FlexBoxColumn">
-                              <h3 className="ListItemTitle">{index + 1 + ". " + question.head}</h3>
+                              <h3 className="ListItemTitle">
+                                {index + 1 + ". " + question.head}
+                              </h3>
                               <p>{question.body}</p>
-                              <h6 className="ListItemSubtitle">{"Total Likes: " + question.total_likes}</h6>
+                              <h6 className="ListItemSubtitle">
+                                {"Total Likes: " + question.total_likes}
+                              </h6>
                             </div>
                           </div>
                         )}
@@ -298,17 +321,14 @@ export default function Discussion() {
                     ))}
                   </div>
                   <div className="FlexCenter">
-
                     <button
                       className="actionButton"
                       onClick={() => {
                         if (!isAllQuestionLoaded) {
                           getQuestions(loadedPageQuestion + 1);
                         } else {
-                          // alert("All questions are loaded");
                           SnackBar("All questions are loaded", 1500, "OK");
                         }
-
                       }}
                     >
                       Load More Questions
@@ -322,43 +342,61 @@ export default function Discussion() {
                     <>
                       {answers.length > 0 ? (
                         <div class="ListBlock">
-
                           {answers.map((answer, index) => (
                             <>
-                              <li className="ListItem active" aria-current="true">
-                                {index + 1 + ". " + answer.head}<br></br>
+                              <li
+                                className="ListItem active"
+                                aria-current="true"
+                              >
+                                {index + 1 + ". " + answer.head}
+                                <br></br>
                                 {answer.body}
-                                <span className={classes.AdminDelete} onClick={(event) => {
-                                deleteAnswer(activeQuestionId,answer._id, event);
-                              }}>
-
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" ><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
-                              </span>
-
+                                <span
+                                  className={classes.AdminDelete}
+                                  onClick={(event) => {
+                                    deleteAnswer(
+                                      activeQuestionId,
+                                      answer._id,
+                                      event
+                                    );
+                                  }}
+                                >
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="24"
+                                    height="24"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="2"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                  >
+                                    <polyline points="3 6 5 6 21 6"></polyline>
+                                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                  </svg>
+                                </span>
                               </li>
                             </>
                           ))}
                           <button
-                      className="actionButton"
-                      onClick={() => {
-                        if (!isAllAnswerLoaded) {
-                          getAnswers(loadedPageAnswer + 1);
-                        } else {
-                          // alert("All questions are loaded");
-                          SnackBar("All questions are loaded", 1500, "OK");
-                        }
-
-                      }}
-                    >
-                      Load More Answers
-                    </button>
+                            className="actionButton"
+                            onClick={() => {
+                              if (!isAllAnswerLoaded) {
+                                setLoadedPageAnswer(loadedPageAnswer + 1);
+                                getAnswers(activeQuestionId, activeAnswerIndex);
+                              } else {
+                                SnackBar("All answers are loaded", 1500, "OK");
+                              }
+                            }}
+                          >
+                            Load More Answers
+                          </button>
                         </div>
                       ) : (
                         <>
-
                           No answers found!
                           {SnackBar("  No answers found! ", 1500, "OK")}
-
                         </>
                       )}
                     </>
@@ -377,7 +415,6 @@ export default function Discussion() {
           )}
         </div>
       </div>
-
     </>
   );
 }

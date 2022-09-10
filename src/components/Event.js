@@ -1,21 +1,80 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import StorageHelper from "../utils/StorageHelper";
 import Loader from "./Loader";
+import SnackBar from "./snackbar";
+import LinkHelper from "../utils/LinkHelper";
 
 export default function Event(props) {
   let { unit } = useLocation().state;
 
   let [state, setState] = React.useState({
-    spinner: false,
+    spinner: true,
     event: {
-      prerequisite: {},
+      prerequisite: {
+        has_prerequisite: false,
+      },
       unit_id: unit.unit_id,
       admin_id: StorageHelper.get("admin_id"),
       type: "event",
+      events: [],
+      completion:"auto"
     },
     lessons: props.lessons,
+    events: [],
   });
+
+  useEffect(() => {
+    getEvents();
+  }, []);
+
+  let getEvents = async () => {
+    let response, data;
+    try {
+      response = await fetch(LinkHelper.getLink() + "event/list", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: "Bearer " + StorageHelper.get("token"),
+        },
+        body: JSON.stringify({
+          admin_id: StorageHelper.get("admin_id"),
+        }),
+      });
+      try {
+        data = await response.json();
+        console.log(data);
+        if (data.success) {
+          setState({
+            ...state,
+            spinner: false,
+            events: data.data,
+          });
+        } else if (data.message === "Token is not valid please login again") {
+          SnackBar("Token is not valid please login again");
+          window.location.href = "/login";
+        } else {
+          SnackBar("Something went wrong");
+          setState({
+            ...state,
+            spinner: false,
+            isError: true,
+          });
+        }
+      } catch (err) {
+        SnackBar("Error", 1500, "OK");
+
+        setState({
+          ...state,
+          spinner: false,
+          isError: true,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      SnackBar("Error", 1500, "OK");
+    }
+  };
   let prerequisiteItemClick = (item) => {
     setState({
       ...state,
@@ -25,8 +84,58 @@ export default function Event(props) {
       },
     });
   };
-  let addTestLesson = () => {
-    console.log(state.event);
+  let addTestLesson = async() => {
+    if(state.event.title ===undefined ||
+      state.event.events.length===0||
+      state.event.prerequisite.has_prerequisite){
+        if(state.event.prerequisite.has_prerequisite){
+          if(state.event.prerequisite.on==undefined || state.event.prerequisite.time==undefined||state.event.prerequisite.message==""){
+            SnackBar("Please select all the fields");
+            return;
+          }
+        }else{
+          SnackBar("Please select all the fields");
+          return;
+        }
+
+        
+      }
+      let data,response;
+      // console.log(state.event);
+      try {
+        response = await fetch(LinkHelper.getLink() + "admin/lesson/create", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            authorization: "Bearer " + StorageHelper.get("token"),
+          },
+          body: JSON.stringify(state.event),
+        });
+        try {
+          data = await response.json();
+          console.log(data);
+          if (data.success) {
+            SnackBar("Event added successfully");
+            window.location.href = "/unit";
+          } else if (data.message === "Token is not valid please login again") {
+            SnackBar("Token is not valid please login again");
+            window.location.href = "/login";
+          } else {
+            SnackBar("Something went wrong");
+            setState({
+              ...state,
+              spinner: false, 
+              isError: true,
+            });
+          }
+        } catch (err) {
+          SnackBar("Error", 1500, "OK");
+        }
+      } catch (error) {
+        console.log(error);
+        SnackBar("Error", 1500, "OK");
+      }
+
   };
   return (
     <div>
@@ -48,6 +157,13 @@ export default function Event(props) {
               className="form-control"
               id="floatingInput"
               placeholder="name@example.com"
+              value={state.event.title}
+              onChange={(e) => {
+                setState({
+                  ...state,
+                  event: { ...state.event, title: e.target.value },
+                });
+              }}
             />
             <label htmlFor="floatingInput">Title</label>
           </div>
@@ -129,6 +245,7 @@ export default function Event(props) {
                         >
                           On Lesson
                         </button>
+                        Prerequisite set on lesson with id: {state.event.prerequisite.on}
                         <ul
                           className="dropdown-menu"
                           aria-labelledby="dropdownMenuButton"
@@ -206,28 +323,67 @@ export default function Event(props) {
                           </label>
                         </div>
                       </div>
-
-                      <button
-                        className="btn btn-primary  btn-lg my-2"
-                        onClick={addTestLesson}
-                      >
-                        Add Lesson
-                      </button>
                     </>
-                    <div class="dropdown">
-  <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-    Dropdown button
-  </button>
-  <ul class="dropdown-menu">
-    {}
-    <li>Action</li>
-  </ul>
-</div>
                   </>
                 ) : (
                   <></>
                 )}
               </div>
+              <div className="dropdown">
+                <button
+                  className="btn btn-primary dropdown-toggle"
+                  type="button"
+                  id="dropdownMenuButton"
+                  data-mdb-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  Add Events
+                </button>
+
+                <ul
+                  className="dropdown-menu"
+                  aria-labelledby="dropdownMenuButton"
+                >
+                  {state.events.map((event, index) => {
+                    return (
+                      <li
+                        className="dropdown-item"
+                        key={index}
+                        onClick={(e) => {
+                          setState({...state, event: {...state.event, events: [...state.event.events, event]}})
+                        }}
+                      >
+                        {event.title}
+                        
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+              <ul className="list-group list-group-light">
+                {state.event.events.map((event, index) => {
+                  return (
+                    <li
+                      className="list-group-item"
+                      key={index}
+                      onClick={(e) => {
+                      }}
+                    >
+                      {event.title}
+                      <button className="btn btn-danger btn-sm mx-4" onClick={(e) => {
+                          setState({...state, event: {...state.event, events: state.event.events.filter((item) => item !== event)}})
+                        } }>Delete</button>
+                    </li>
+                  );
+                })}
+              </ul>
+
+              <button
+                className="btn btn-primary  btn-lg my-2"
+                onClick={addTestLesson}
+              >
+                Add Lesson
+              </button>
             </div>
           </div>
         </>
