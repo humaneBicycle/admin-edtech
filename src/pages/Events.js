@@ -74,7 +74,7 @@ export default function Events() {
     if(state.activeEvent.title===undefined || 
       state.activeEvent.description===undefined || 
       state.activeEvent.type ===undefined|| 
-      state.activeEvent.time.date===undefined ||
+      state.activeEvent.time.date_full===undefined ||
       state.activeEvent.time.event_time===undefined){
       SnackBar("Please fill all the fields");
       return;
@@ -194,9 +194,9 @@ export default function Events() {
                     className="form-control"
                     placeholder="Enter the Message"
                     type="date"
-                    value={state.activeEvent.time.date}
+                    value={state.activeEvent.time.date_full}
                     onChange={(event) => {
-                      setState({...state, activeEvent: {...state.activeEvent, time: {...state.activeEvent.time,date:event.target.value}}})
+                      setState({...state, activeEvent: {...state.activeEvent, time: {...state.activeEvent.time,date_full:event.target.value}}})
 
                     }}
                   />{" "}

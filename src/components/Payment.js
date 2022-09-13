@@ -31,6 +31,7 @@ export default function Payment(props) {
   };
 
   let addPayment = async () => {
+    console.log(state.payment);
     if (
       state.payment.title === undefined ||
       state.payment.description === undefined ||
@@ -60,6 +61,7 @@ export default function Payment(props) {
       });
       try {
         data = await response.json();
+        console.log(data)
         if (data.success) {
           SnackBar("Payment created successfully");
           setState({ ...state, spinner: false });
@@ -114,7 +116,7 @@ export default function Payment(props) {
                 });
               }}
             />
-            <label htmlFor="floatingInput">Price</label>
+            <label htmlFor="floatingInput">Price(INR)</label>
           </div>
           <div className="form-floating mb-3">
             <input
