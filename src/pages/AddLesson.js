@@ -229,7 +229,7 @@ export default function AddLesson() {
                     role="tabpanel"
                     aria-labelledby="ex1-tab-5"
                   >
-                    <Payment />
+                    <Payment lessons={lessons}/>
                   </div>
                   <div
                     class="tab-pane fade"
