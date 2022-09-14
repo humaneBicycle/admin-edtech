@@ -433,7 +433,6 @@ export default function AddLessonTest(props) {
                   role="switch"
                   id="flexSwitchCheckChecked"
                   onChange={(event) => {
-                    // article.prerequisite.has_prerequisite=!hasPrerequisite
                     setState({
                       ...state,
                       lesson: {

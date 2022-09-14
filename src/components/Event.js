@@ -116,7 +116,7 @@ export default function Event(props) {
           console.log(data);
           if (data.success) {
             SnackBar("Event added successfully");
-            window.location.href = "/unit";
+            window.location.href = "/course";
           } else if (data.message === "Token is not valid please login again") {
             SnackBar("Token is not valid please login again");
             window.location.href = "/login";

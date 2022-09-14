@@ -11,19 +11,24 @@ import Header from "../components/Header";
 let questions = [];
 let answers = [];
 export default function Discussion() {
+  let [state, setState] = useState({
+    spinner:false,
+    loadedPageAnswer:1
+
+  })
   let [loadedPageQuestion, setLoadedPageQuestion] = useState(1);
-  let [loadedPageAnswer, setLoadedPageAnswer] = useState(1);
   let [isLoaded, setIsLoaded] = useState(false);
   let [isAnswerLoaded, setIsAnswerLoaded] = useState(false);
   let [activeQuestionIndex, setActiveQuestionIndex] = useState(0);
   let [activeAnswerIndex, setActiveAnswerIndex] = useState(0);
-  let [spinner, setSpinner] = useState(false);
   let [isAllQuestionLoaded, setIsAllQuestionLoaded] = useState(false);
   let [isAllAnswerLoaded, setIsAllAnswerLoaded] = useState(false);
   let [activeQuestionId, setActiveQuestionId] = useState(0);
   useEffect(() => {
-    getQuestions(1);
+    getQuestions();
   }, []);
+
+  // console.log(state)
 
   let getQuestions = async () => {
     let response, data;
@@ -71,14 +76,15 @@ export default function Discussion() {
   };
 
   let handleQuestionClick = async (question, index) => {
-    setLoadedPageAnswer(1);
+    setState({...state,loadedPageAnswer:1})
     setActiveQuestionIndex(index);
     setIsAnswerLoaded(false);
     getAnswers(question._id, index);
   };
+  console.log(state)
 
   let getAnswers = async (id, index) => {
-    console.log(id, index, loadedPageAnswer);
+    console.log(id, index, state.loadedPageAnswer+1);
     let response, data;
     try {
       response = await fetch(
@@ -93,7 +99,7 @@ export default function Discussion() {
           body: JSON.stringify({
             question_id: id,
             admin_id: StorageHelper.get("admin_id"),
-            page: loadedPageAnswer,
+            page: state.loadedPageAnswer+1,
           }),
         }
       );
@@ -103,7 +109,9 @@ export default function Discussion() {
           answers.push(...data.data);
           setActiveAnswerIndex(index);
           setIsAnswerLoaded(true);
-          if (data.pages === loadedPageAnswer) {
+          setState({ ...state, loadedPageAnswer:state.loadedPageAnswer + 1 });
+
+          if (data.pages === state.loadedPageAnswer) {
             setIsAllAnswerLoaded(true);
           }
         } else {
@@ -121,7 +129,7 @@ export default function Discussion() {
   };
 
   let deleteQuestion = async (id, event) => {
-    setSpinner(true);
+    setState({...state,spinner:true})
     event.preventDefault();
     let response, data;
     try {
@@ -145,30 +153,34 @@ export default function Discussion() {
         if (data.success) {
           SnackBar("Question deleted successfully", 1500, "OK");
 
-          setSpinner(false);
+          setState({...state,spinner:false})
+
           window.location.reload();
         } else {
-          setSpinner(false);
+          setState({...state,spinner:false})
+
           throw new Error(data.message);
         }
       } catch (err) {
         // alert("Error");
         SnackBar("Question deleted successfully", 1500, "OK");
 
-        setSpinner(false);
-        setSpinner(false);
+        setState({...state,spinner:false})
+
 
         console.log("error");
       }
     } catch (err) {
-      setSpinner(false);
+      setState({...state,spinner:false})
+
 
       console.log(err);
       SnackBar(err, 1500, "OK");
     }
   };
   let deleteAnswer = async (question_id, answer_id, event) => {
-    setSpinner(true);
+    setState({...state,spinner:true})
+
     let response, data;
     try {
       response = await fetch(
@@ -192,22 +204,26 @@ export default function Discussion() {
         if (data.success) {
           SnackBar("Answer deleted successfully", 3500, "OK");
 
-          setSpinner(false);
+          setState({...state,spinner:false})
+
           window.location.reload();
         } else if (data.message === "Token is not valid please login again") {
           SnackBar("Token is not valid please login again");
           window.location.href = "/login";
         } else {
-          setSpinner(false);
+          setState({...state,spinner:false})
+
           throw new Error(data.message);
         }
       } catch (err) {
         SnackBar(err, 1500, "OK");
 
-        setSpinner(false);
+        setState({...state,spinner:false})
+
       }
     } catch (err) {
-      setSpinner(false);
+      setState({...state,spinner:false})
+
       SnackBar(err, 1500, "OK");
     }
   };
@@ -219,7 +235,7 @@ export default function Discussion() {
         <Header PageTitle={"Forum || Admin Panel"} />
 
         <div className={classes.MainInnerContainer}>
-          {spinner ? (
+          {state.spinner ? (
             <>
               <Loader />
             </>
@@ -383,7 +399,6 @@ export default function Discussion() {
                             className="actionButton"
                             onClick={() => {
                               if (!isAllAnswerLoaded) {
-                                setLoadedPageAnswer(loadedPageAnswer + 1);
                                 getAnswers(activeQuestionId, activeAnswerIndex);
                               } else {
                                 SnackBar("All answers are loaded", 1500, "OK");
