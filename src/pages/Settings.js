@@ -14,12 +14,12 @@ export default function Settings() {
     },
     new_admin: {
       admin_id: StorageHelper.get("admin_id"),
-    }
+    },
   });
 
   useEffect(() => {
     getListOfAdmins();
-  }, [])
+  }, []);
 
   let logoutButton = (e) => {
     e.preventDefault();
@@ -35,11 +35,11 @@ export default function Settings() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": "Bearer " + StorageHelper.get("token")
+          Authorization: "Bearer " + StorageHelper.get("token"),
         },
         body: JSON.stringify({
-          admin_id: StorageHelper.get("admin_id")
-        })
+          admin_id: StorageHelper.get("admin_id"),
+        }),
       });
 
       try {
@@ -49,8 +49,8 @@ export default function Settings() {
           setState({
             ...state,
             isSpinner: false,
-            admins: data.data
-          })
+            admins: data.data,
+          });
         }
       } catch (err) {
         console.log(err);
@@ -58,12 +58,15 @@ export default function Settings() {
     } catch (err) {
       console.log(err);
     }
-  }
+  };
 
   let setAWSCredentials = async (e) => {
     setState({ ...state, isSpinner: true });
     e.preventDefault();
-    if (state.credentials.accessKeyId == undefined || state.credentials.secretAccessKey == undefined) {
+    if (
+      state.credentials.accessKeyId == undefined ||
+      state.credentials.secretAccessKey == undefined
+    ) {
       // alert("please complete all the feilds");
       SnackBar("Please complete all the feilds", 1500, "OK");
 
@@ -72,34 +75,33 @@ export default function Settings() {
     console.log(state);
     let response, data;
     try {
-      console.log(state.credentials)
+      console.log(state.credentials);
       response = await fetch(LinkHelper.getLink() + "admin/aws/update", {
-
         method: "PUT",
         headers: {
-          "authorization": "Bearer " + StorageHelper.get("token"),
+          authorization: "Bearer " + StorageHelper.get("token"),
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(state.credentials)
-      })
+        body: JSON.stringify(state.credentials),
+      });
       data = await response.json();
       if (data.success) {
-        alert("set success")
+        alert("set success");
         setState({ ...state, isSpinner: false });
-
       } else {
-        alert("error setting")
+        alert("error setting");
         setState({ ...state, isSpinner: false });
-
       }
     } catch (err) {
-      console.log(err)
+      console.log(err);
       setState({ ...state, isSpinner: false });
-
     }
-  }
+  };
   let createAdmin = async () => {
-    if (state.new_admin.email == undefined || state.new_admin.password == undefined) {
+    if (
+      state.new_admin.email == undefined ||
+      state.new_admin.password == undefined
+    ) {
       // alert("please complete all the feilds");
       SnackBar("Please complete all the feilds", 1500, "OK");
 
@@ -110,17 +112,16 @@ export default function Settings() {
       response = await fetch(LinkHelper.getLink() + "admin/new-admin", {
         method: "POST",
         headers: {
-          "authorization": "Bearer " + StorageHelper.get("token"),
+          authorization: "Bearer " + StorageHelper.get("token"),
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(state.new_admin)
-      })
+        body: JSON.stringify(state.new_admin),
+      });
       try {
         data = await response.json();
         if (data.success) {
           SnackBar("Admin created", 1500, "OK");
           setTimeout(() => {
-
             window.location.reload();
           }, 600);
         } else {
@@ -137,51 +138,46 @@ export default function Settings() {
       console.log(err);
       SnackBar("error creating admin : " + err, 1500, "OK");
       // alert("error creating admin ", err)
-
     }
-  }
+  };
   let deleteAdmin = async (sec_admin_id) => {
-    setState({ ...state, isSpinner: true })
+    setState({ ...state, isSpinner: true });
     console.log(sec_admin_id);
     let response, data;
     try {
       response = await fetch(LinkHelper.getLink() + "admin/remove-admin", {
         method: "POST",
         headers: {
-          "authorization": "Bearer " + StorageHelper.get("token"),
+          authorization: "Bearer " + StorageHelper.get("token"),
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
           admin_id: StorageHelper.get("admin_id"),
           sec_admin_id: sec_admin_id,
-        })
-      })
+        }),
+      });
       try {
         data = await response.json();
         if (data.success) {
           SnackBar("Admin deleted", 1500, "OK");
 
           // alert("admin deleted")
-          setState({ ...state, isSpinner: false })
+          setState({ ...state, isSpinner: false });
 
           window.location.reload();
         } else {
           SnackBar("error deleting admin", 1500, "OK");
 
           // alert("error deleting admin")
-          setState({ ...state, isSpinner: false })
-
+          setState({ ...state, isSpinner: false });
         }
       } catch (err) {
         console.log(err);
-        setState({ ...state, isSpinner: false })
-
+        setState({ ...state, isSpinner: false });
       }
-
     } catch (err) {
       console.log(err);
-      setState({ ...state, isSpinner: false })
-
+      setState({ ...state, isSpinner: false });
     }
   }
 
@@ -200,7 +196,6 @@ export default function Settings() {
 
   return (
     <>
-
       <Navbar />
 
 
@@ -211,11 +206,8 @@ export default function Settings() {
           {!state.isSpinner ? (
             <>
               <div className="row flex-wrap g-3 w-100">
-
                 <div className="col-12 col-md-6 d-flex flex-column ">
                   <div className="order-last order-md-first p-2 border-bottom pb-3 mb-4">
-
-
                     <h2 className="ms-3">Create New Admin</h2>
                     <div className="formElement">
                       <label htmlFor="exampleInputEmail1" className="formLabel">
@@ -227,7 +219,13 @@ export default function Settings() {
                         placeholder="Enter Unique Email Address"
                         value={state.new_admin.email}
                         onChange={(e) => {
-                          setState({ ...state, new_admin: { ...state.new_admin, email: e.target.value } });
+                          setState({
+                            ...state,
+                            new_admin: {
+                              ...state.new_admin,
+                              email: e.target.value,
+                            },
+                          });
                         }}
                       />
                       <div id="emailHelp" className="formHelper">
@@ -245,17 +243,25 @@ export default function Settings() {
                         placeholder="Enter your password..."
                         value={state.new_admin.password}
                         onChange={(e) => {
-                          setState({ ...state, new_admin: { ...state.new_admin, password: e.target.value } });
-
+                          setState({
+                            ...state,
+                            new_admin: {
+                              ...state.new_admin,
+                              password: e.target.value,
+                            },
+                          });
                         }}
                       />
                     </div>
                     <div className=" w-100 d-flex justify-content-center">
-
-                      <button type="submit" className="btn btn-primary my-2 w-50 mx-auto" onClick={(e) => {
-                        e.preventDefault();
-                        createAdmin()
-                      }}>
+                      <button
+                        type="submit"
+                        className="btn btn-primary my-2 w-50 mx-auto"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          createAdmin();
+                        }}
+                      >
                         Create
                       </button>
                     </div>
@@ -284,26 +290,37 @@ export default function Settings() {
                     </div>
                   </div>
                   <div className="order-first order-md-last p-2 border-bottom pb-3 mb-4">
-
                     <h2 className="ms-3">AWS CREDENTIALS</h2>
                     <form className="AWSSection">
                       <div className="formElement">
-                        <label htmlFor="exampleInputEmail1" className="formLabel">
+                        <label
+                          htmlFor="exampleInputEmail1"
+                          className="formLabel"
+                        >
                           Access Key ID
                         </label>
                         <input
                           className="formInput"
                           id="exampleInputEmail1"
-                          placeholder="Enter Access Key ID" value={state.credentials.accessKeyId}
+                          placeholder="Enter Access Key ID"
+                          value={state.credentials.accessKeyId}
                           onChange={(e) => {
-                            setState({ ...state, credentials: { ...state.credentials, accessKeyId: e.target.value } });
+                            setState({
+                              ...state,
+                              credentials: {
+                                ...state.credentials,
+                                accessKeyId: e.target.value,
+                              },
+                            });
                           }}
                         />
-                        <div id="emailHelp" className="formHelper">
-                        </div>
+                        <div id="emailHelp" className="formHelper"></div>
                       </div>
                       <div className="formElement">
-                        <label htmlFor="exampleInputPassword1" className="formLabel">
+                        <label
+                          htmlFor="exampleInputPassword1"
+                          className="formLabel"
+                        >
                           Access Secret Key
                         </label>
                         <input
@@ -312,18 +329,32 @@ export default function Settings() {
                           placeholder="Enter Access Secret Key"
                           value={state.credentials.secretAccessKey}
                           onChange={(e) => {
-                            setState({ ...state, credentials: { ...state.credentials, secretAccessKey: e.target.value } });
-
+                            setState({
+                              ...state,
+                              credentials: {
+                                ...state.credentials,
+                                secretAccessKey: e.target.value,
+                              },
+                            });
                           }}
                         />
                       </div>
 
                       <p className="note m-3 me-5">
                         <strong>IAM of AWS : </strong>
-                        Please make sure that the AWS Credentials have MediaConvert Role and s3 full access role. Otherwise the features might not work as expected.
-                        <br></br><strong>Note: </strong> All old AWS Credentials will be deleted.   </p>
+                        Please make sure that the AWS Credentials have
+                        MediaConvert Role and s3 full access role. Otherwise the
+                        features might not work as expected.
+                        <br></br>
+                        <strong>Note: </strong> All old AWS Credentials will be
+                        deleted.{" "}
+                      </p>
 
-                      <button type="submit" className="formSubmit" onClick={setAWSCredentials}>
+                      <button
+                        type="submit"
+                        className="btn btn-primary my-2 w-50 mx-auto"
+                        onClick={setAWSCredentials}
+                      >
                         Submit
                       </button>
                     </form>
@@ -346,8 +377,7 @@ export default function Settings() {
                             </div>
                           </div>
                         </>
-
-                      )
+                      );
                     } else {
                       return (
                         //id of all other admins
@@ -371,8 +401,6 @@ export default function Settings() {
                   })}
                 </div>
               </div>
-
-
             </>
           ) : (
             <>
@@ -382,10 +410,6 @@ export default function Settings() {
             </>
           )}
 
-
-
-
-
           {/* <button
           type="button"
           className="btn btn-outline-danger my-4 "
@@ -393,8 +417,8 @@ export default function Settings() {
         >
           Logout <i className="fas fa-sign-in-alt ms-2"></i>
         </button> */}
-        </div>
-      </div>
+        </div >
+      </div >
     </>
   );
 }

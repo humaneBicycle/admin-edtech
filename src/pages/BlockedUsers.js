@@ -70,6 +70,37 @@ export default function BlockedUsers() {
       SnackBar("Something went wrong: " + err, 1500, "OK")
     }
   };
+  let unblockUser = async (user_id) => {
+    let response,data;
+    try {
+      response = await fetch(LinkHelper.getLink() + "admin/user/unblock", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + StorageHelper.get("token"),
+        },
+        body: JSON.stringify({
+          admin_id: StorageHelper.get("admin_id"),
+          user_id: user_id,
+        }),
+      });
+      try {
+        data = await response.json();
+        if (data.success) {
+          SnackBar("User unblocked successfully", 1500, "OK")
+          getBlockedUsers();
+        }
+        else {
+          SnackBar("Error: " + data.message, 1500, "OK")
+        }
+      } catch (err) {
+        SnackBar("Error: " + err, 1500, "OK")
+      }
+    } catch (err) {
+      console.log(err);
+      SnackBar("Something went wrong: " + err, 1500, "OK")
+    }
+  }
   return (
     <>
       <Navbar />
@@ -104,6 +135,11 @@ export default function BlockedUsers() {
                                   <h4 className="CardSubtitle">ID : {blockedUser.user_id}</h4>
                                   <div class="text-muted">Number :{blockedUser.phone_number}</div>
                                 </div>
+                                <button className="btn btn-primary" onClick={() => {
+                                  unblockUser(blockedUser.user_id);
+                                }}>
+                                  Unblock
+                                </button>
                               </div>
                             </div>
                           </div>
