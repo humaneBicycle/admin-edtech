@@ -54,12 +54,12 @@ export default function Unit({
         data = await response.json();
         console.log(data)
 
-        if(data.success){
+        if (data.success) {
           window.location.reload();
-        }else if (data.message==="Token is not valid please login again"){
+        } else if (data.message === "Token is not valid please login again") {
           SnackBar("Token is not valid please login again");
           window.location.href = "/login";
-        }else{
+        } else {
           SnackBar("Something went wrong");
         }
       } catch (error) {
@@ -86,6 +86,7 @@ export default function Unit({
                     </div>
                   </a>
                 </div>
+
               </div>
               <div className="col-md-6 col-lg-6 col-xl-6">
                 <h3> <Link to="lessons" state={{ unit: unit }}>{unit_name}</Link></h3>
@@ -98,6 +99,7 @@ export default function Unit({
                   </div>
                   <span></span>
                 </div>
+
                 <div className="mt-1 mb-0 text-muted small">
                   {tags.map((tag, index) => (
                     <>
@@ -114,6 +116,20 @@ export default function Unit({
                 </p>
                 <div className="d-flex flex-row">
                   Course contains :  {total_lessons} Lessons
+                </div>
+                <div className="d-flex flex-row flex-wrap m-1 w-100">
+                  <Link
+                    className="btn btn-primary btn-sm"
+                    to="add-lesson"
+                    state={{ unit: unit }}>      Add lesson</Link>
+                  <Link
+                    className="btn btn-light btn-sm  m-1"
+                    to="edit-unit"
+                    state={{ unit: unit }}
+                  >
+                    Edit Unit<i className="far fa-edit mx-2"></i>
+                  </Link>
+
                 </div>
               </div>
               <div className="col-md-6 col-lg-3 col-xl-3 border-sm-start-none border-start">
@@ -139,29 +155,16 @@ export default function Unit({
                     Type : <span className="badge badge-primary mb-2">{type}</span>
                   </small>
 
-
-
-
-
-                </div>
-
-
-                <div className="d-flex flex-column mt-4">
-                  <Link
-                    className="btn btn-primary btn-sm"
-                    to="add-lesson"
-                    state={{ unit: unit }}>      Add lesson</Link>
-                    <Link
-            className="btn btn-light btn-sm  my-2"
-            to="edit-unit"
-            state={{ unit: unit }}
-          >
-            Edit Unit<i className="far fa-edit mx-2"></i>
-          </Link>
-                  <button className="btn btn-outline-danger btn-sm mt-2" type="button" onClick={deleteUnit}>
+                  <button className="btn btn-outline-danger btn-sm m-1" type="button" onClick={deleteUnit}>
                     <span>Delete</span>
                   </button>
+
+
+
                 </div>
+
+
+
               </div>
             </div>
           </div>

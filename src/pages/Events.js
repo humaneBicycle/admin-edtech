@@ -11,8 +11,8 @@ export default function Events() {
   let [state, setState] = useState({
     activeEvent: {
       admin_id: StorageHelper.get("admin_id"),
-      type:"online",
-      time:{}
+      type: "online",
+      time: {}
     },
     spinner: true,
   });
@@ -71,17 +71,17 @@ export default function Events() {
 
   let addEvent = async () => {
     console.log(state.activeEvent);
-    if(state.activeEvent.title===undefined || 
-      state.activeEvent.description===undefined || 
-      state.activeEvent.type ===undefined|| 
-      state.activeEvent.time.date_full===undefined ||
-      state.activeEvent.time.event_time===undefined){
+    if (state.activeEvent.title === undefined ||
+      state.activeEvent.description === undefined ||
+      state.activeEvent.type === undefined ||
+      state.activeEvent.time.date_full === undefined ||
+      state.activeEvent.time.event_time === undefined) {
       SnackBar("Please fill all the fields");
       return;
     }
-      
+
     let response, data;
-    try{
+    try {
       response = await fetch(LinkHelper.getLink() + "event/create", {
         method: "POST",
         headers: {
@@ -105,15 +105,15 @@ export default function Events() {
       } catch (err) {
         SnackBar("Error", 1500, "OK");
       }
-    }catch(err){
+    } catch (err) {
       SnackBar(err, 1500, "OK");
     }
 
   }
 
   let deleteEvent = async (event) => {
-    let response,data;
-    try{
+    let response, data;
+    try {
       response = await fetch(LinkHelper.getLink() + "event/remove", {
         method: "DELETE",
         headers: {
@@ -121,8 +121,8 @@ export default function Events() {
           authorization: "Bearer " + StorageHelper.get("token"),
         },
         body: JSON.stringify({
-          event_id:event._id,
-          admin_id:StorageHelper.get("admin_id")
+          event_id: event._id,
+          admin_id: StorageHelper.get("admin_id")
         }),
       });
       try {
@@ -140,7 +140,7 @@ export default function Events() {
       } catch (err) {
         SnackBar("Error", 1500, "OK");
       }
-    }catch(err){
+    } catch (err) {
       SnackBar(err, 1500, "OK");
     }
   }
@@ -156,39 +156,39 @@ export default function Events() {
           <Loader />
         ) : (
           <>
-            <div className="row">
-              <div className="col-6">
-                <h2>Add Event</h2>
-                <div className="form-floating me-2">
+            <div className="row flex-wrap">
+              <div className="col-12 col-md-6 p-4">
+                <h2 className="ms-2 mb-4">Add Event</h2>
+                <div className="form-floating m-2">
                   <input
                     id="inputPassword5"
                     className="form-control"
                     placeholder="Enter the Message"
                     value={state.activeEvent.title}
                     onChange={(event) => {
-                      setState({...state, activeEvent: {...state.activeEvent, title: event.target.value}})
+                      setState({ ...state, activeEvent: { ...state.activeEvent, title: event.target.value } })
                     }}
                   />{" "}
                   <label htmlFor="inputPassword5" className="form-label">
                     Title
                   </label>
                 </div>
-                <div className="form-floating me-2">
+                <div className="form-floating m-2">
                   <input
                     id="inputPassword5"
                     className="form-control"
                     placeholder="Enter the Message"
                     value={state.activeEvent.venue}
                     onChange={(event) => {
-                      setState({...state, activeEvent: {...state.activeEvent, venue: event.target.value}})
-                      
+                      setState({ ...state, activeEvent: { ...state.activeEvent, venue: event.target.value } })
+
                     }}
                   />{" "}
                   <label htmlFor="inputPassword5" className="form-label">
                     Venue
                   </label>
                 </div>
-                <div className="form-floating me-2">
+                <div className="form-floating m-2">
                   <input
                     id="inputPassword5"
                     className="form-control"
@@ -196,7 +196,7 @@ export default function Events() {
                     type="date"
                     value={state.activeEvent.time.date_full}
                     onChange={(event) => {
-                      setState({...state, activeEvent: {...state.activeEvent, time: {...state.activeEvent.time,date_full:event.target.value}}})
+                      setState({ ...state, activeEvent: { ...state.activeEvent, time: { ...state.activeEvent.time, date_full: event.target.value } } })
 
                     }}
                   />{" "}
@@ -204,14 +204,14 @@ export default function Events() {
                     Date
                   </label>
                 </div>
-                <div className="form-floating me-2">
+                <div className="form-floating m-2">
                   <input
                     id="inputPassword5"
                     className="form-control"
                     placeholder="Enter the Message"
                     value={state.activeEvent.description}
                     onChange={(event) => {
-                      setState({...state, activeEvent: {...state.activeEvent, description: event.target.value}})
+                      setState({ ...state, activeEvent: { ...state.activeEvent, description: event.target.value } })
 
                     }}
                   />{" "}
@@ -219,7 +219,7 @@ export default function Events() {
                     Description
                   </label>
                 </div>
-                <div className="form-floating me-2">
+                <div className="form-floating m-2">
                   <input
                     id="inputPassword5"
                     className="form-control"
@@ -227,7 +227,7 @@ export default function Events() {
                     type="time"
                     value={state.activeEvent.time.event_time}
                     onChange={(event) => {
-                      setState({...state, activeEvent: {...state.activeEvent, time: {...state.activeEvent.time,event_time:event.target.value}}})
+                      setState({ ...state, activeEvent: { ...state.activeEvent, time: { ...state.activeEvent.time, event_time: event.target.value } } })
 
                     }}
                   />{" "}
@@ -236,64 +236,81 @@ export default function Events() {
                   </label>
                 </div>
                 <div className="d-flex align-items-center justify-content-start p-2 mb-2 flex-wrap">
-              <div className="form-check me-2">
-                <input
-                  className="form-check-input"
-                  type="radio"
-                  name="flexRadioDefault"
-                  id="flexRadioDefault1"
-                  checked={state.activeEvent.type==="online"}
-                  onChange={() => {
-                    setState({...state, activeEvent: {...state.activeEvent, type: "online"}})
-                    
-                  }}
-                />
-                <label className="form-check-label" htmlFor="flexRadioDefault1">
-                  online
-                </label>
+                  <div className="form-check m-2">
+                    <input
+                      className="form-check-input"
+                      type="radio"
+                      name="flexRadioDefault"
+                      id="flexRadioDefault1"
+                      checked={state.activeEvent.type === "online"}
+                      onChange={() => {
+                        setState({ ...state, activeEvent: { ...state.activeEvent, type: "online" } })
+
+                      }}
+                    />
+                    <label className="form-check-label" htmlFor="flexRadioDefault1">
+                      online
+                    </label>
+                  </div>
+                  <div className="form-check me-2">
+                    <input
+                      className="form-check-input"
+                      type="radio"
+                      name="flexRadioDefault"
+                      id="flexRadioDefault2"
+                      checked={state.activeEvent.type === "offline"}
+                      onChange={() => {
+                        setState({ ...state, activeEvent: { ...state.activeEvent, type: "offline" } })
+
+                      }}
+                    />
+                    <label className="form-check-label" htmlFor="flexRadioDefault2">
+                      offline
+                    </label>
+                  </div>
+                  <button
+                    type="button"
+                    className="btn btn-primary"
+                    onClick={(event) => {
+                      // updateUI(event, "video_id");
+                      addEvent();
+                    }}
+                  >
+                    Add Event
+                  </button>
+                </div>
               </div>
-              <div className="form-check me-2">
-                <input
-                  className="form-check-input"
-                  type="radio"
-                  name="flexRadioDefault"
-                  id="flexRadioDefault2"
-                  checked={state.activeEvent.type==="offline"}
-                  onChange={() => {
-                    setState({...state, activeEvent: {...state.activeEvent, type: "offline"}})
-                    
-                  }}
-                />
-                <label className="form-check-label" htmlFor="flexRadioDefault2">
-                  offline
-                </label>
-              </div>
-              <button
-                type="button"
-                className="btn btn-primary"
-                onClick={(event) => {
-                  // updateUI(event, "video_id");
-                  addEvent();
-                }}
-              >
-                Add Event
-              </button>
-            </div>
-              </div>
-              <div className="col-6">
-                <h2>Events</h2>
-                <ul>
-                {state.events.map((event,i) => {
-                  return(
-                    <>
-                    <li key={i} className="my-4">{event.title}
-                    <button className="btn btn-danger mx-4"onClick={() => {
-                      deleteEvent(event);
-                    } }>Delete</button>
-                    </li>
-                    </>
-                  )
-                })}
+              <div className="col-12 col-md-6  p-4 border-start">
+                <h2 className="ms-2 mb-4">Events</h2>
+                <ul class="list-group list-group-light">
+                  {state.events.map((event, i) => {
+                    return (
+                      <>
+                        <li className="list-group-item d-flex justify-content-between align-items-center g-3 border-bottom"
+                          key={i} >
+                          <div className="pe-2 border-end w-75">
+                            <div class="fw-bold h4">{event.title}</div>
+                            <div class=" h6"><span className="fw-bold">
+
+                              Venue: </span> {event.venue} | <span className="fw-bold"> Time :</span> {event.time.date_full}</div>
+                            <p class="text-muted"> {event.description}</p>
+                          </div>
+                          <div className="p-2 w-25 text-center">
+                            <p className="mb-2">
+                              Price:
+                              <span class="badge rounded-pill badge-primary ms-2">{event.price}</span>
+                            </p>  <span class="badge rounded-pill badge-info mb-2">{event.type}</span>
+                            <p>
+
+                              <button className="btn btn-danger btn-sm my-2" onClick={() => {
+                                deleteEvent(event);
+                              }}>Delete</button>
+                            </p>
+                          </div>
+                        </li>
+                      </>
+                    )
+                  })}
                 </ul>
 
               </div>

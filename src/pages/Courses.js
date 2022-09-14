@@ -62,12 +62,12 @@ export default function Courses() {
       });
       try {
         data = await response.json();
-        if(data.success){
+        if (data.success) {
           updateUI(data.data);
-        }else if (data.message==="Token is not valid please login again"){
+        } else if (data.message === "Token is not valid please login again") {
           SnackBar("Token is not valid please login again");
           window.location.href = "/login";
-        }else{
+        } else {
           SnackBar("Something went wrong");
         }
         console.log(data);
@@ -173,7 +173,7 @@ export default function Courses() {
 
 
       <div className={classes.MainContent}>
-        <Header PageTitle={"Courses || Admin Panel"} />
+        <Header PageTitle={"Courses "} />
 
         <div className={classes.MainInnerContainer}>
 
@@ -213,15 +213,15 @@ export default function Courses() {
                         </small>
                         <div className="card-body">
 
-                        <p className="card-text">
-                          {"description: " + course.description}
-                        </p>
-                        <div className="card-text">
-                          {"quote: " + course.quote}
-                        </div>
-                        <div className="card-text">
-                          {"heading: " + course.headline}
-                        </div>
+                          <p className="card-text">
+                            {"description: " + course.description}
+                          </p>
+                          <div className="card-text">
+                            {"quote: " + course.quote}
+                          </div>
+                          <div className="card-text">
+                            {"heading: " + course.headline}
+                          </div>
                         </div>
                         <div className="d-flex flex-row justify-content-end mt-3 card-footer">
                           <Link

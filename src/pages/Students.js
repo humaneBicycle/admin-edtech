@@ -37,7 +37,7 @@ export default function Students() {
       });
       try {
         data = await response.json();
-        if(data.success){
+        if (data.success) {
           users = data.data.users;
           console.log(data);
           if (data.pages === loadedPageStudent) {
@@ -46,13 +46,13 @@ export default function Students() {
           }
           setLoadedPageStudent(loadedPageStudent + 1);
           setIsLoaded(true);
-        }else if (data.message==="Token is not valid please login again"){
+        } else if (data.message === "Token is not valid please login again") {
           SnackBar("Token is not valid please login again");
           window.location.href = "/login";
-        }else{
+        } else {
           SnackBar("Something went wrong");
         }
-        
+
       } catch {
         alert("Error");
         console.log("error");
@@ -67,16 +67,17 @@ export default function Students() {
 
 
       <div className={classes.MainContent}>
-        <Header PageTitle={"Students || Admin Panel"} />
+        <Header PageTitle={"Students"} />
 
         <div className={classes.MainInnerContainer}>
-          <div className="FlexBoxRow">
-            <div className="Flex50">
-              <h2 className="title ">Students</h2>
+          <div className="d-flex justify-content-between align-items-center g-3 border-bottom w-100 mb-5">
+            <div className="p-2 ms-2" style={{ minWidth: '75%', }}>
+              <input type="search" className="form-control" placeholder="Search Students" />
             </div>
-            <div className="FlexBox50">
-              <Link className="HoverButton" to="/students/blocked-users"><svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><line x1={8} y1={6} x2={21} y2={6} /><line x1={8} y1={12} x2={21} y2={12} /><line x1={8} y1={18} x2={21} y2={18} /><line x1={3} y1={6} x2="3.01" y2={6} /><line x1={3} y1={12} x2="3.01" y2={12} /><line x1={3} y1={18} x2="3.01" y2={18} /></svg>
-                List Block users</Link>
+            <div className="p-2">
+              <Link className="btn btn-dark btn-sm" to="/students/blocked-users">
+                <svg xmlns="http://www.w3.org/2000/svg" width={18} height={18} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><line x1={8} y1={6} x2={21} y2={6} /><line x1={8} y1={12} x2={21} y2={12} /><line x1={8} y1={18} x2={21} y2={18} /><line x1={3} y1={6} x2="3.01" y2={6} /><line x1={3} y1={12} x2="3.01" y2={12} /><line x1={3} y1={18} x2="3.01" y2={18} /></svg>
+                Block users</Link>
             </div>
           </div>
 
@@ -88,22 +89,53 @@ export default function Students() {
           {isLoaded ? (
             <>
               <div className="FlexBoxRow FlexWrap Gap1 FlexStart Padding3">
+                {users.map((user, index) => {
+                  return (
+                    <>
+
+                    </>
+                  )
+                })}
                 {users.map((user, index) => (
                   // console.log(user);
 
-                  <Link to="/students/profile" key={index} state={{ currentUser: user }} style={{ "text-decoration": "none", "color": "inherit" }}>
-                    <div className="Card" key={user._id}>
-                      <h1 className="CardTitle">{user.name}</h1>
-                      <h5 className="CardSubtitle">{user.phone_number}</h5>
+                  <Link to="/students/profile" key={index} className="w-100 p-3" state={{ currentUser: user }} style={{ "text-decoration": "none", "color": "inherit" }}>
+                    <div className="card " key={user._id}>
+                      <div className="card-body d-flex justify-content-between align-items-center g-3 border-bottom">
+                        <div className="w-75">
 
-                      <div className="CardBody">
-                        <p className="CardText">
-                          Tests given = {user.test_given}<br></br>
-                          Created On = {user.created}<br></br>
-                          {/* Is Anonymous Sign In = {user.is_anonymous.toString()}<br></br>
+                          <h1 className="card-title">{user.name}</h1>
+                          <h5 className="card-subtitle">{user.phone_number}</h5>
+
+                          <p className="card-text mb-1">
+                            Tests given = {user.test_given}
+                          </p>
+                          <p className="card-text mb-1">
+                            Created On = {user.created_at}
+                            {/* Is Anonymous Sign In = {user.is_anonymous.toString()}<br></br>
                       Is Educator = {user.educator.toString()}<br></br> */}
-                        </p>
-
+                          </p>
+                          <p className="card-text mb-1">
+                            Average : <span className="badge badge-primary">
+                              {user.avg_percentage_test} %
+                            </span>
+                          </p>
+                          <p className="card-text mb-1">
+                            Last Unit : <span className="text-muted">
+                              {user.last_unit.title}
+                            </span>
+                          </p>
+                          <p className="card-text mb-1">
+                            Last Lesson : <span className="text-muted">
+                              {user.last_lesson.title}
+                            </span>
+                          </p>
+                        </div>
+                        <div class="w-25">
+                          {
+                            user.is_anonymous ? (<span className="badge bg-warning">Anonymous</span>) : (<span className="badge bg-success">Registered</span>)
+                          }
+                        </div>
                       </div>
                     </div>
                   </Link>

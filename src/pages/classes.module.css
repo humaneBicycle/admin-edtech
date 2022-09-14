@@ -48,7 +48,14 @@
     transform: translateX(0);
 }
 
-
+@media (min-width:840px) {
+    .sideMenu {
+        position: sticky;
+        top: 0;
+        transform: translateX(0);
+        padding-bottom: 0.85rem;
+    }
+}
 
 .sideMenuInner {
     width: inherit;
@@ -73,6 +80,7 @@
     height: auto;
     aspect-ratio: 4/3;
     max-height: 10rem;
+    padding: 0.75rem;
 
 }
 
@@ -320,7 +328,7 @@ button.sideMenuLink {
 .Section {
     width: 100%;
     margin: 2rem auto;
-       max-width: 50rem;
+    max-width: 50rem;
     padding: 1rem;
 }
 
@@ -341,6 +349,9 @@ button.sideMenuLink {
     padding: 0.75rem;
     border-top: 0;
 }
+
 @media (min-width: 500px) {
-    .Section{min-width: 30rem;}
+    .Section {
+        min-width: 30rem;
+    }
 }

@@ -140,6 +140,12 @@ body {
   height: 48px;
 }
 
+@media (min-width:840px) {
+  .closeButton {
+    display: none;
+  }
+}
+
 .closeButton>div {
   position: absolute;
   inset: 0;
@@ -461,6 +467,7 @@ a>svg {
 .Flex50 {
   flex: 1 1 50%;
   padding: 0.5rem;
+  z-index: 1;
 }
 
 .Gap1 {
