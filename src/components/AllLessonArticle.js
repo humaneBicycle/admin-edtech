@@ -64,10 +64,10 @@ export default function AllLessonArticle(props) {
       }
     }
     setSpinner(true);
-    // console.log(article);
+    console.log(article);
     let response, data;
     try {
-      response = await (LinkHelper.getLink() + "/admin/lesson/create", {
+      response = await fetch(LinkHelper.getLink() + "admin/lesson/create", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -85,11 +85,11 @@ export default function AllLessonArticle(props) {
         } else {
           throw new Error(data.message);
         }
-      } catch {
+      } catch (err){
         // alert("Error");
         SnackBar("Error", 1000, "OK");
 
-        console.log("error");
+        console.log("error",err);
         setSpinner(false);
 
       }
