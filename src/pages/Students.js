@@ -4,7 +4,7 @@ import Navbar from "../components/Navbar";
 import LinkHelper from "../utils/LinkHelper";
 import StorageHelper from "../utils/StorageHelper";
 import Loader from "../components/Loader";
-import classes from "../pages/classes.module.css";
+import "../pages/classes.css";
 import SnackBar from "../components/snackbar";
 import Header from "../components/Header";
 
@@ -66,10 +66,10 @@ export default function Students() {
       <Navbar />
 
 
-      <div className={classes.MainContent}>
+      <div className="MainContent">
         <Header PageTitle={"Students"} />
 
-        <div className={classes.MainInnerContainer}>
+        <div className="MainInnerContainer">
           <div className="d-flex justify-content-between align-items-center g-3 border-bottom w-100 mb-5">
             <div className="p-2 ms-2" style={{ minWidth: '75%', }}>
               <input type="search" className="form-control" placeholder="Search Students" />
@@ -89,13 +89,7 @@ export default function Students() {
           {isLoaded ? (
             <>
               <div className="FlexBoxRow FlexWrap Gap1 FlexStart Padding3">
-                {users.map((user, index) => {
-                  return (
-                    <>
 
-                    </>
-                  )
-                })}
                 {users.map((user, index) => (
                   // console.log(user);
 

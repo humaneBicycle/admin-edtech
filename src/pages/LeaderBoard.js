@@ -5,13 +5,13 @@ import LinkHelper from "../utils/LinkHelper";
 import StorageHelper from "../utils/StorageHelper";
 import Loader from "../components/Loader";
 export default function LeaderBoard() {
-  let [state,setState]=useState({
-    spinner:true
+  let [state, setState] = useState({
+    spinner: true
   });
 
-  useEffect(()=>{
+  useEffect(() => {
     getLeaderBoard();
-  },[])
+  }, [])
   let getLeaderBoard = async () => {
     let response, data;
     try {
@@ -28,16 +28,16 @@ export default function LeaderBoard() {
       try {
         data = await response.json();
         console.log(data)
-        if(data.success){
+        if (data.success) {
           setState({
             ...state,
             spinner: false,
             leaderBoard: data.data,
           });
-        }else if (data.message==="Token is not valid please login again"){
+        } else if (data.message === "Token is not valid please login again") {
           SnackBar("Token is not valid please login again");
           window.location.href = "/login";
-        }else{
+        } else {
           SnackBar("Something went wrong");
           setState({
             ...state,
@@ -45,9 +45,9 @@ export default function LeaderBoard() {
             isError: true,
           });
         }
-        
+
       } catch (err) {
-      SnackBar("Error", 1500, "OK")
+        SnackBar("Error", 1500, "OK")
 
         setState({
           ...state,
@@ -55,7 +55,7 @@ export default function LeaderBoard() {
           isError: true,
         });
       }
-    }catch(err){
+    } catch (err) {
       setState({
         ...state,
         spinner: false,
@@ -63,7 +63,7 @@ export default function LeaderBoard() {
       });
       SnackBar("Error", 1500, "OK")
     }
-    
+
   }
 
   return (
@@ -78,12 +78,12 @@ export default function LeaderBoard() {
               <h2>LeaderBoard</h2>
             </div>
           </div>
-          {!state.spinner?(<>
-            
-            jfla
+          {!state.spinner ? (<>
 
-          </>):(<>
-            <Loader/>
+            LeaderBoard
+
+          </>) : (<>
+            <Loader />
           </>)}
         </div>
       </div>

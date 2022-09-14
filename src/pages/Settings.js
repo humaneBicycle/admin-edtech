@@ -5,7 +5,7 @@ import StorageHelper from "../utils/StorageHelper";
 import SnackBar from "../components/snackbar";
 import Header from "../components/Header";
 import Loader from "../components/Loader";
-import classes from "../pages/classes.module.css";
+import "../pages/classes.css";
 export default function Settings() {
   let [state, setState] = useState({
     isSpinner: true,
@@ -185,6 +185,18 @@ export default function Settings() {
     }
   }
 
+  function darkModeToggle(e) {
+    e.target.checked ? (() => {
+      document.body.classList.add("darkMode");
+      localStorage.setItem("darkMode", true);
+    })() : (() => {
+      document.body.classList.remove("darkMode");
+      localStorage.setItem("darkMode", false);
+    })();
+
+
+
+  }
 
   return (
     <>
@@ -192,10 +204,10 @@ export default function Settings() {
       <Navbar />
 
 
-      <div className={classes.MainContent}>
+      <div className="MainContent">
         <Header PageTitle={"Settings "} />
 
-        <div className={classes.MainInnerContainer}>
+        <div className="MainInnerContainer">
           {!state.isSpinner ? (
             <>
               <div className="row flex-wrap g-3 w-100">
@@ -248,10 +260,33 @@ export default function Settings() {
                       </button>
                     </div>
                   </div>
+                  <div className="order-last order-md-first p-2 border-bottom pb-3 mb-4" style={{ order: "2" }}>
+
+
+                    <h2 className="ms-3">Dark Mode</h2>
+                    <input type="checkbox" id="switch" hidden className="darkModeToggle" onClick={(e) => darkModeToggle(e)} onLoad={(e) => {
+                      if (localStorage.getItem("darkMode")) {
+                        e.target.setAttribute("checked", "true");
+                      }
+                    }} />
+                    <div className="app" style={{ borderRadius: '10px' }}>
+                      <div className="DarkModeButton">
+                        <div className="content">
+                          <label for="switch">
+                            <div className="toggle"></div>
+                            <div className="names">
+                              <p className="light">Light</p>
+                              <p className="dark">Dark</p>
+                            </div>
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                   <div className="order-first order-md-last p-2 border-bottom pb-3 mb-4">
 
                     <h2 className="ms-3">AWS CREDENTIALS</h2>
-                    <form className={classes.AWSSection}>
+                    <form className="AWSSection">
                       <div className="formElement">
                         <label htmlFor="exampleInputEmail1" className="formLabel">
                           Access Key ID
@@ -303,10 +338,10 @@ export default function Settings() {
                       return (
                         //id of logged in admin
                         <>
-                          <div key={index} className="card border " >
+                          <div key={index} className="card border mb-3" >
                             <div className="card-body p-3">
                               <h3 className="card-title">{admin.email}</h3>
-                              <p className="card-text">Role:  {admin.role}  & <small className={classes.AdminProfession}>Created at {admin.created_at}</small></p>
+                              <p className="card-text">Role:  {admin.role}  & <small className="AdminProfession">Created at {admin.created_at}</small></p>
 
                             </div>
                           </div>
@@ -316,16 +351,21 @@ export default function Settings() {
                     } else {
                       return (
                         //id of all other admins
-                        <div key={index} className={classes.AdminBlock} >
-                          <h1 className={classes.AdminName}>{admin.email}
-                            <span className={classes.AdminDelete} onClick={(e) => { e.preventDefault(); deleteAdmin(admin._id) }}>
+                        <>
+                          <div key={index} className="card border mb-2" >
+                            <div className="card-body p-3">
+                              <h3 className="card-title">{admin.email} <span className="AdminDelete" onClick={(e) => { e.preventDefault(); deleteAdmin(admin._id) }}>
 
-                              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" ><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
-                            </span></h1>
-                          <p className={classes.AdminProfession}>Role:  {admin.role}  & <small className={classes.AdminProfession}>Created at {admin.created_at}</small></p>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" ><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                              </span></h3>
+                              <p className="card-text">Role:  {admin.role}  & <small className="AdminProfession">Created at {admin.created_at}</small></p>
 
-                        </div>
-                      )
+                            </div>
+                          </div>
+
+
+                        </>)
+
 
                     }
                   })}
@@ -336,7 +376,7 @@ export default function Settings() {
             </>
           ) : (
             <>
-              <div class="d-flex">
+              <div className="d-flex">
                 <Loader />
               </div>
             </>

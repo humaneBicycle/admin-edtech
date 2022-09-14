@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import Loader from "../components/Loader";
-import classes from "../pages/classes.module.css";
+import "../pages/classes.css";
 import SnackBar from "../components/snackbar";
 import Header from "../components/Header";
 import LinkHelper from "../utils/LinkHelper";
@@ -149,7 +149,7 @@ export default function Events() {
     <>
       <Navbar />
 
-      <div className={classes.MainContent}>
+      <div className="MainContent">
         <Header PageTitle={"Events"} />
 
         {state.spinner ? (
@@ -157,7 +157,7 @@ export default function Events() {
         ) : (
           <>
             <div className="row flex-wrap  p-4 border-start">
-              <ul class="list-group list-group-light p-2">
+              <ul class="list-group  p-2">
                 {state.events.map((event, i) => {
                   return (
                     <>

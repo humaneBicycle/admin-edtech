@@ -7,7 +7,7 @@ import { s3Client } from "../libs/s3Clients"; // Helper function that creates an
 import S3FileUpload from 'react-s3';
 import StorageHelper from "../utils/StorageHelper";
 import Loader from "../components/Loader";
-import classes from "../pages/classes.module.css";
+import "../pages/classes.css";
 // import SnackBar from "../components/snackbar";
 import Header from "../components/Header";
 const config = {
@@ -51,16 +51,16 @@ export default function EditCourseModal() {
       <Navbar />
 
 
-      <div className={classes.MainContent}>
+      <div className="MainContent">
         <Header PageTitle={"Edit Course || Admin Panel"} />
 
-        <div className={classes.MainInnerContainer}>
-          <div className={classes.Section}>
-            <div className={[classes.SectionHeader, "pt-3"].join(" ")}>
+        <div className="MainInnerContainer">
+          <div className="Section">
+            <div className="SectionHeader pt-3">
               <h2 className="title">Edit Course :-</h2>
 
             </div>
-            <div className={classes.SectionBody}>
+            <div className="SectionBody">
 
               <div className="form-floating mb-3">
                 <input

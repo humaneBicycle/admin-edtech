@@ -27,6 +27,11 @@ import LeaderBoard from "./pages/LeaderBoard";
 
 export const Title = "Admin Panel";
 document.title = "Admin Panel";
+window.onload = () => {
+
+  localStorage.getItem("darkMode") && document.body.classList.add("darkMode");
+}
+
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <BrowserRouter>

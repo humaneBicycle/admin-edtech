@@ -3,7 +3,7 @@ import LinkHelper from "../utils/LinkHelper";
 import StorageHelper from "../utils/StorageHelper";
 import Navbar from "../components/Navbar";
 import Loader from "../components/Loader";
-import classes from "../pages/classes.module.css";
+import "../pages/classes.css";
 import SnackBar from "../components/snackbar";
 import Header from "../components/Header";
 
@@ -75,10 +75,10 @@ export default function BlockedUsers() {
       <Navbar />
 
 
-      <div className={classes.MainContent}>
+      <div className="MainContent">
         <Header PageTitle={"Blocked User "} />
 
-        <div className={classes.MainInnerContainer}>
+        <div className="MainInnerContainer">
 
 
 

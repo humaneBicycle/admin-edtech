@@ -4,7 +4,7 @@ import LinkHelper from "../utils/LinkHelper";
 import StorageHelper from "../utils/StorageHelper";
 import { Link } from "react-router-dom";
 import Loader from "../components/Loader";
-import classes from "../pages/classes.module.css";
+import "../pages/classes.css";
 import SnackBar from "../components/snackbar";
 import Header from "../components/Header";
 
@@ -231,11 +231,11 @@ export default function Discussion() {
     <>
       <Navbar />
 
-      <div className={classes.MainContent}>
+      <div className="MainContent">
         <Header PageTitle={"Forum "} />
 
-        <div className={classes.MainInnerContainer}>
-          {state.spinner ? (
+        <div className="MainInnerContainer">
+          s          {state.spinner ? (
             <>
               <Loader />
             </>
@@ -273,7 +273,7 @@ export default function Discussion() {
 
                             <div className="FlexBoxColumn ListItemButtons">
                               <span
-                                className={classes.AdminDelete}
+                                className="AdminDelete"
                                 onClick={(event) => {
                                   deleteQuestion(question._id, event);
                                 }}
@@ -371,7 +371,7 @@ export default function Discussion() {
                                 <br></br>
                                 {answer.body}
                                 <span
-                                  className={classes.AdminDelete}
+                                  className="AdminDelete"
                                   onClick={(event) => {
                                     deleteAnswer(
                                       activeQuestionId,

@@ -3,7 +3,7 @@ import StorageHelper from "../utils/StorageHelper";
 import Navbar from "../components/Navbar";
 import LinkHelper from "../utils/LinkHelper";
 import Loader from "../components/Loader";
-import classes from "../pages/classes.module.css";
+import "../pages/classes.css";
 import SnackBar from "../components/snackbar";
 import Header from "../components/Header";
 
@@ -116,27 +116,27 @@ export default function Notifications() {
       <Navbar />
 
 
-      <div className={classes.MainContent}>
+      <div className="MainContent">
         <Header PageTitle={"Notifications"} />
 
-        <div className={classes.MainInnerContainer}>
+        <div className="MainInnerContainer">
 
-          <div className={classes.NotificationSection}>
+          <div className="NotificationSection">
 
-            <div className={classes.NotificationList}>
+            <div className="NotificationList">
 
               {!state.spinner ? (
                 state.notifications.map((notification, index) => {
                   return (
                     <>
-                      <div key={index} className={[classes.NotificationBlock, "card", "flex-row", "g-2", "p-3", "border"].join(" ")} style={{ border: "2px solid #ddd" }}>
+                      <div key={index} className="NotificationBlock card flex-row g-2 p-3 border" style={{ border: "2px solid #ddd" }}>
 
-                        <div className={[classes.NotificationBlockDetails, "card-body p-0"].join(" ")}>
+                        <div className="NotificationBlockDetailscard-body p-0">
                           <h2 className="card-title">{notification.title}</h2>
                           <p className="card-text">{notification.description}</p>
                         </div>
                         <div>
-                          <a href={notification.link} className={[classes.goToNotifications, "btn btn-primary rounded-3 bg-primary text-white"].join(" ")}>Go to link</a>
+                          <a href={notification.link} className="goToNotifications btn btn-primary rounded-3 bg-primary text-white">Go to link</a>
                         </div>
                       </div>
                     </>

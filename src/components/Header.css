@@ -42,3 +42,8 @@ nav {
         margin-left: 2.25rem;
     }
 }
+
+.darkMode header {
+    border-bottom-color: #333333 !important;
+
+}

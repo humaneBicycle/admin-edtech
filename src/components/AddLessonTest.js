@@ -1,4 +1,4 @@
-import React, { useState,useRef } from "react";
+import React, { useState, useRef } from "react";
 import { useLocation } from "react-router-dom";
 import LinkHelper from "../utils/LinkHelper";
 import SnackBar from "./snackbar";
@@ -11,7 +11,7 @@ import StorageHelper from "../utils/StorageHelper";
 let credentials, imageId;
 export default function AddLessonTest(props) {
   let { unit } = useLocation().state;
-  
+
 
   credentials = props.awsCredentials;
   let initState = {
@@ -33,10 +33,10 @@ export default function AddLessonTest(props) {
     lessons: [],
   };
   let [state, setState] = useState(initState);
-  let imageRef=useRef(null);
+  let imageRef = useRef(null);
   // console.log(state)
 
-  let prerequisiteItemClick = async (e) => {};
+  let prerequisiteItemClick = async (e) => { };
 
   let addQuestionToTest = () => {
     if (
@@ -56,7 +56,7 @@ export default function AddLessonTest(props) {
       SnackBar("Please fill all the fields");
       return;
     }
-    imageRef.current.value="";
+    imageRef.current.value = "";
     setState({
       ...state,
       lesson: {
@@ -160,7 +160,7 @@ export default function AddLessonTest(props) {
         console.log(data);
         if (data.success) {
           SnackBar("success", 1500);
-          setState({ ...initState, spinner: false, lesson:{...state.lesson,questions:[]} });
+          setState({ ...initState, spinner: false, lesson: { ...state.lesson, questions: [] } });
         } else {
           SnackBar("error ", data.message);
           console.log(data);
@@ -193,9 +193,11 @@ export default function AddLessonTest(props) {
               onChange={(event) => {
                 setState({
                   ...state,
-                  lesson:{...state.lesson,
+                  lesson: {
+                    ...state.lesson,
                     title: event.target.value,
-                }});
+                  }
+                });
               }}
             />
             <label htmlFor="exampleFormControlInput1" className="form-label">
@@ -208,9 +210,11 @@ export default function AddLessonTest(props) {
               onChange={(event) => {
                 setState({
                   ...state,
-                  lesson:{...state.lesson,
-                  time_allowed: event.target.value,
-                }});
+                  lesson: {
+                    ...state.lesson,
+                    time_allowed: event.target.value,
+                  }
+                });
               }}
             />
             <label htmlFor="exampleFormControlInput1" className="form-label">
@@ -233,7 +237,7 @@ export default function AddLessonTest(props) {
               Image
             </label>
             <input
-            ref={imageRef}
+              ref={imageRef}
               className="form-control"
               type="file"
               accept="image/*"
@@ -348,10 +352,10 @@ export default function AddLessonTest(props) {
                 className="dropdown-menu"
                 aria-labelledby="dropdownMenuButton"
               >
-                <li className="dropdown-item" onClick={()=>{setState({...state,activeQuestion:{...state.activeQuestion  ,correct_option:"a"}})}}>a</li>
-                <li className="dropdown-item" onClick={()=>{setState({...state,activeQuestion:{...state.activeQuestion,correct_option:"b"}})}}>b</li>
-                <li className="dropdown-item" onClick={()=>{setState({...state,activeQuestion:{...state.activeQuestion,correct_option:"c"}})}}>c</li>
-                <li className="dropdown-item" onClick={()=>{setState({...state,activeQuestion:{...state.activeQuestion,correct_option:"d"}})}}>d</li>
+                <li className="dropdown-item" onClick={() => { setState({ ...state, activeQuestion: { ...state.activeQuestion, correct_option: "a" } }) }}>a</li>
+                <li className="dropdown-item" onClick={() => { setState({ ...state, activeQuestion: { ...state.activeQuestion, correct_option: "b" } }) }}>b</li>
+                <li className="dropdown-item" onClick={() => { setState({ ...state, activeQuestion: { ...state.activeQuestion, correct_option: "c" } }) }}>c</li>
+                <li className="dropdown-item" onClick={() => { setState({ ...state, activeQuestion: { ...state.activeQuestion, correct_option: "d" } }) }}>d</li>
               </ul>
             </div>
 
@@ -427,6 +431,13 @@ export default function AddLessonTest(props) {
                 </label>
               </div>
               <div className="form-check form-switch">
+                <label
+                  className="form-check-label"
+                  htmlFor="flexSwitchCheckChecked"
+                  checked
+                >
+                  Has Pre-requisites
+                </label>
                 <input
                   className="form-check-input"
                   type="checkbox"
@@ -446,13 +457,6 @@ export default function AddLessonTest(props) {
                     });
                   }}
                 />
-                <label
-                  className="form-check-label"
-                  htmlFor="flexSwitchCheckChecked"
-                  checked
-                >
-                  Has Pre-requisites
-                </label>
                 <div className="prerequisites">
                   {state.lesson.prerequisite.has_prerequisite ? (
                     <>
@@ -491,6 +495,12 @@ export default function AddLessonTest(props) {
                         </div>
                         <div className="d-flex align-items-center justify-content-between p-2 mb-2 flex-wrap">
                           <div className="form-floating me-2">
+                            <label
+                              htmlFor="inputPassword5"
+                              className="form-label"
+                            >
+                              After Time in Seconds
+                            </label>
                             <input
                               id="inputPassword5"
                               className="form-control"
@@ -510,12 +520,6 @@ export default function AddLessonTest(props) {
                                 });
                               }}
                             />
-                            <label
-                              htmlFor="inputPassword5"
-                              className="form-label"
-                            >
-                              After Time in Seconds
-                            </label>
                           </div>
                           <div className="form-floating me-2">
                             <input

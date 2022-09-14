@@ -4,7 +4,7 @@ import { useLocation } from "react-router-dom";
 import LinkHelper from "../utils/LinkHelper";
 import StorageHelper from "../utils/StorageHelper";
 import Loader from "../components/Loader";
-import classes from "../pages/classes.module.css";
+import "../pages/classes.css";
 import SnackBar from "../components/snackbar";
 import Header from "../components/Header";
 export default function StudentProfile() {
@@ -31,17 +31,17 @@ export default function StudentProfile() {
       });
       try {
         data = await response.json();
-        if(data.success){
+        if (data.success) {
           setState({
             ...state,
             spinner: false,
             student: data.data,
             user: data.data.user
           });
-        }else if (data.message==="Token is not valid please login again"){
+        } else if (data.message === "Token is not valid please login again") {
           SnackBar("Token is not valid please login again");
           window.location.href = "/login";
-        }else{
+        } else {
           SnackBar("Something went wrong");
           setState({
             ...state,
@@ -49,7 +49,7 @@ export default function StudentProfile() {
             isError: true,
           });
         }
-        
+
       } catch (err) {
 
         setState({
@@ -128,10 +128,10 @@ export default function StudentProfile() {
       <Navbar />
 
 
-      <div className={classes.MainContent}>
-        <Header PageTitle={"Students' Profile || Admin Panel"} />
+      <div className="MainContent">
+        <Header PageTitle={"Students' Profile "} />
 
-        <div className={classes.MainInnerContainer}>
+        <div className="MainInnerContainer">
           {!state.isError ? (
             <>
               {!state.spinner ? (<div className="Card " style={{ "max-width": "600px", "margin": "auto" }}>

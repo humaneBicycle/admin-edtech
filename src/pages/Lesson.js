@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import Navbar from "../components/Navbar";
-import classes from "../pages/classes.module.css";
+import "../pages/classes.css";
 import SnackBar from "../components/snackbar";
 import Header from "../components/Header";
 import Loader from "../components/Loader";
@@ -27,10 +27,10 @@ export default function Lesson() {
       <Navbar />
 
 
-      <div className={classes.MainContent}>
+      <div className="MainContent">
         <Header PageTitle={"Events || Admin Panel"} />
 
-        <div className={classes.MainInnerContainer}>
+        <div className="MainInnerContainer">
           <Loader />
           {SnackBar("Nothing Yet", 6000, "OK")}
         </div>

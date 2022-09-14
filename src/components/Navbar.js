@@ -1,5 +1,5 @@
 import React from "react";
-import classes from "../pages/classes.module.css";
+import "../pages/classes.css";
 import { Link } from "react-router-dom";
 import StorageHelper from "../utils/StorageHelper";
 import logo from "../images/logo.svg";
@@ -24,14 +24,14 @@ export default function Navbar() {
   }
   return (
     <>
-      <div className={classes.sideMenu} ref={sideMenu}>
+      <div className="sideMenu" ref={sideMenu}>
         <div className="closeButton" onClick={ToggleSidenav} ref={toggle}>
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="close">
             <line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
           <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="bars"><line x1={3} y1={12} x2={21} y2={12} /><line x1={3} y1={6} x2={21} y2={6} /><line x1={3} y1={18} x2={21} y2={18} /></svg>
         </div>
-        <div className={classes.sideMenuInner}>
-          <div className={classes.sideMenuHeader}>
+        <div className="sideMenuInner">
+          <div className="sideMenuHeader">
 
             <Link to="/">
               <img
@@ -41,8 +41,8 @@ export default function Navbar() {
 
             </Link>
           </div>
-          <ul className={classes.sideMenuLinkList}>
-            <Link to="/course" className={classes.sideMenuLink}>
+          <ul className="sideMenuLinkList">
+            <Link to="/course" className="sideMenuLink">
               <i>
 
                 <svg width="28" height="28" viewBox="0 0 33 33" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -54,7 +54,7 @@ export default function Navbar() {
               Course
 
             </Link>
-            <Link to="/students" className={classes.sideMenuLink}>
+            <Link to="/students" className="sideMenuLink">
               <i>
 
                 <svg width="28" height="28" viewBox="0 0 33 33" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -69,7 +69,7 @@ export default function Navbar() {
 
             </Link>
 
-            <Link to="/events" className={classes.sideMenuLink}>
+            <Link to="/events" className="sideMenuLink">
               <i>
 
                 <svg width="28" height="28" viewBox="0 0 33 33" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -81,12 +81,11 @@ export default function Navbar() {
               </i> Events
 
             </Link>
-            {/* <Link to="/analytics" className={classes.sideMenuLink}>
-              
+            {/* <Link to="/analytics" className="sideMenuLink">
                Analytics
              
             </Link> */}
-            <Link to="/forum" className={classes.sideMenuLink}>
+            <Link to="/forum" className="sideMenuLink">
               <i>
 
                 <svg width="26" height="26" viewBox="0 0 33 33" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -96,7 +95,7 @@ export default function Navbar() {
               </i>  Forum
 
             </Link>
-            <Link to="/notifications" className={classes.sideMenuLink}>
+            <Link to="/notifications" className="sideMenuLink">
               <i>
 
                 <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -108,7 +107,7 @@ export default function Navbar() {
               </i>  Notifications
 
             </Link>
-            <Link to="/leaderboard" className={classes.sideMenuLink}>
+            <Link to="/leaderboard" className="sideMenuLink">
               <i>
 
                 <svg width="28" height="28" viewBox="0 0 33 33" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -123,8 +122,8 @@ export default function Navbar() {
             </Link>
           </ul>
 
-          <div className={classes.sideMenuFooter}>
-            <Link to="/settings" className={classes.sideMenuLink}>
+          <div className="sideMenuFooter">
+            <Link to="/settings" className="sideMenuLink">
               <i>
 
                 <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="feather feather-settings">
@@ -136,7 +135,7 @@ export default function Navbar() {
 
               </i>   Settings
             </Link>
-            <button className={classes.sideMenuLink} onClick={(e) => { logoutButton(e) }} >
+            <button className="sideMenuLink" onClick={(e) => { logoutButton(e) }} >
               <i>
                 <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="feather feather-log-out"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline>
                   <line x1="21" y1="12" x2="9" y2="12"></line></svg>
@@ -149,7 +148,7 @@ export default function Navbar() {
             </Link> */}
           </div>
         </div>
-      </div >
+      </div>
     </>
   )
 }

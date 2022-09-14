@@ -17,6 +17,7 @@
     min-height: 100vh;
 }
 
+
 .Home {
     display: flex;
     justify-content: center;
@@ -327,8 +328,8 @@ button.sideMenuLink {
 
 .Section {
     width: 100%;
-    margin: 2rem auto;
-    max-width: 50rem;
+    margin: auto;
+    /* max-width: 50rem; */
     padding: 1rem;
 }
 
@@ -354,4 +355,10 @@ button.sideMenuLink {
     .Section {
         min-width: 30rem;
     }
+}
+
+.darkMode .sideMenu {
+    background-color: #16171D !important;
+    border-right: 2px #16171d solid;
+
 }

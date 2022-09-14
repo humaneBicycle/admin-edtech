@@ -8,7 +8,7 @@ import * as AWSManager from "../utils/AWSManager";
 import StorageHelper from "../utils/StorageHelper";
 // require("dotenv").config();
 import Loader from "../components/Loader";
-import classes from "../pages/classes.module.css";
+import "../pages/classes.css";
 import SnackBar from "../components/snackbar";
 import Header from "../components/Header";
 let image;
@@ -164,19 +164,19 @@ export default function AddUnit() {
       <Navbar />
 
 
-      <div className={classes.MainContent}>
+      <div className="MainContent">
         <Header PageTitle={"Add Unit || Admin Panel"} />
 
-        <div className={classes.MainInnerContainer}>
+        <div className="MainInnerContainer">
           {spinner ? <>
             <Loader />
           </> : <>
-            <div className={classes.Section}>
-              <div className={[classes.SectionHeader, "pt-3"].join(" ")}>
+            <div className="Section">
+              <div className="SectionHeader pt-3">
                 <h2 className="title">Edit Unit :-</h2>
 
               </div>
-              <div className={classes.SectionBody}>
+              <div className="SectionBody">
                 <div className="form-floating mb-3">
                   <input
                     className="form-control"

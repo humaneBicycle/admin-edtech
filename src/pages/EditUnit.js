@@ -5,7 +5,7 @@ import LinkHelper from "../utils/LinkHelper";
 import StorageHelper from "../utils/StorageHelper";
 import * as AWSManager from "../utils/AWSManager";
 import Loader from "../components/Loader";
-import classes from "../pages/classes.module.css";
+import "../pages/classes.css";
 import SnackBar from "../components/snackbar";
 import Header from "../components/Header";
 
@@ -133,10 +133,10 @@ export default function EditUnit() {
       <Navbar />
 
 
-      <div className={classes.MainContent}>
+      <div className="MainContent">
         <Header PageTitle={"Edit Unit "} />
 
-        <div className={classes.MainInnerContainer}>
+        <div className="MainInnerContainer">
           {state.progress !== -1 ? (
             <>
               <div className="progress" style={{ height: 20 }}>

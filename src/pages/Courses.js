@@ -6,7 +6,7 @@ import Unit from "../components/Unit";
 import { Link } from "react-router-dom";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import Loader from "../components/Loader";
-import classes from "../pages/classes.module.css";
+import "../pages/classes.css";
 import SnackBar from "../components/snackbar";
 import Header from "../components/Header";
 // let isLoaded;
@@ -172,10 +172,10 @@ export default function Courses() {
       <Navbar />
 
 
-      <div className={classes.MainContent}>
+      <div className="MainContent">
         <Header PageTitle={"Courses "} />
 
-        <div className={classes.MainInnerContainer}>
+        <div className="MainInnerContainer">
 
           {progressVisibility ? (
             <Loader />

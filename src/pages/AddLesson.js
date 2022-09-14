@@ -10,7 +10,7 @@ import Event from "../components/Event";
 import Payment from "../components/Payment";
 import StorageHelper from "../utils/StorageHelper";
 import Loader from "../components/Loader";
-import classes from "../pages/classes.module.css";
+import "../pages/classes.css";
 import SnackBar from "../components/snackbar";
 import Header from "../components/Header";
 
@@ -74,17 +74,17 @@ export default function AddLesson() {
           setIsLoaded(true)
         } else {
           setIsLoaded(true)
-          
+
         }
       } catch (err) {
         console.log(err);
         setIsLoaded(true)
-        
+
       }
     } catch (err) {
       console.log("error", err);
       setIsLoaded(true)
-      
+
     }
   };
 
@@ -94,16 +94,16 @@ export default function AddLesson() {
       <Navbar />
 
 
-      <div className={classes.MainContent}>
-        <Header PageTitle={"Add Lesson || Admin Panel"} />
+      <div className="MainContent">
+        <Header PageTitle={"Add Lesson "} />
 
-        <div className={classes.MainInnerContainer}>
+        <div className="MainInnerContainer">
           {isLoaded ? (<>
 
-            <h2 className="title">Adding to: {unit.unit_name} </h2>
-            <hr />
-            <section className={classes.Section}>
-              <div className={classes.SectionHeader}>
+            <h2 className="card-title w-100 text-start  ms-5">Adding to: {unit.unit_name} </h2>
+
+            <section className="Section">
+              <div className="SectionHeader">
 
 
                 <ul class="nav nav-tabs" id="ex1" role="tablist">
@@ -187,7 +187,7 @@ export default function AddLesson() {
                   </li>
                 </ul>
               </div>
-              <div className={classes.SectionBody}>
+              <div className="SectionBody">
 
                 {/* <!-- Tabs content --> */}
                 <div class="tab-content" id="ex1-content">
@@ -221,7 +221,7 @@ export default function AddLesson() {
                     role="tabpanel"
                     aria-labelledby="ex1-tab-4"
                   >
-                    <Event  lessons={lessons}/>
+                    <Event lessons={lessons} />
                   </div>
                   <div
                     class="tab-pane fade"
@@ -229,7 +229,7 @@ export default function AddLesson() {
                     role="tabpanel"
                     aria-labelledby="ex1-tab-5"
                   >
-                    <Payment lessons={lessons}/>
+                    <Payment lessons={lessons} />
                   </div>
                   <div
                     class="tab-pane fade"
@@ -237,7 +237,7 @@ export default function AddLesson() {
                     role="tabpanel"
                     aria-labelledby="ex1-tab-6"
                   >
-                    <AddLessonTest lessons={lessons} awsCredentials = {credentials}/>
+                    <AddLessonTest lessons={lessons} awsCredentials={credentials} />
                   </div>
                 </div>
               </div>

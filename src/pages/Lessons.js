@@ -6,7 +6,7 @@ import StorageHelper from "../utils/StorageHelper";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { Link } from "react-router-dom";
 import Loader from "../components/Loader";
-import classes from "../pages/classes.module.css";
+import "../pages/classes.css";
 import SnackBar from "../components/snackbar";
 import Header from "../components/Header";
 
@@ -115,12 +115,12 @@ export default function Lessons() {
       <Navbar />
 
 
-      <div className={classes.MainContent}>
+      <div className="MainContent">
         <Header PageTitle={unit.unit_name} />
 
-        <div className={classes.MainInnerContainer}>
-          <section className={classes.Section} style={{ maxWidth: '100%', margin: "auto" }}>
-            <div className={[classes.SectionHeader, " p-3"].join(" ")}>
+        <div className="MainInnerContainer">
+          <section className="Section" style={{ maxWidth: '100%', margin: "auto" }}>
+            <div className="SectionHeader p-3">
               <h1 className="ms-3">Lessons   <span className=" h4 ms-3">In Unit: {unit.unit_name} </span></h1>
 
             </div>
@@ -142,7 +142,7 @@ export default function Lessons() {
               <></>
             )}
 
-            <div className={classes.SectionBody}>
+            <div className="SectionBody">
 
               {isLoaded ? (
                 <DragDropContext onDragEnd={handleOnDragEvent}>
