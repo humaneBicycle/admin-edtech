@@ -288,7 +288,7 @@ export default function Settings() {
                         Please make sure that the AWS Credentials have MediaConvert Role and s3 full access role. Otherwise the features might not work as expected.
                         <br></br><strong>Note: </strong> All old AWS Credentials will be deleted.   </p>
 
-                      <button type="submit" className="formSubmit" onClick={setAWSCredentials}>
+                      <button type="submit" className="btn btn-primary my-2 w-50 mx-auto" onClick={setAWSCredentials}>
                         Submit
                       </button>
                     </form>
