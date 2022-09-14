@@ -117,99 +117,26 @@ export default function Notifications() {
 
 
       <div className={classes.MainContent}>
-        <Header PageTitle={"Notifications || Admin Panel"} />
+        <Header PageTitle={"Notifications"} />
 
         <div className={classes.MainInnerContainer}>
-          <h2 className="title">Notifications</h2>
 
           <div className={classes.NotificationSection}>
-            <form className="card">
-              <div className="formElement">
-                <label htmlFor="exampleInputEmail1" className="formLabel">
-                  Notification Title
-                </label>
-                <input
-                  type="email"
-                  className="formInput"
-                  id="exampleInputEmail1"
-                  aria-describedby="emailHelp"
-                  value={state.notification.title}
-                  onChange={(e) => {
-                    setState({
-                      ...state,
-                      notification: {
-                        ...state.notification,
-                        title: e.target.value,
-                      },
-                    });
-                  }}
-                />
-              </div>
-              <div className="formElement">
-                <label htmlFor="exampleInputPassword1" className="formLabel">
-                  Notification Body
-                </label>
-                <input
-                  className="formInput"
-                  id="exampleInputPassword1"
-                  onChange={(e) => {
-                    setState({
-                      ...state,
-                      notification: {
-                        ...state.notification,
-                        description: e.target.value,
-                      },
-                    });
-                  }}
-                  value={state.notification.description}
-                />
-              </div>
-              <div className="formElement">
 
-                <label htmlFor="exampleInputPassword1" className="formLabel">
-                  Clickable Link
-                </label>
-                <input
-                  className="formInput"
-                  id="exampleInputPassword1"
-                  type="url"
-                  onChange={(e) => {
-                    setState({
-                      ...state,
-                      notification: {
-                        ...state.notification,
-                        link: e.target.value,
-                      },
-                    });
-                  }}
-                  value={state.notification.link}
-                />
-              </div>
-              <button
-                type="submit"
-                className="formSubmit"
-                onClick={(e) => {
-                  e.preventDefault();
-                  sendNotification();
-                }}
-              >
-                Send Notification to all users.
-              </button>
-            </form>
             <div className={classes.NotificationList}>
 
               {!state.spinner ? (
                 state.notifications.map((notification, index) => {
                   return (
                     <>
-                      <div key={index} className={[classes.NotificationBlock, "card", "flex-row", "g-2", "p-3", "border-start"].join(" ")}>
+                      <div key={index} className={[classes.NotificationBlock, "card", "flex-row", "g-2", "p-3", "border"].join(" ")} style={{ border: "2px solid #ddd" }}>
 
-                        <div className={classes.NotificationBlockDetails}>
-                          <h3>{notification.title}</h3>
-                          <p>{notification.description}</p>
+                        <div className={[classes.NotificationBlockDetails, "card-body p-0"].join(" ")}>
+                          <h2 className="card-title">{notification.title}</h2>
+                          <p className="card-text">{notification.description}</p>
                         </div>
                         <div>
-                          <a href={notification.link} className={classes.goToNotifications}>Go to link</a>
+                          <a href={notification.link} className={[classes.goToNotifications, "btn btn-primary rounded-3 bg-primary text-white"].join(" ")}>Go to link</a>
                         </div>
                       </div>
                     </>
@@ -225,9 +152,108 @@ export default function Notifications() {
 
 
 
+        </div>
+      </div>       <div class="fixed-action-btn" id="fixed1">
+        <button class="btn btn-floating bg-success text-white btn-lg " data-mdb-toggle="modal" data-mdb-target="#addNew">
+          <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="feather feather-plus-circle">
+            {/* <circle cx={12} cy={12} r={10} /> */}
+            <line x1={12} y1={8} x2={12} y2={16} />
+            <line x1={8} y1={12} x2={16} y2={12} />
+          </svg>
+        </button>
+      </div>
 
+      <div class="modal fade" id="addNew" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h2 className="modal-title" id="exampleModalLabel">Add Notification</h2>
+
+              <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <div className="form-floating mb-4">
+                <label htmlFor="exampleInputEmail1" className="form-label">
+                  Notification Title
+                </label>
+                <input
+                  type="email"
+                  className="form-control"
+                  id="exampleInputEmail1"
+                  aria-describedby="emailHelp"
+                  value={state.notification.title}
+                  onChange={(e) => {
+                    setState({
+                      ...state,
+                      notification: {
+                        ...state.notification,
+                        title: e.target.value,
+                      },
+                    });
+                  }}
+                />
+              </div>
+              <div className="form-floating mb-4">
+                <label htmlFor="exampleInputPassword1" className="form-label">
+                  Notification Body
+                </label>
+                <input
+                  className="form-control"
+                  id="exampleInputPassword1"
+                  onChange={(e) => {
+                    setState({
+                      ...state,
+                      notification: {
+                        ...state.notification,
+                        description: e.target.value,
+                      },
+                    });
+                  }}
+                  value={state.notification.description}
+                />
+              </div>
+              <div className="form-floating mb-4">
+
+                <label htmlFor="exampleInputPassword1" className="form-label">
+                  Clickable Link
+                </label>
+                <input
+                  className="form-control"
+                  id="exampleInputPassword1"
+                  type="url"
+                  onChange={(e) => {
+                    setState({
+                      ...state,
+                      notification: {
+                        ...state.notification,
+                        link: e.target.value,
+                      },
+                    });
+                  }}
+                  value={state.notification.link}
+                />
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">Close</button>
+              <button
+                type="submit"
+                className="btn btn-primary"
+                onClick={(e) => {
+                  e.preventDefault();
+                  sendNotification();
+                }}
+              >
+                Send Notification to all users.
+              </button>
+            </div>
+          </div>
         </div>
       </div>
+
+
+
+
     </>
   );
 }

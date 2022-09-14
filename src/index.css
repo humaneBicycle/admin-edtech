@@ -428,7 +428,7 @@ hr {
   color: #0dce91;
 }
 
-button>svg,
+button:not(.btn)>svg,
 a>svg {
   margin-right: 0.5rem;
 }

@@ -100,11 +100,19 @@ export default function Students() {
                   // console.log(user);
 
                   <Link to="/students/profile" key={index} className="w-100 p-3" state={{ currentUser: user }} style={{ "text-decoration": "none", "color": "inherit" }}>
-                    <div className="card " key={user._id}>
+                    <div className="card  border border-dark overflow-hidden" key={user._id}>
                       <div className="card-body d-flex justify-content-between align-items-center g-3 border-bottom">
-                        <div className="w-75">
+                        <div className="w-100">
 
-                          <h1 className="card-title">{user.name}</h1>
+                          <div className="card-title">
+
+                            <h1 className="card-title">
+                              {user.name}
+                            </h1>
+                            {
+                              user.is_anonymous ? (<span className="badge bg-warning ms-auto me-2">Anonymous</span>) : (<span className="badge bg-success">Registered</span>)
+                            }
+                          </div>
                           <h5 className="card-subtitle">{user.phone_number}</h5>
 
                           <p className="card-text mb-1">
@@ -131,11 +139,7 @@ export default function Students() {
                             </span>
                           </p>
                         </div>
-                        <div class="w-25">
-                          {
-                            user.is_anonymous ? (<span className="badge bg-warning">Anonymous</span>) : (<span className="badge bg-success">Registered</span>)
-                          }
-                        </div>
+
                       </div>
                     </div>
                   </Link>

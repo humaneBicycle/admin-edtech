@@ -76,7 +76,7 @@ export default function BlockedUsers() {
 
 
       <div className={classes.MainContent}>
-        <Header PageTitle={"Blocked User || Admin Panel"} />
+        <Header PageTitle={"Blocked User "} />
 
         <div className={classes.MainInnerContainer}>
 
@@ -85,22 +85,35 @@ export default function BlockedUsers() {
           {!state.spinner ? (
             <>
               {state.blockedUsers.length > 0 ? (
-                <ul className="w-100 p-4 d-flex flex-wrap g-3 justify-content-start align-items-center list-group list-group-light">
+                <div className="FlexBoxRow FlexWrap Gap1 FlexStart Padding3">
                   {state.blockedUsers.map((blockedUser => {
                     return (
                       <>
-                        <li className="list-group-item d-flex justify-content-between align-items-center card p-4 m-auto shadow-5">
-                          <div>
-                            <div class="fw-bold">UserName :{blockedUser.user_name}</div>
-                            <h4 className="CardSubtitle">ID : {blockedUser.user_id}</h4>
-                            <div class="text-muted">Number :{blockedUser.phone_number}</div>
-                          </div>
 
-                        </li>
+                        <div className="card w-100  border border-dark overflow-hidden" key={blockedUser._id}>
+                          <div className="card-body d-flex justify-content-between align-items-center g-3 border-bottom">
+                            <div className="w-100">
+
+                              <div className="card-title">
+
+                                <h1 className="card-title">
+                                  {blockedUser.user_name}
+                                </h1>
+                                <div>
+                                  <div class="fw-bold">UserName :{blockedUser.user_name}</div>
+                                  <h4 className="CardSubtitle">ID : {blockedUser.user_id}</h4>
+                                  <div class="text-muted">Number :{blockedUser.phone_number}</div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
                       </>
                     )
                   }))}
-                </ul>) : (<>
+
+                </div>) : (<>
                   No Blocked Users Found
                 </>)}
             </>

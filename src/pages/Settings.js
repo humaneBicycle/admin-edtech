@@ -193,23 +193,122 @@ export default function Settings() {
 
 
       <div className={classes.MainContent}>
-        <Header PageTitle={"Settings || Admin Panel"} />
+        <Header PageTitle={"Settings "} />
 
         <div className={classes.MainInnerContainer}>
           {!state.isSpinner ? (
             <>
-              <h1>List of Admins</h1>
-              <div className={classes.AdminSection}>
-                <div className={classes.AdminList}>
+              <div className="row flex-wrap g-3 w-100">
+
+                <div className="col-12 col-md-6 d-flex flex-column ">
+                  <div className="order-last order-md-first p-2 border-bottom pb-3 mb-4">
+
+
+                    <h2 className="ms-3">Create New Admin</h2>
+                    <div className="formElement">
+                      <label htmlFor="exampleInputEmail1" className="formLabel">
+                        Email
+                      </label>
+                      <input
+                        className="formInput"
+                        id="exampleInputEmail1"
+                        placeholder="Enter Unique Email Address"
+                        value={state.new_admin.email}
+                        onChange={(e) => {
+                          setState({ ...state, new_admin: { ...state.new_admin, email: e.target.value } });
+                        }}
+                      />
+                      <div id="emailHelp" className="formHelper">
+                        Email id of new admin
+                      </div>
+                    </div>
+                    <div className="formElement">
+                      <label htmlFor="password" className="formLabel">
+                        Password
+                      </label>
+                      <input
+                        className="formInput"
+                        id="exampleInputPassword1"
+                        type="password"
+                        placeholder="Enter your password..."
+                        value={state.new_admin.password}
+                        onChange={(e) => {
+                          setState({ ...state, new_admin: { ...state.new_admin, password: e.target.value } });
+
+                        }}
+                      />
+                    </div>
+                    <div className=" w-100 d-flex justify-content-center">
+
+                      <button type="submit" className="btn btn-primary my-2 w-50 mx-auto" onClick={(e) => {
+                        e.preventDefault();
+                        createAdmin()
+                      }}>
+                        Create
+                      </button>
+                    </div>
+                  </div>
+                  <div className="order-first order-md-last p-2 border-bottom pb-3 mb-4">
+
+                    <h2 className="ms-3">AWS CREDENTIALS</h2>
+                    <form className={classes.AWSSection}>
+                      <div className="formElement">
+                        <label htmlFor="exampleInputEmail1" className="formLabel">
+                          Access Key ID
+                        </label>
+                        <input
+                          className="formInput"
+                          id="exampleInputEmail1"
+                          placeholder="Enter Access Key ID" value={state.credentials.accessKeyId}
+                          onChange={(e) => {
+                            setState({ ...state, credentials: { ...state.credentials, accessKeyId: e.target.value } });
+                          }}
+                        />
+                        <div id="emailHelp" className="formHelper">
+                        </div>
+                      </div>
+                      <div className="formElement">
+                        <label htmlFor="exampleInputPassword1" className="formLabel">
+                          Access Secret Key
+                        </label>
+                        <input
+                          className="formInput"
+                          id="exampleInputPassword1"
+                          placeholder="Enter Access Secret Key"
+                          value={state.credentials.secretAccessKey}
+                          onChange={(e) => {
+                            setState({ ...state, credentials: { ...state.credentials, secretAccessKey: e.target.value } });
+
+                          }}
+                        />
+                      </div>
+
+                      <p className="note m-3 me-5">
+                        <strong>IAM of AWS : </strong>
+                        Please make sure that the AWS Credentials have MediaConvert Role and s3 full access role. Otherwise the features might not work as expected.
+                        <br></br><strong>Note: </strong> All old AWS Credentials will be deleted.   </p>
+
+                      <button type="submit" className="formSubmit" onClick={setAWSCredentials}>
+                        Submit
+                      </button>
+                    </form>
+                  </div>
+                </div>
+
+                <div className="col-12 col-md-6 p-3">
+                  <h1>List of Admins</h1>
+
                   {state.admins.map((admin, index) => {
                     if (admin._id === StorageHelper.get("admin_id")) {
                       return (
                         //id of logged in admin
                         <>
-                          <div key={index} className={classes.AdminBlock} >
-                            <h1 className={classes.AdminName}>{admin.email}</h1>
-                            <p className={classes.AdminProfession}>Role:  {admin.role}  & <small className={classes.AdminProfession}>Created at {admin.created_at}</small></p>
+                          <div key={index} className="card border " >
+                            <div className="card-body p-3">
+                              <h3 className="card-title">{admin.email}</h3>
+                              <p className="card-text">Role:  {admin.role}  & <small className={classes.AdminProfession}>Created at {admin.created_at}</small></p>
 
+                            </div>
                           </div>
                         </>
 
@@ -231,94 +330,8 @@ export default function Settings() {
                     }
                   })}
                 </div>
-                <div className={classes.CreateAdminSection}>
-
-                  <h2>Create New Admin</h2>
-                  <div className="formElement">
-                    <label htmlFor="exampleInputEmail1" className="formLabel">
-                      Email
-                    </label>
-                    <input
-                      className="formInput"
-                      id="exampleInputEmail1"
-                      placeholder="Enter Unique Email Address"
-                      value={state.new_admin.email}
-                      onChange={(e) => {
-                        setState({ ...state, new_admin: { ...state.new_admin, email: e.target.value } });
-                      }}
-                    />
-                    <div id="emailHelp" className="formHelper">
-                      Email id of new admin
-                    </div>
-                  </div>
-                  <div className="formElement">
-                    <label htmlFor="password" className="formLabel">
-                      Password
-                    </label>
-                    <input
-                      className="formInput"
-                      id="exampleInputPassword1"
-                      type="password"
-                      placeholder="Enter your password..."
-                      value={state.new_admin.password}
-                      onChange={(e) => {
-                        setState({ ...state, new_admin: { ...state.new_admin, password: e.target.value } });
-
-                      }}
-                    />
-                  </div>
-
-                  <button type="submit" className="formSubmit" onClick={(e) => {
-                    e.preventDefault();
-                    createAdmin()
-                  }}>
-                    Create
-                  </button>
-
-                </div>
               </div>
-              <form className={classes.AWSSection}>
-                <h2>AWS CREDIANTIALS</h2>
-                <div className="formElement">
-                  <label htmlFor="exampleInputEmail1" className="formLabel">
-                    Access Key ID
-                  </label>
-                  <input
-                    className="formInput"
-                    id="exampleInputEmail1"
-                    placeholder="Enter Access Key ID" value={state.credentials.accessKeyId}
-                    onChange={(e) => {
-                      setState({ ...state, credentials: { ...state.credentials, accessKeyId: e.target.value } });
-                    }}
-                  />
-                  <div id="emailHelp" className="formHelper">
-                  </div>
-                </div>
-                <div className="formElement">
-                  <label htmlFor="exampleInputPassword1" className="formLabel">
-                    Access Secret Key
-                  </label>
-                  <input
-                    className="formInput"
-                    id="exampleInputPassword1"
-                    placeholder="Enter Access Secret Key"
-                    value={state.credentials.secretAccessKey}
-                    onChange={(e) => {
-                      setState({ ...state, credentials: { ...state.credentials, secretAccessKey: e.target.value } });
 
-                    }}
-                  />
-                </div>
-
-                <p className="note">
-                  <strong>IAM of AWS : </strong>
-                  Please make sure that the AWS Credentials have MediaConvert Role and s3 full access role. Otherwise the features might not work as expected.
-                  <br></br><strong>Note: </strong> All old AWS Credentials will be deleted.   </p>
-
-                <button type="submit" className="formSubmit" onClick={setAWSCredentials}>
-                  Submit
-                </button>
-              </form>
 
             </>
           ) : (

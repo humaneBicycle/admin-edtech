@@ -247,8 +247,8 @@ export default function Courses() {
                       <DragDropContext onDragEnd={handleOnDragEvent}>
                         <Droppable droppableId="droppable">
                           {(provided) => (
-                            <ul
-                              className="list-group mx-4"
+                            <div
+                              className="list-group"
                               {...provided.droppableProps}
                               ref={provided.innerRef}
                             >
@@ -261,10 +261,10 @@ export default function Courses() {
                                       index={index}
                                     >
                                       {(provided) => (
-                                        <li
+                                        <div
                                           {...provided.draggableProps}
                                           ref={provided.innerRef}
-                                          {...provided.dragHandleProps}
+                                          {...provided.dragHandleProps} className="row justify-content-center mb-3"
                                         >
 
                                           <Unit
@@ -282,7 +282,7 @@ export default function Courses() {
                                             unit_id={unit.unit_id}
                                           />
 
-                                        </li>
+                                        </div>
                                       )}
                                     </Draggable>
                                   </>
@@ -292,7 +292,7 @@ export default function Courses() {
                                   <div>No Units found</div>
                                 </>
                               )}
-                            </ul>
+                            </div>
                           )}
                         </Droppable>
                       </DragDropContext>

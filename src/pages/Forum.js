@@ -12,8 +12,8 @@ let questions = [];
 let answers = [];
 export default function Discussion() {
   let [state, setState] = useState({
-    spinner:false,
-    loadedPageAnswer:1
+    spinner: false,
+    loadedPageAnswer: 1
 
   })
   let [loadedPageQuestion, setLoadedPageQuestion] = useState(1);
@@ -76,7 +76,7 @@ export default function Discussion() {
   };
 
   let handleQuestionClick = async (question, index) => {
-    setState({...state,loadedPageAnswer:1})
+    setState({ ...state, loadedPageAnswer: 1 })
     setActiveQuestionIndex(index);
     setIsAnswerLoaded(false);
     getAnswers(question._id, index);
@@ -84,7 +84,7 @@ export default function Discussion() {
   console.log(state)
 
   let getAnswers = async (id, index) => {
-    console.log(id, index, state.loadedPageAnswer+1);
+    console.log(id, index, state.loadedPageAnswer + 1);
     let response, data;
     try {
       response = await fetch(
@@ -99,7 +99,7 @@ export default function Discussion() {
           body: JSON.stringify({
             question_id: id,
             admin_id: StorageHelper.get("admin_id"),
-            page: state.loadedPageAnswer+1,
+            page: state.loadedPageAnswer + 1,
           }),
         }
       );
@@ -109,7 +109,7 @@ export default function Discussion() {
           answers.push(...data.data);
           setActiveAnswerIndex(index);
           setIsAnswerLoaded(true);
-          setState({ ...state, loadedPageAnswer:state.loadedPageAnswer + 1 });
+          setState({ ...state, loadedPageAnswer: state.loadedPageAnswer + 1 });
 
           if (data.pages === state.loadedPageAnswer) {
             setIsAllAnswerLoaded(true);
@@ -129,7 +129,7 @@ export default function Discussion() {
   };
 
   let deleteQuestion = async (id, event) => {
-    setState({...state,spinner:true})
+    setState({ ...state, spinner: true })
     event.preventDefault();
     let response, data;
     try {
@@ -153,11 +153,11 @@ export default function Discussion() {
         if (data.success) {
           SnackBar("Question deleted successfully", 1500, "OK");
 
-          setState({...state,spinner:false})
+          setState({ ...state, spinner: false })
 
           window.location.reload();
         } else {
-          setState({...state,spinner:false})
+          setState({ ...state, spinner: false })
 
           throw new Error(data.message);
         }
@@ -165,13 +165,13 @@ export default function Discussion() {
         // alert("Error");
         SnackBar("Question deleted successfully", 1500, "OK");
 
-        setState({...state,spinner:false})
+        setState({ ...state, spinner: false })
 
 
         console.log("error");
       }
     } catch (err) {
-      setState({...state,spinner:false})
+      setState({ ...state, spinner: false })
 
 
       console.log(err);
@@ -179,7 +179,7 @@ export default function Discussion() {
     }
   };
   let deleteAnswer = async (question_id, answer_id, event) => {
-    setState({...state,spinner:true})
+    setState({ ...state, spinner: true })
 
     let response, data;
     try {
@@ -204,25 +204,25 @@ export default function Discussion() {
         if (data.success) {
           SnackBar("Answer deleted successfully", 3500, "OK");
 
-          setState({...state,spinner:false})
+          setState({ ...state, spinner: false })
 
           window.location.reload();
         } else if (data.message === "Token is not valid please login again") {
           SnackBar("Token is not valid please login again");
           window.location.href = "/login";
         } else {
-          setState({...state,spinner:false})
+          setState({ ...state, spinner: false })
 
           throw new Error(data.message);
         }
       } catch (err) {
         SnackBar(err, 1500, "OK");
 
-        setState({...state,spinner:false})
+        setState({ ...state, spinner: false })
 
       }
     } catch (err) {
-      setState({...state,spinner:false})
+      setState({ ...state, spinner: false })
 
       SnackBar(err, 1500, "OK");
     }
@@ -232,7 +232,7 @@ export default function Discussion() {
       <Navbar />
 
       <div className={classes.MainContent}>
-        <Header PageTitle={"Forum || Admin Panel"} />
+        <Header PageTitle={"Forum "} />
 
         <div className={classes.MainInnerContainer}>
           {state.spinner ? (
@@ -244,9 +244,12 @@ export default function Discussion() {
           )}
           {isLoaded ? (
             <>
-              <h2 className="title">Questions</h2>
               <div className="FlexBoxRow FlexWrap">
                 <div className="Flex50">
+                  <h2 className="title">Questions</h2>
+                  <div className="p-2 ms-2" style={{ minWidth: '75%', }}>
+                    <input type="search" className="form-control" placeholder="Search Forum" />
+                  </div>
                   <div class="ListBlock">
                     {questions.map((question, index) => (
                       <>

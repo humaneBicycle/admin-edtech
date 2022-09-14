@@ -19,7 +19,7 @@ export default function EditUnit() {
     spinner: true,
     units: [],
     activeUnit: {
-      admin_id:StorageHelper.get("admin_id"),
+      admin_id: StorageHelper.get("admin_id"),
 
       ...unit,
       progress: -1,
@@ -121,7 +121,7 @@ export default function EditUnit() {
         console.log(err);
       }
     } catch (err) {
-      
+
       SnackBar("Unit updated failed", 1500, "OK")
 
       console.log(err);
@@ -134,7 +134,7 @@ export default function EditUnit() {
 
 
       <div className={classes.MainContent}>
-        <Header PageTitle={"Edit Unit || Admin Panel"} />
+        <Header PageTitle={"Edit Unit "} />
 
         <div className={classes.MainInnerContainer}>
           {state.progress !== -1 ? (
@@ -159,7 +159,7 @@ export default function EditUnit() {
         </div>
         {!state.spinner ? (
           <>
-            <div className="col-md-10">
+            <div className="col-md-10 p-3">
               <div className="form-floating mb-3">
                 <input
                   className="form-control"
@@ -177,8 +177,16 @@ export default function EditUnit() {
                 />
                 <label htmlFor="floatingInput">Name</label>
               </div>
-              <div className="form-floating mb-3">
-                <img src={state.activeUnit.image_url} alt="No Image" ></img>
+
+              <div class="bg-image hover-overlay ripple my-2 w-100 d-flex justify-content-center" data-mdb-ripple-color="light">
+                <img src={state.activeUnit.image_url} alt="No Image" className="img-fluid" style={{ maxWidth: "200px", maxHeight: "200px" }} />
+
+                <div class="mask" style={{ backgroundColor: "rgba(251, 251, 251, 0.15)" }}>
+
+                </div>
+
+              </div>   <div className="form-floating mb-3">
+
                 <input
                   className="form-control"
                   id="floatingInput"

@@ -116,14 +116,13 @@ export default function Lessons() {
 
 
       <div className={classes.MainContent}>
-        <Header PageTitle={unit.unit_name + " || Admin Panel"} />
+        <Header PageTitle={unit.unit_name} />
 
         <div className={classes.MainInnerContainer}>
-          <section className={classes.Section}>
-            <div className={[classes.SectionHeader, "pt-2"].join(" ")}>
-              <h1 className="title">Lessons</h1>
-              <hr />
-              <h4 className="title">In Unit: {unit.unit_name} </h4>
+          <section className={classes.Section} style={{ maxWidth: '100%', margin: "auto" }}>
+            <div className={[classes.SectionHeader, " p-3"].join(" ")}>
+              <h1 className="ms-3">Lessons   <span className=" h4 ms-3">In Unit: {unit.unit_name} </span></h1>
+
             </div>
             {isLessonOrderChanged ? (
               <div className="d-flex flex-row p-2 p-3 fw-bold text-light  justify-content-between align-items-center bg-info">
@@ -164,7 +163,7 @@ export default function Lessons() {
                               {(provided) => (
 
                                 <Link to="lesson"
-                                  state={{ lesson: lesson }}>
+                                  state={{ lesson: lesson }} className="text-dark">
                                   <li
                                     className="row"
                                     {...provided.draggableProps}
@@ -197,9 +196,10 @@ export default function Lessons() {
                                                       Type: {lesson.type}
                                                     </p>
                                                     <p className="card-text">
-                                                      <small className="text-muted">
-                                                        id:{lesson.lesson_id}
-                                                      </small>
+                                                      {lesson.description}
+                                                    </p>
+                                                    <p className="card-text">
+                                                      prerequisite:   {lesson.prerequisite.message}
                                                     </p>
                                                   </div>
                                                 </div>
@@ -235,9 +235,10 @@ export default function Lessons() {
                                                       Type: {lesson.type}
                                                     </p>
                                                     <p className="card-text">
-                                                      <small className="text-muted">
-                                                        id:{lesson.lesson_id}
-                                                      </small>
+                                                      {lesson.description}
+                                                    </p>
+                                                    <p className="card-text">
+                                                      prerequisite:   {lesson.prerequisite.message}
                                                     </p>
                                                   </div>
                                                 </div>
