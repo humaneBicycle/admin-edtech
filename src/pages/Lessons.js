@@ -109,6 +109,40 @@ export default function Lessons() {
 
     setIsLessonOrderChanged(true);
   };
+  
+  let deleteLesson = async (lesson_id) => {
+    let response,data;
+    try {
+      response = await fetch(LinkHelper.getLink() + "admin/lesson/delete", {
+        method: "DELETE",
+        headers: {
+          authorization: "Bearer " + StorageHelper.get("token"),
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({
+          
+          lesson_id: lesson_id,
+          admin_id: StorageHelper.get("admin_id"),
+        }),
+      });
+      try {
+        data = await response.json();
+        if (data.success) {
+          // console.log(data)
+          getLessons();
+        } else {
+          // alert("Error");
+          SnackBar("Error", 1500, "OK")
+
+        }
+      } catch(err) {
+        SnackBar(err)
+      }
+    } catch (error) {
+      SnackBar(error, 1500, "OK")
+
+    }
+  }
 
   return (
     <>
@@ -385,6 +419,10 @@ export default function Lessons() {
                                         </div>
                                       </> : <></>}
                                     </div>
+                                    <button className="btn btn-danger" onClick={(e)=>{
+                                      e.preventDefault();
+                                      deleteLesson(lesson.lesson_id)
+                                    }}>Delete Lesson</button>
                                   </li>
                                 </Link>
                               )}

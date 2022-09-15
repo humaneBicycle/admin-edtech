@@ -55,7 +55,7 @@ export default function Payment(props) {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          authorization: StorageHelper.get("token"),
+          authorization: "Bearer " + StorageHelper.get("token"),
         },
         body: JSON.stringify(state.payment),
       });

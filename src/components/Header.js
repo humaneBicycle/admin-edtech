@@ -1,6 +1,6 @@
 import "./Header.css";
 export default function Header({ PageTitle }) {
-    document.title = PageTitle;
+    document.title = PageTitle
     return (
         <>
             <header>
