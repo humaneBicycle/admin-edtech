@@ -24,6 +24,7 @@ import AnswerThisQuestion from "./pages/AnswerThisQuestion";
 import Lesson from "./pages/Lesson";
 import BlockedUsers from "./pages/BlockedUsers";
 import LeaderBoard from "./pages/LeaderBoard";
+import Assignments from "./pages/Assignments";
 
 export const Title = "Admin Panel";
 document.title = "Admin Panel";
@@ -43,6 +44,7 @@ root.render(
         <Route path="/students/blocked-users" element={<BlockedUsers />} />
         <Route path="/events" element={<Events />} />
         <Route path="/analytics" element={<Analytics />} />
+        <Route path="/assignments" element={<Assignments />} />
         <Route path="/notifications" element={<Notifications />} />
         <Route path="/leaderboard" element={<LeaderBoard />} />
         <Route path="/forum" element={<Discussion />} />

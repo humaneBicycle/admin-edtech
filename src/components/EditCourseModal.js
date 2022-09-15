@@ -52,7 +52,7 @@ export default function EditCourseModal() {
 
 
       <div className="MainContent">
-        <Header PageTitle={"Edit Course || Admin Panel"} />
+        <Header PageTitle={"Edit Course"} />
 
         <div className="MainInnerContainer">
           <div className="Section">

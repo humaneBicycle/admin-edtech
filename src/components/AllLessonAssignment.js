@@ -14,6 +14,7 @@ export default function AllLessonAsignment(props) {
   let { unit } = location.state;
 
 
+
   let assignmentInit = {
     admin_id: StorageHelper.get("admin_id"),
     type: "assignment",
@@ -34,7 +35,7 @@ export default function AllLessonAsignment(props) {
 
   let uploadAssigment = async () => {
     console.log(assignment)
-    if (assignment.title === undefined || assignment.body === undefined || assignment.sample === undefined || assignment.placeholder === undefined || assignment.submitted_url === undefined || assignment.prerequisite.has_prerequisite) {
+    if (assignment.title === undefined || assignment.body === undefined || assignment.sample === undefined || assignment.placeholder === undefined ||  assignment.prerequisite.has_prerequisite) {
       if (assignment.prerequisite.has_prerequisite) {
         if (
           assignment.prerequisite.on === undefined ||
@@ -132,16 +133,7 @@ export default function AllLessonAsignment(props) {
             handleAssignmentChange("placeholder", event);
           }}
         />
-        <label htmlFor="exampleFormControlInput1" className="form-label">
-          Submitted Url
-        </label>
-        <input
-          value={assignment.submitted_url}
-          className="form-control"
-          onChange={(event) => {
-            handleAssignmentChange("submitted_url", event);
-          }}
-        />
+        
         <label htmlFor="exampleFormControlTextarea1" className="form-label">
           Body
         </label>
