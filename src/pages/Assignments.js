@@ -4,34 +4,33 @@ import Header from "../components/Header";
 import Loader from "../components/Loader";
 import LinkHelper from "../utils/LinkHelper";
 import StorageHelper from "../utils/StorageHelper";
-import { Link } from "react-router-dom";
 import SnackBar from "../components/snackbar";
-import loginSvg from "../images/login_illustration.png";
-import LoginCss from "./LoginCss.module.css";
 
 export default function Assignments() {
   let [state, setState] = React.useState({
     spinner: true,
     assignments: [],
     current_page: 0,
+    units: [],
   });
 
   useEffect(() => {
-    getAssignments();
+    getUnits();
   }, []);
 
-  console.log(state);
+  //   console.log(state);
 
-  let getAssignments = async () => {
+  let getAssignments = async (details) => {
     if (state.current_page === state.total_pages) {
       SnackBar("All Assignments Loaded", 3000, "OK");
       return;
     }
     let data = {
-        
-        admin_id: StorageHelper.get("admin_id"),
-        page: state.current_page + 1,
-    }
+      admin_id: StorageHelper.get("admin_id"),
+      page: state.current_page + 1,
+      ...details,
+    };
+    console.log(data);
     let response, json;
     try {
       response = await fetch(
@@ -42,15 +41,15 @@ export default function Assignments() {
             "Content-Type": "application/json",
             authorization: "Bearer " + StorageHelper.get("token"),
           },
-          body: JSON.stringify(),
+          body: JSON.stringify(data),
         }
       );
       try {
         json = await response.json();
+        console.log(json);
         if (json.success) {
           setState({
             ...state,
-            spinner: false,
             assignments: [...state.assignments, ...json.data],
             total_pages: json.pages,
             current_page: state.current_page + 1,
@@ -69,9 +68,50 @@ export default function Assignments() {
       });
     }
   };
+  let getUnits = async () => {
+    let data, response;
+    try {
+      response = await fetch(LinkHelper.getLink() + "admin/unit/list", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: "Bearer " + StorageHelper.get("token"),
+        },
+        body: JSON.stringify({
+          admin_id: StorageHelper.get("admin_id"),
+        }),
+      });
+      try {
+        data = await response.json();
+        console.log(data);
+        if (data.success) {
+          setState({
+            ...state,
+            spinner: false,
+            units: data.data,
+          });
+        }
+      } catch (err) {
+        console.log(err);
+        SnackBar(err);
+        setState({
+          ...state,
+          spinner: false,
+        });
+      }
+    } catch (err) {
+      console.log(err);
+      SnackBar(err);
+
+      setState({
+        ...state,
+        spinner: false,
+      });
+    }
+  };
 
   let approveAssignment = async (assignment_id) => {
-    setState({ ...state, spinner: true });
+    // setState({ ...state, spinner: true });
     let response, json;
     try {
       response = await fetch(
@@ -92,16 +132,18 @@ export default function Assignments() {
       try {
         json = await response.json();
         if (json.success) {
-            setState({
-                ...state,
-                spinner: false,
-                assignments: [
-                  ...state.assignments,
-                  (state.assignments.filter(
-                    (assignment) => assignment._id === assignment_id?assignment.status="Approved":null
-                  )),
-                ],
-              });
+          setState({
+            ...state,
+            spinner: false,
+            assignments: [
+              ...state.assignments,
+              state.assignments.filter((assignment) =>
+                assignment._id === assignment_id
+                  ? (assignment.status = "Approved")
+                  : null
+              ),
+            ],
+          });
           SnackBar("Assignment Approved", 3000, "OK");
         }
       } catch (err) {
@@ -116,7 +158,7 @@ export default function Assignments() {
     }
   };
   let rejectAssignment = async (assignment_id) => {
-    setState({ ...state, spinner: true });
+    // setState({ ...state, spinner: true });
     let response, json;
     try {
       response = await fetch(
@@ -143,9 +185,11 @@ export default function Assignments() {
             spinner: false,
             assignments: [
               ...state.assignments,
-              (state.assignments.filter(
-                (assignment) => assignment._id === assignment_id?assignment.status="Rejected":null
-              )),
+              state.assignments.filter((assignment) =>
+                assignment._id === assignment_id
+                  ? (assignment.status = "Rejected")
+                  : null
+              ),
             ],
           });
         }
@@ -166,140 +210,272 @@ export default function Assignments() {
       <div className="mainContent">
         <Header PageTitle={"Assignments"} />
         <div className="MainInnerContainer">
-          Note: The assignment will be in pending mode mode unless approved by
-          the admin
+          Note: The assignment will be in pending mode unless approved by the
+          admin
           <div className="NotificationSection">
             <div className="NotificationList">
               {!state.spinner ? (
-                state.assignments.length > 0 ? (
-                  <>
-                    {state.assignments.map((assignment, index) => {
-                      return (
-                        <>
-                          <div className="NotificationItem">
-                            <div className="NotificationItemTitle">
-                              {index + 1}.
-                              <a
-                                className="btn btn-primary"
-                                href={assignment.assignment_url}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                download={
-                                  "assignment" +
-                                  assignment.user_id +
-                                  "_lesson" +
-                                  assignment.lesson_id
-                                }
-                              >
-                                Download Assignment
-                              </a>
-                            </div>
-                            <div className="NotificationItemSubtitle">
-                              Submitted at: {assignment.created_at}
-                              <br></br>
-                              Status:{assignment.status}
-                              <br></br>
-                              for lesson: {assignment.lesson_id} <br></br>
-                              Type: {assignment.assignment_type} <br></br>
-                              Submitted by user with ID: {assignment.user_id}
-                            </div>
-                            <div
-                              className="btn btn-success"
-                              onClick={(e) => {
-                                approveAssignment(assignment._id);
-                              }}
-                            >
-                              Approve
-                            </div>
-                            <div
-                              className="btn btn-danger"
-                              onClick={(e) => {
-                                rejectAssignment(assignment._id);
-                              }}
-                            >
-                              Reject
-                            </div>
-                          </div>
-                        </>
-                      );
-                    })}
-                    <button
-                      className="btn btn-primary"
-                      onClick={(e) => {
-                        getAssignments();
-                      }}
-                    >
-                      Load More
-                    </button>
-                  </>
-                ) : (
-                  <>No Assignments</>
-                )
-              ) : (
                 <>
-                  <div className={LoginCss.Loader}>
-                    <div>
-                      <div className={LoginCss.wifiLoader}>
-                        <svg
-                          className={LoginCss.circleOuter}
-                          viewBox="0 0 86 86"
+                  <div>
+                    {/* Tabs navs */}
+                    <ul className="nav nav-tabs mb-3" id="ex1" role="tablist">
+                      <li
+                        className="nav-item"
+                        role="presentation"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setState({
+                            ...state,
+                            current_page: 0,
+                            assignments: [],
+                          });
+                          //   getAssignments("units");
+                        }}
+                      >
+                        <a
+                          className="nav-link active"
+                          id="ex1-tab-1"
+                          data-mdb-toggle="tab"
+                          href="#ex1-tabs-1"
+                          role="tab"
+                          aria-controls="ex1-tabs-1"
+                          aria-selected="true"
                         >
-                          <circle
-                            className={LoginCss.back}
-                            cx={43}
-                            cy={43}
-                            r={40}
-                          />
-                          <circle
-                            className={LoginCss.front}
-                            cx={43}
-                            cy={43}
-                            r={40}
-                          />
-                          <circle
-                            className={LoginCss.new}
-                            cx={43}
-                            cy={43}
-                            r={40}
-                          />
-                        </svg>
-                        <svg
-                          className={LoginCss.circleMiddle}
-                          viewBox="0 0 60 60"
+                          Sort by Units
+                        </a>
+                      </li>
+                      <li
+                        className="nav-item"
+                        role="presentation"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setState({
+                            ...state,
+                            current_page: 0,
+                            assignments: [],
+                          });
+
+                          //   getAssignments("users");
+                        }}
+                      >
+                        <a
+                          className="nav-link"
+                          id="ex1-tab-2"
+                          data-mdb-toggle="tab"
+                          href="#ex1-tabs-2"
+                          role="tab"
+                          aria-controls="ex1-tabs-2"
+                          aria-selected="false"
                         >
-                          <circle
-                            className={LoginCss.back}
-                            cx={30}
-                            cy={30}
-                            r={27}
-                          />
-                          <circle
-                            className={LoginCss.front}
-                            cx={30}
-                            cy={30}
-                            r={27}
-                          />
-                        </svg>
-                        <svg
-                          className={LoginCss.circleInner}
-                          viewBox="0 0 34 34"
+                          Sort by students
+                        </a>
+                      </li>
+                      <li
+                        className="nav-item"
+                        role="presentation"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setState({
+                            ...state,
+                            current_page: 0,
+                            assignments: [],
+                          });
+
+                          //   getAssignments("status");
+                        }}
+                      >
+                        <a
+                          className="nav-link"
+                          id="ex1-tab-3"
+                          data-mdb-toggle="tab"
+                          href="#ex1-tabs-3"
+                          role="tab"
+                          aria-controls="ex1-tabs-3"
+                          aria-selected="false"
                         >
-                          <circle
-                            className={LoginCss.back}
-                            cx={17}
-                            cy={17}
-                            r={14}
-                          />
-                          <circle
-                            className={LoginCss.front}
-                            cx={17}
-                            cy={17}
-                            r={14}
-                          />
-                        </svg>
+                          Sort by status
+                        </a>
+                      </li>
+                    </ul>
+                    {/* Tabs navs */}
+                    {/* Tabs content */}
+                    <div className="tab-content" id="ex1-content">
+                      <div
+                        className="tab-pane fade show active"
+                        id="ex1-tabs-1"
+                        role="tabpanel"
+                        aria-labelledby="ex1-tab-1"
+                      >
+                        {/* units */}
+                        <div className="dropdown">
+                          <button
+                            className="btn btn-primary dropdown-toggle"
+                            type="button"
+                            id="dropdownMenuButton"
+                            data-mdb-toggle="dropdown"
+                            aria-expanded="false"
+                          >
+                            Select Unit
+                          </button>
+                          <ul
+                            className="dropdown-menu"
+                            aria-labelledby="dropdownMenuButton"
+                          >
+                            {state.units.map((unit, index) => (
+                              <>
+                                <li
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    let details = {
+                                      unit_id: unit._id,
+                                    };
+                                    getAssignments(details);
+                                  }}
+                                >
+                                  {unit.unit_name}
+                                </li>
+                              </>
+                            ))}
+                          </ul>
+                        </div>
+                      </div>
+                      <div
+                        className="tab-pane fade"
+                        id="ex1-tabs-2"
+                        role="tabpanel"
+                        aria-labelledby="ex1-tab-2"
+                      ></div>
+                      <div
+                        className="tab-pane fade"
+                        id="ex1-tabs-3"
+                        role="tabpanel"
+                        aria-labelledby="ex1-tab-3"
+                      >
+                        {/* status  */}
+                        <div className="dropdown">
+                          <button
+                            className="btn btn-primary dropdown-toggle"
+                            type="button"
+                            id="dropdownMenuButton"
+                            data-mdb-toggle="dropdown"
+                            aria-expanded="false"
+                          >
+                            Mode
+                          </button>
+                          <ul
+                            className="dropdown-menu"
+                            aria-labelledby="dropdownMenuButton"
+                          >
+                            <li
+                              onClick={() => {
+                                setState({...state, current_page: 0, assignments: []})
+                                let details = {
+                                  status: "submitted",
+                                };
+                                getAssignments(details);
+                              }}
+                            >
+                              <a className="dropdown-item">Submitted</a>
+                            </li>
+                            <li
+                              onClick={() => {
+                                setState({...state, current_page: 0, assignments: []})
+
+                                let details = {
+                                  status: "approved",
+                                };
+                                getAssignments(details);
+                              }}
+                            >
+                              <a className="dropdown-item">Approved</a>
+                            </li>
+                            <li
+                              onClick={() => {
+                                setState({...state, current_page: 0, assignments: []})
+
+                                let details = {
+                                  status: "rejected",
+                                };
+                                getAssignments(details);
+                              }}
+                            >
+                              <a className="dropdown-item">Rejected</a>
+                            </li>
+                          </ul>
+                        </div>
                       </div>
                     </div>
+                    {/* Tabs content */}
                   </div>
+
+                  {state.assignments.length > 0 ? (
+                    <>
+                      {state.assignments.map((assignment, index) => {
+                        return (
+                          <>
+                            <div className="NotificationItem">
+                              <div className="NotificationItemTitle">
+                                {index + 1}.
+                                <a
+                                  className="btn btn-primary"
+                                  href={assignment.assignment_url}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  download={
+                                    "assignment" +
+                                    assignment.user_id +
+                                    "_lesson" +
+                                    assignment.lesson_id
+                                  }
+                                >
+                                  Download Assignment
+                                </a>
+                              </div>
+                              <div className="NotificationItemSubtitle">
+                                Submitted at: {assignment.created_at}
+                                <br></br>
+                                Status:{assignment.status}
+                                <br></br>
+                                for lesson: {assignment.lesson_id} <br></br>
+                                Type: {assignment.assignment_type} <br></br>
+                                Submitted by user with ID: {assignment.user_id}
+                              </div>
+                              <div
+                                className="btn btn-success"
+                                onClick={(e) => {
+                                  approveAssignment(assignment._id);
+                                }}
+                              >
+                                Approve
+                              </div>
+                              <div
+                                className="btn btn-danger"
+                                onClick={(e) => {
+                                  rejectAssignment(assignment._id);
+                                }}
+                              >
+                                Reject
+                              </div>
+                            </div>
+                          </>
+                        );
+                      })}
+                      <button
+                        className="btn btn-primary"
+                        onClick={(e) => {
+                          getAssignments();
+                        }}
+                      >
+                        Load More
+                      </button>
+                    </>
+                  ) : (
+                    <>No Assignments</>
+                  )}
+                </>
+              ) : (
+                <>
+                  <Loader />
                 </>
               )}
             </div>

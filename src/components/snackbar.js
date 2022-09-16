@@ -1,7 +1,7 @@
 // SnackBar
 
 
-export default function SnackBar(SnackBarBody, SnackBarDuration, actionButton = "OK") {
+export default function SnackBar(SnackBarBody, SnackBarDuration=3000, actionButton = "OK") {
     let SnackBarContainer = document.querySelector(".snackBar-container");
     if (SnackBarContainer === null || SnackBarContainer === undefined) {
 

@@ -15,7 +15,7 @@ export default function LeaderBoard() {
   let getLeaderBoard = async () => {
     let response, data;
     try {
-      response = await fetch(LinkHelper.getLink() + "admin/leaderboard/read", {
+      response = await fetch(LinkHelper.getLink() + "admin/leaderboard/ranklist", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
