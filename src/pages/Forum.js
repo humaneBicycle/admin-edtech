@@ -235,7 +235,7 @@ export default function Discussion() {
         <Header PageTitle={"Forum "} />
 
         <div className="MainInnerContainer">
-          s          {state.spinner ? (
+                    {state.spinner ? (
             <>
               <Loader />
             </>
