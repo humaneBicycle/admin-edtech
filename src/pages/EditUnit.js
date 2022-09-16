@@ -8,9 +8,13 @@ import Loader from "../components/Loader";
 import "../pages/classes.css";
 import SnackBar from "../components/snackbar";
 import Header from "../components/Header";
+import { Upload } from "@aws-sdk/lib-storage";
+import { S3Client, S3 } from "@aws-sdk/client-s3";
 
 
 let image;
+let imageId;
+
 
 export default function EditUnit() {
   const location = useLocation();
@@ -41,7 +45,7 @@ export default function EditUnit() {
   let getUnits = async () => {
     let response, data;
     try {
-      response = await fetch(LinkHelper.getLink() + "admin/course/units", {
+      response = await fetch(LinkHelper.getLink() + "admin/unit/list", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -55,17 +59,15 @@ export default function EditUnit() {
         data = await response.json();
         console.log(data);
         if (data.success) {
+          getAWSCredentials();
           setState({
             ...state,
-            spinner: false,
             units: data.data,
           });
         } else {
-          // alert("Something went wrong: ", data.message);
           SnackBar("Something went wrong: " + data.message, 1500, "OK")
         }
       } catch (err) {
-        // alert("Something went wrong: ", err);
 
         SnackBar("Something went wrong: " + err, 1500, "OK")
         console.log(err);
@@ -78,7 +80,6 @@ export default function EditUnit() {
     } catch (err) {
       console.log(err);
       SnackBar("Something went wrong: " + err, 1500, "OK")
-      // alert("Something went wrong: ", err);
       setState({
         ...state,
         spinner: false,
@@ -86,10 +87,83 @@ export default function EditUnit() {
     }
   };
 
+  let getAWSCredentials = async () => {
+    let response, data;
+    try {
+      response = await fetch(LinkHelper.getLink() + "admin/aws/read", {
+        method: "POST",
+        headers: {
+          authorization: "Bearer " + StorageHelper.get("token"),
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({
+          admin_id: StorageHelper.get("admin_id"),
+        }),
+      });
+      try {
+        data = await response.json();
+
+        if (data.success) {
+          setState({...state, spinner: false,credentials: data.data});
+
+        } 
+      } catch (err) {
+        console.log(err);
+        SnackBar("Something went wrong: " + err, 1500, "OK")
+      setState({...state, spinner: false});
 
 
-  async function editUnit(e) {
-    e.preventDefault();
+      }
+    } catch (err) {
+      console.log("error", err);
+      SnackBar("Something went wrong: " + err, 1500, "OK")
+
+      setState({...state, spinner: false});
+
+    }
+  };
+
+  let uploadImageToS3 = async () => {
+    let params = {
+      Bucket: "quasaredtech-adminuploads",
+      Key: imageId,
+      Body: image,
+
+    }
+    try {
+      const parallelUploads3 = new Upload({
+        client:
+          new S3({ region: "us-east-1", credentials: state.credentials }) ||
+          new S3Client({}),
+        params: params,
+
+        tags: [
+          /*...*/
+        ], // optional tags
+        queueSize: 4, // optional concurrency configuration
+        partSize: 1024 * 1024 * 5, // optional size of each part, in bytes, at least 5MB
+        leavePartsOnError: false, // optional manually handle dropped parts
+      });
+
+      parallelUploads3.on("httpUploadProgress", (progress) => {
+        //TODO update progress bar
+        console.log("progress", progress);
+        // setProgress(progress);
+      });
+
+      await parallelUploads3.done();
+      editUnit();
+    } catch (error) {
+      console.log(error)
+      // alert("Error uploading image");
+      SnackBar("Error uploading image", 1000, "OK");
+      setState({...state, spinner: false});
+    }
+  }
+
+
+
+  async function editUnit() {
     console.log(state);
     let response, data;
     try {
@@ -194,7 +268,7 @@ export default function EditUnit() {
                   accept="image/*"
                   onChange={(e) => {
                     image = e.target.files[0];
-                    let imageId = "imageId" + new Date().getTime() + "." + image.name.split(".")[1];
+                    imageId = "imageId" + new Date().getTime() + "." + image.name.split(".")[1];
                     let imageIdurl = AWSManager.getImageBucketLink() + imageId;
                     setState({
                       ...state,
@@ -406,7 +480,7 @@ export default function EditUnit() {
               <button
                 className="btn btn-outline-primary mx-4 my-4"
                 onClick={(e) => {
-                  editUnit(e);
+                  uploadImageToS3();
                 }}
               >
                 Edit Unit
