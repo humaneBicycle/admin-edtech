@@ -270,11 +270,16 @@ export default function Settings() {
 
 
                     <h2 className="ms-3">Dark Mode</h2>
-                    <input type="checkbox" id="switch" hidden className="darkModeToggle" onClick={(e) => darkModeToggle(e)} onLoad={(e) => {
+
+                    {document.body.classList.contains("darkMode") ? (<input checked type="checkbox" id="switch" hidden className="darkModeToggle" onClick={(e) => darkModeToggle(e)} onLoad={(e) => {
                       if (localStorage.getItem("darkMode")) {
                         e.target.setAttribute("checked", "true");
                       }
-                    }} />
+                    }} />) : (<input type="checkbox" id="switch" hidden className="darkModeToggle" onClick={(e) => darkModeToggle(e)} onLoad={(e) => {
+                      if (localStorage.getItem("darkMode")) {
+                        e.target.setAttribute("checked", "true");
+                      }
+                    }} />)}
                     <div className="app" style={{ borderRadius: '10px' }}>
                       <div className="DarkModeButton">
                         <div className="content">
@@ -417,8 +422,8 @@ export default function Settings() {
         >
           Logout <i className="fas fa-sign-in-alt ms-2"></i>
         </button> */}
-        </div >
-      </div >
+        </div>
+      </div>
     </>
   );
 }
