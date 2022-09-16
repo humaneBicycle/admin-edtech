@@ -368,6 +368,7 @@ export default function Assignments() {
                           >
                             <li
                               onClick={() => {
+                                setState({...state, current_page: 0, assignments: []})
                                 let details = {
                                   status: "submitted",
                                 };
@@ -378,6 +379,8 @@ export default function Assignments() {
                             </li>
                             <li
                               onClick={() => {
+                                setState({...state, current_page: 0, assignments: []})
+
                                 let details = {
                                   status: "approved",
                                 };
@@ -388,6 +391,8 @@ export default function Assignments() {
                             </li>
                             <li
                               onClick={() => {
+                                setState({...state, current_page: 0, assignments: []})
+
                                 let details = {
                                   status: "rejected",
                                 };
