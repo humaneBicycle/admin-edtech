@@ -97,7 +97,7 @@ export default function LeaderBoard() {
                           style={{ border: "2px solid #ddd" }}
                         >
                           <div className="NotificationBlockDetailscard-body p-0">
-                            <h2 className="card-title">{leader.user_name}</h2>
+                            <h2 className="card-title">{index+1 + ". "+leader.user_name}</h2>
                             <p className="card-text">Score: {leader.score}</p>
                           </div>
                           <div>

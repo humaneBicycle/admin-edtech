@@ -35,7 +35,7 @@ export default function Notifications() {
           setState({
             ...state,
             spinner: false,
-            notifications: data.data
+            notifications: data.data,
           });
         }
       } catch (err) {
@@ -87,26 +87,27 @@ export default function Notifications() {
         data = await response.json();
         console.log(data);
         if (data.success) {
-          setState({ ...state, spinner: false, notifications: [...state.notifications, state.notification], notification: { admin_id: StorageHelper.get("admin_id"), } });
+          setState({
+            ...state,
+            spinner: false,
+            notifications: [...state.notifications, state.notification],
+            notification: { admin_id: StorageHelper.get("admin_id") },
+          });
           // alert("Notification will be sent soon.");
           SnackBar("Notification will be sent soon.", 1500, "OK");
-
         } else {
           setState({ ...state, spinner: false });
           // alert("Error " + data.message);
           SnackBar("Error : " + data.message, 1500, "OK");
-
         }
       } catch (err) {
         setState({ ...state, spinner: false });
         // alert("Error ", err);
         SnackBar("Error : " + err, 1500, "OK");
-
       }
     } catch (err) {
       // alert("error", err);
       SnackBar("Error : " + err, 1500, "OK");
-
     }
     console.log(state.notification);
   };
@@ -114,29 +115,34 @@ export default function Notifications() {
   return (
     <>
       <Navbar />
-
-
       <div className="MainContent">
         <Header PageTitle={"Notifications"} />
 
         <div className="MainInnerContainer">
-
           <div className="NotificationSection">
-
             <div className="NotificationList">
-
               {!state.spinner ? (
                 state.notifications.map((notification, index) => {
                   return (
                     <>
-                      <div key={index} className="NotificationBlock card flex-row g-2 p-3 border" style={{ border: "2px solid #ddd" }}>
-
+                      <div
+                        key={index}
+                        className="NotificationBlock card flex-row g-2 p-3 border"
+                        style={{ border: "2px solid #ddd" }}
+                      >
                         <div className="NotificationBlockDetailscard-body p-0">
                           <h2 className="card-title">{notification.title}</h2>
-                          <p className="card-text">{notification.description}</p>
+                          <p className="card-text">
+                            {notification.description}
+                          </p>
                         </div>
                         <div>
-                          <a href={notification.link} className="goToNotifications btn btn-primary rounded-3 bg-primary text-white">Go to link</a>
+                          <a
+                            href={notification.link}
+                            className="goToNotifications btn btn-primary rounded-3 bg-primary text-white"
+                          >
+                            Go to link
+                          </a>
                         </div>
                       </div>
                     </>
@@ -145,31 +151,56 @@ export default function Notifications() {
               ) : (
                 <>
                   <Loader />
-
                 </>
-              )}  </div>
+              )}{" "}
+            </div>
           </div>
-
-
-
         </div>
-      </div>       <div class="fixed-action-btn" id="fixed1">
-        <button class="btn btn-floating bg-success text-white btn-lg " data-mdb-toggle="modal" data-mdb-target="#addNew">
-          <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="feather feather-plus-circle">
+      </div>{" "}
+      <div class="fixed-action-btn" id="fixed1">
+        <button
+          class="btn btn-floating bg-success text-white btn-lg "
+          data-mdb-toggle="modal"
+          data-mdb-target="#addNew"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width={24}
+            height={24}
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={2}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="feather feather-plus-circle"
+          >
             {/* <circle cx={12} cy={12} r={10} /> */}
             <line x1={12} y1={8} x2={12} y2={16} />
             <line x1={8} y1={12} x2={16} y2={12} />
           </svg>
         </button>
       </div>
-
-      <div class="modal fade" id="addNew" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div
+        class="modal fade"
+        id="addNew"
+        tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
-              <h2 className="modal-title" id="exampleModalLabel">Add Notification</h2>
+              <h2 className="modal-title" id="exampleModalLabel">
+                Add Notification
+              </h2>
 
-              <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+              <button
+                type="button"
+                class="btn-close"
+                data-mdb-dismiss="modal"
+                aria-label="Close"
+              ></button>
             </div>
             <div class="modal-body">
               <div className="form-floating mb-4">
@@ -213,7 +244,6 @@ export default function Notifications() {
                 />
               </div>
               <div className="form-floating mb-4">
-
                 <label htmlFor="exampleInputPassword1" className="form-label">
                   Clickable Link
                 </label>
@@ -235,7 +265,13 @@ export default function Notifications() {
               </div>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">Close</button>
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-mdb-dismiss="modal"
+              >
+                Close
+              </button>
               <button
                 type="submit"
                 className="btn btn-primary"
@@ -250,10 +286,6 @@ export default function Notifications() {
           </div>
         </div>
       </div>
-
-
-
-
     </>
   );
 }

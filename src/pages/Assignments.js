@@ -5,6 +5,7 @@ import Loader from "../components/Loader";
 import LinkHelper from "../utils/LinkHelper";
 import StorageHelper from "../utils/StorageHelper";
 import SnackBar from "../components/snackbar";
+import {Link} from "react-router-dom";
 
 export default function Assignments() {
   let [state, setState] = React.useState({
@@ -467,7 +468,13 @@ export default function Assignments() {
                                 <br></br>
                                 for lesson: {assignment.lesson_id} <br></br>
                                 Type: {assignment.assignment_type} <br></br>
-                                Submitted by user with ID: {assignment.user_id}
+                                Open user ID:<br></br><Link
+                              to="/students/profile"
+                              state={{ currentUser: { user_id: assignment.user_id } }}
+                            >
+                              Student Profile
+                            </Link>
+                                
                               </div>
                               <div
                                 className="btn btn-success"
