@@ -25,6 +25,7 @@ import Lesson from "./pages/Lesson";
 import BlockedUsers from "./pages/BlockedUsers";
 import LeaderBoard from "./pages/LeaderBoard";
 import Assignments from "./pages/Assignments";
+import Payments from "./pages/Payments";
 
 export const Title = "Admin Panel";
 document.title = "Admin Panel";
@@ -47,6 +48,7 @@ root.render(
         <Route path="/assignments" element={<Assignments />} />
         <Route path="/notifications" element={<Notifications />} />
         <Route path="/leaderboard" element={<LeaderBoard />} />
+        <Route path="/payments" element={<Payments />} />
         <Route path="/forum" element={<Discussion />} />
         <Route path="/course" element={<Courses />} />
         <Route path="/settings" element={<Settings />} />

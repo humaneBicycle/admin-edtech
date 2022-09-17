@@ -12,7 +12,7 @@ export default function Events() {
     activeEvent: {
       admin_id: StorageHelper.get("admin_id"),
       type: "online",
-      time: {}
+      time: {},
     },
     spinner: true,
   });
@@ -71,11 +71,14 @@ export default function Events() {
 
   let addEvent = async () => {
     console.log(state.activeEvent);
-    if (state.activeEvent.title === undefined ||
+    if (
+      state.activeEvent.title === undefined ||
       state.activeEvent.description === undefined ||
       state.activeEvent.type === undefined ||
       state.activeEvent.time.date_full === undefined ||
-      state.activeEvent.time.event_time === undefined) {
+      state.activeEvent.time.event_time === undefined||
+      state.activeEvent.price === undefined
+    ) {
       SnackBar("Please fill all the fields");
       return;
     }
@@ -108,8 +111,7 @@ export default function Events() {
     } catch (err) {
       SnackBar(err, 1500, "OK");
     }
-
-  }
+  };
 
   let deleteEvent = async (event) => {
     let response, data;
@@ -122,7 +124,7 @@ export default function Events() {
         },
         body: JSON.stringify({
           event_id: event._id,
-          admin_id: StorageHelper.get("admin_id")
+          admin_id: StorageHelper.get("admin_id"),
         }),
       });
       try {
@@ -143,7 +145,7 @@ export default function Events() {
     } catch (err) {
       SnackBar(err, 1500, "OK");
     }
-  }
+  };
 
   return (
     <>
@@ -161,55 +163,95 @@ export default function Events() {
                 {state.events.map((event, i) => {
                   return (
                     <>
-                      <li className="list-group-item d-flex justify-content-between align-items-center g-3 border-bottom"
-                        key={i} >
+                      <li
+                        className="list-group-item d-flex justify-content-between align-items-center g-3 border-bottom"
+                        key={i}
+                      >
                         <div className="pe-2 border-end w-75">
                           <div class="fw-bold h4">{event.title}</div>
-                          <div class=" h6"><span className="fw-bold">
-
-                            Venue: </span> {event.venue} | <span className="fw-bold"> Time :</span> {event.time.date_full}</div>
+                          <div class=" h6">
+                            <span className="fw-bold">Venue: </span>{" "}
+                            {event.venue} |{" "}
+                            <span className="fw-bold"> Time :</span>{" "}
+                            {event.time.date_full}
+                          </div>
                           <p class="text-muted"> {event.description}</p>
                         </div>
                         <div className="p-2 w-25 text-center">
                           <p className="mb-2">
                             Price:
-                            <span class="badge rounded-pill badge-primary ms-2">{event.price}</span>
-                          </p>  <span class="badge rounded-pill badge-info mb-2">{event.type}</span>
+                            <span class="badge rounded-pill badge-primary ms-2">
+                              {event.price}
+                            </span>
+                          </p>{" "}
+                          <span class="badge rounded-pill badge-info mb-2">
+                            {event.type}
+                          </span>
                           <p>
-
-                            <button className="btn btn-danger btn-sm my-2" onClick={() => {
-                              deleteEvent(event);
-                            }}>Delete</button>
+                            <button
+                              className="btn btn-danger btn-sm my-2"
+                              onClick={() => {
+                                deleteEvent(event);
+                              }}
+                            >
+                              Delete
+                            </button>
                           </p>
                         </div>
                       </li>
                     </>
-                  )
+                  );
                 })}
               </ul>
-
             </div>
 
             <div class="fixed-action-btn" id="fixed1">
-              <button class="btn btn-floating bg-success text-white btn-lg " data-mdb-toggle="modal" data-mdb-target="#addNew">
-                <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="feather feather-plus-circle">
+              <button
+                class="btn btn-floating bg-success text-white btn-lg "
+                data-mdb-toggle="modal"
+                data-mdb-target="#addNew"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width={24}
+                  height={24}
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="feather feather-plus-circle"
+                >
                   {/* <circle cx={12} cy={12} r={10} /> */}
                   <line x1={12} y1={8} x2={12} y2={16} />
                   <line x1={8} y1={12} x2={16} y2={12} />
                 </svg>
               </button>
             </div>
-
           </>
         )}
       </div>
-      <div class="modal fade" id="addNew" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div
+        class="modal fade"
+        id="addNew"
+        tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
-              <h2 className="modal-title" id="exampleModalLabel">Add Event</h2>
+              <h2 className="modal-title" id="exampleModalLabel">
+                Add Event
+              </h2>
 
-              <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+              <button
+                type="button"
+                class="btn-close"
+                data-mdb-dismiss="modal"
+                aria-label="Close"
+              ></button>
             </div>
             <div class="modal-body">
               <div className="form-floating m-2">
@@ -219,7 +261,13 @@ export default function Events() {
                   placeholder="Enter the Message"
                   value={state.activeEvent.title}
                   onChange={(event) => {
-                    setState({ ...state, activeEvent: { ...state.activeEvent, title: event.target.value } })
+                    setState({
+                      ...state,
+                      activeEvent: {
+                        ...state.activeEvent,
+                        title: event.target.value,
+                      },
+                    });
                   }}
                 />{" "}
                 <label htmlFor="inputPassword5" className="form-label">
@@ -231,10 +279,36 @@ export default function Events() {
                   id="inputPassword5"
                   className="form-control"
                   placeholder="Enter the Message"
+                  type="number"
+                  value={state.activeEvent.price}
+                  onChange={(event) => {
+                    setState({
+                      ...state,
+                      activeEvent: {
+                        ...state.activeEvent,
+                        price: event.target.value,
+                      },
+                    });
+                  }}
+                />{" "}
+                <label htmlFor="inputPassword5" className="form-label">
+                  Price
+                </label>
+              </div>
+              <div className="form-floating m-2">
+                <input
+                  id="inputPassword5"
+                  className="form-control"
+                  placeholder="Enter the Message"
                   value={state.activeEvent.venue}
                   onChange={(event) => {
-                    setState({ ...state, activeEvent: { ...state.activeEvent, venue: event.target.value } })
-
+                    setState({
+                      ...state,
+                      activeEvent: {
+                        ...state.activeEvent,
+                        venue: event.target.value,
+                      },
+                    });
                   }}
                 />{" "}
                 <label htmlFor="inputPassword5" className="form-label">
@@ -249,8 +323,16 @@ export default function Events() {
                   type="date"
                   value={state.activeEvent.time.date_full}
                   onChange={(event) => {
-                    setState({ ...state, activeEvent: { ...state.activeEvent, time: { ...state.activeEvent.time, date_full: event.target.value } } })
-
+                    setState({
+                      ...state,
+                      activeEvent: {
+                        ...state.activeEvent,
+                        time: {
+                          ...state.activeEvent.time,
+                          date_full: event.target.value,
+                        },
+                      },
+                    });
                   }}
                 />{" "}
                 <label htmlFor="inputPassword5" className="form-label">
@@ -264,8 +346,13 @@ export default function Events() {
                   placeholder="Enter the Message"
                   value={state.activeEvent.description}
                   onChange={(event) => {
-                    setState({ ...state, activeEvent: { ...state.activeEvent, description: event.target.value } })
-
+                    setState({
+                      ...state,
+                      activeEvent: {
+                        ...state.activeEvent,
+                        description: event.target.value,
+                      },
+                    });
                   }}
                 />{" "}
                 <label htmlFor="inputPassword5" className="form-label">
@@ -280,8 +367,16 @@ export default function Events() {
                   type="time"
                   value={state.activeEvent.time.event_time}
                   onChange={(event) => {
-                    setState({ ...state, activeEvent: { ...state.activeEvent, time: { ...state.activeEvent.time, event_time: event.target.value } } })
-
+                    setState({
+                      ...state,
+                      activeEvent: {
+                        ...state.activeEvent,
+                        time: {
+                          ...state.activeEvent.time,
+                          event_time: event.target.value,
+                        },
+                      },
+                    });
                   }}
                 />{" "}
                 <label htmlFor="inputPassword5" className="form-label">
@@ -297,11 +392,16 @@ export default function Events() {
                     id="flexRadioDefault1"
                     checked={state.activeEvent.type === "online"}
                     onChange={() => {
-                      setState({ ...state, activeEvent: { ...state.activeEvent, type: "online" } })
-
+                      setState({
+                        ...state,
+                        activeEvent: { ...state.activeEvent, type: "online" },
+                      });
                     }}
                   />
-                  <label className="form-check-label" htmlFor="flexRadioDefault1">
+                  <label
+                    className="form-check-label"
+                    htmlFor="flexRadioDefault1"
+                  >
                     online
                   </label>
                 </div>
@@ -313,19 +413,29 @@ export default function Events() {
                     id="flexRadioDefault2"
                     checked={state.activeEvent.type === "offline"}
                     onChange={() => {
-                      setState({ ...state, activeEvent: { ...state.activeEvent, type: "offline" } })
-
+                      setState({
+                        ...state,
+                        activeEvent: { ...state.activeEvent, type: "offline" },
+                      });
                     }}
                   />
-                  <label className="form-check-label" htmlFor="flexRadioDefault2">
+                  <label
+                    className="form-check-label"
+                    htmlFor="flexRadioDefault2"
+                  >
                     offline
                   </label>
                 </div>
-
               </div>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">Close</button>
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-mdb-dismiss="modal"
+              >
+                Close
+              </button>
               <button
                 type="button"
                 className="btn btn-primary"
@@ -335,7 +445,8 @@ export default function Events() {
                 }}
               >
                 Add Event
-              </button>            </div>
+              </button>{" "}
+            </div>
           </div>
         </div>
       </div>

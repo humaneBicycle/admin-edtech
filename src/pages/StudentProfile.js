@@ -138,7 +138,7 @@ export default function StudentProfile() {
 
                 <>
                   <div className="FlexBoxColumn  Gap1 FlexStart ">
-                    <h1 className="CardTitle d-flex justify-content-between">{state.user.name} {state.user.isis_anonymous ? (<span className="badge badge-info ms-auto me-2">Anonymous</span>) : (<span className="badge badge-info">Not Anonymous</span>)}</h1>
+                    <h1 className="CardTitle d-flex justify-content-between">{state.user.name} {state.user.is_anonymous ? (<span className="badge badge-info ms-auto me-2">Anonymous</span>) : (<span className="badge badge-info">Not Anonymous</span>)}</h1>
                     <h5 className="CardSubtitle">Email : {state.user.email}</h5>
 
 

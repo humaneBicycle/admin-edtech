@@ -5,6 +5,7 @@ import Loader from "../components/Loader";
 import LinkHelper from "../utils/LinkHelper";
 import StorageHelper from "../utils/StorageHelper";
 import SnackBar from "../components/snackbar";
+import {Link} from "react-router-dom";
 
 export default function Assignments() {
   let [state, setState] = React.useState({
@@ -21,38 +22,52 @@ export default function Assignments() {
   //   console.log(state);
 
   let getAssignments = async (details) => {
-    if (state.current_page === state.total_pages) {
-      SnackBar("All Assignments Loaded", 3000, "OK");
-      return;
-    }
-    let data = {
-      admin_id: StorageHelper.get("admin_id"),
-      page: state.current_page + 1,
-      ...details,
-    };
-    console.log(data);
-    let response, json;
-    try {
-      response = await fetch(
-        LinkHelper.getLink() + "admin/assignment/review/list",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            authorization: "Bearer " + StorageHelper.get("token"),
-          },
-          body: JSON.stringify(data),
-        }
-      );
+    if (details !== state.last_details) {
+      if (details.page === state.total_pages + 1) {
+        SnackBar("No More Assignments Available", 3000, "OK");
+        return;
+      }
+      let data = {
+        admin_id: StorageHelper.get("admin_id"),
+        ...details,
+      };
+      console.log(data);
+      let response, json;
       try {
-        json = await response.json();
-        console.log(json);
-        if (json.success) {
+        response = await fetch(
+          LinkHelper.getLink() + "admin/assignment/review/list",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              authorization: "Bearer " + StorageHelper.get("token"),
+            },
+            body: JSON.stringify(data),
+          }
+        );
+        try {
+          json = await response.json();
+          console.log(json);
+          if (json.success) {
+            if (json.message !== undefined) {
+              SnackBar(json.message, 3000, "OK");
+              setState({...state,assignments:[]})
+            }else{
+                setState({
+                  ...state,
+                  assignments: [...state.assignments, ...json.data],
+                  total_pages: json.pages,
+                  current_page: state.current_page + 1,
+                  last_details: details,
+                });
+
+            }
+            
+          }
+        } catch (err) {
           setState({
             ...state,
-            assignments: [...state.assignments, ...json.data],
-            total_pages: json.pages,
-            current_page: state.current_page + 1,
+            spinner: false,
           });
         }
       } catch (err) {
@@ -61,11 +76,6 @@ export default function Assignments() {
           spinner: false,
         });
       }
-    } catch (err) {
-      setState({
-        ...state,
-        spinner: false,
-      });
     }
   };
   let getUnits = async () => {
@@ -210,7 +220,7 @@ export default function Assignments() {
       <div className="mainContent">
         <Header PageTitle={"Assignments"} />
         <div className="MainInnerContainer">
-          Note: The assignment will be in pending mode unless approved by the
+          Note: The assignment will be in "Submitted" mode unless approved by the
           admin
           <div className="NotificationSection">
             <div className="NotificationList">
@@ -323,12 +333,17 @@ export default function Assignments() {
                           >
                             {state.units.map((unit, index) => (
                               <>
-                                <li
+                                <li key={index}
                                   onClick={(e) => {
                                     e.preventDefault();
+                                    setState({...state, current_page: 0, assignments: []});
+
                                     let details = {
                                       unit_id: unit._id,
+
+                                      page: 1,
                                     };
+
                                     getAssignments(details);
                                   }}
                                 >
@@ -368,9 +383,14 @@ export default function Assignments() {
                           >
                             <li
                               onClick={() => {
-                                setState({...state, current_page: 0, assignments: []})
+                                setState({
+                                  ...state,
+                                  current_page: 0,
+                                  assignments: [],
+                                });
                                 let details = {
-                                  status: "submitted",
+                                  status: "Submitted",
+                                  page: 1,
                                 };
                                 getAssignments(details);
                               }}
@@ -379,10 +399,15 @@ export default function Assignments() {
                             </li>
                             <li
                               onClick={() => {
-                                setState({...state, current_page: 0, assignments: []})
+                                setState({
+                                  ...state,
+                                  current_page: 0,
+                                  assignments: [],
+                                });
 
                                 let details = {
                                   status: "approved",
+                                  page:  1,
                                 };
                                 getAssignments(details);
                               }}
@@ -391,10 +416,15 @@ export default function Assignments() {
                             </li>
                             <li
                               onClick={() => {
-                                setState({...state, current_page: 0, assignments: []})
+                                setState({
+                                  ...state,
+                                  current_page: 0,
+                                  assignments: [],
+                                });
 
                                 let details = {
                                   status: "rejected",
+                                  page:  1,
                                 };
                                 getAssignments(details);
                               }}
@@ -438,7 +468,13 @@ export default function Assignments() {
                                 <br></br>
                                 for lesson: {assignment.lesson_id} <br></br>
                                 Type: {assignment.assignment_type} <br></br>
-                                Submitted by user with ID: {assignment.user_id}
+                                Open user ID:<br></br><Link
+                              to="/students/profile"
+                              state={{ currentUser: { user_id: assignment.user_id } }}
+                            >
+                              Student Profile
+                            </Link>
+                                
                               </div>
                               <div
                                 className="btn btn-success"
@@ -463,7 +499,11 @@ export default function Assignments() {
                       <button
                         className="btn btn-primary"
                         onClick={(e) => {
-                          getAssignments();
+                          let details = {
+                            ...state.last_details,
+                            page: state.current_page + 1,
+                          };
+                          getAssignments(details);
                         }}
                       >
                         Load More

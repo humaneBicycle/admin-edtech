@@ -8,12 +8,16 @@ import "../pages/classes.css";
 import SnackBar from "../components/snackbar";
 import Header from "../components/Header";
 
-let users;
+let users=[];
 
 export default function Students() {
   let [isLoaded, setIsLoaded] = useState(false);
   let [isAllLoaded, setIsAllLoaded] = useState(false);
   let [loadedPageStudent, setLoadedPageStudent] = useState(1);
+  let [state,setState]=useState({
+    users:[],
+
+  })
 
 
   useEffect(() => {
@@ -38,8 +42,7 @@ export default function Students() {
       try {
         data = await response.json();
         if (data.success) {
-          users = data.data.users;
-          console.log(data);
+          setState({...state,users:[...state.users,...data.data.users]})
           if (data.pages === loadedPageStudent) {
             setLoadedPageStudent(loadedPageStudent);
             setIsAllLoaded(true);
@@ -90,7 +93,7 @@ export default function Students() {
             <>
               <div className="FlexBoxRow FlexWrap Gap1 FlexStart Padding3">
 
-                {users.map((user, index) => (
+                {state.users.map((user, index) => (
                   // console.log(user);
 
                   <Link to="/students/profile" key={index} className="w-100 p-3" state={{ currentUser: user }} style={{ "text-decoration": "none", "color": "inherit" }}>
