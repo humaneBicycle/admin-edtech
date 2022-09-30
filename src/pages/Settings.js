@@ -271,15 +271,12 @@ export default function Settings() {
 
                     <h2 className="ms-3">Dark Mode</h2>
 
-                    {document.body.classList.contains("darkMode") ? (<input checked type="checkbox" id="switch" hidden className="darkModeToggle" onClick={(e) => darkModeToggle(e)} onLoad={(e) => {
+
+                    <input checked={document.body.classList.contains("darkMode") ? "true" : "false"} type="checkbox" id="switch" hidden className="darkModeToggle" onClick={(e) => darkModeToggle(e)} onLoad={(e) => {
                       if (localStorage.getItem("darkMode")) {
                         e.target.setAttribute("checked", "true");
                       }
-                    }} />) : (<input type="checkbox" id="switch" hidden className="darkModeToggle" onClick={(e) => darkModeToggle(e)} onLoad={(e) => {
-                      if (localStorage.getItem("darkMode")) {
-                        e.target.setAttribute("checked", "true");
-                      }
-                    }} />)}
+                    }} />
                     <div className="app" style={{ borderRadius: '10px' }}>
                       <div className="DarkModeButton">
                         <div className="content">
