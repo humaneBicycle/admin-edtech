@@ -16,7 +16,7 @@ export default function Events() {
     },
     spinner: true,
   });
-
+  
   useEffect(() => {
     getEvents();
   }, []);
@@ -172,7 +172,7 @@ export default function Events() {
                           <div class=" h6">
                             <span className="fw-bold">Venue: </span>{" "}
                             {event.venue} |{" "}
-                            <span className="fw-bold"> Time :</span>{" "}
+                            <span className="fw-bold"> Date :</span>{" "}
                             {event.time.date_full}
                           </div>
                           <p class="text-muted"> {event.description}</p>
@@ -380,8 +380,10 @@ export default function Events() {
                   }}
                 />{" "}
                 <label htmlFor="inputPassword5" className="form-label">
-                  Time in seconds(estimated)
+                  Time 
                 </label>
+                
+
               </div>
               <div className="d-flex align-items-center justify-content-start p-2 mb-2 flex-wrap">
                 <div className="form-check m-2">

@@ -164,357 +164,103 @@ export default function AllLessonVideo(props) {
     let params = {
       UserMetadata: {},
       Role: "arn:aws:iam::927103216175:role/service-role/MediaConvert_Default_Role",
-      Settings: {
-        OutputGroups: [
+      "Settings": {
+        "Inputs": [
           {
-            CustomName: "HLS",
-            Name: "Apple HLS",
-            Outputs: [
-              {
-                ContainerSettings: {
-                  Container: "M3U8",
-                  M3u8Settings: {
-                    AudioFramesPerPes: 4,
-                    PcrControl: "PCR_EVERY_PES_PACKET",
-                    PmtPid: 480,
-                    PrivateMetadataPid: 503,
-                    ProgramNumber: 1,
-                    PatInterval: 0,
-                    PmtInterval: 0,
-                    Scte35Source: "NONE",
-                    TimedMetadata: "NONE",
-                    VideoPid: 481,
-                    AudioPids: [
-                      482, 483, 484, 485, 486, 487, 488, 489, 490, 491, 492,
-                    ],
-                  },
-                },
-                VideoDescription: {
-                  Width: 640,
-                  ScalingBehavior: "DEFAULT",
-                  Height: 360,
-                  TimecodeInsertion: "DISABLED",
-                  AntiAlias: "ENABLED",
-                  Sharpness: 50,
-                  CodecSettings: {
-                    Codec: "H_264",
-                    H264Settings: {
-                      InterlaceMode: "PROGRESSIVE",
-                      NumberReferenceFrames: 3,
-                      Syntax: "DEFAULT",
-                      Softness: 0,
-                      GopClosedCadence: 1,
-                      GopSize: 90,
-                      Slices: 1,
-                      GopBReference: "DISABLED",
-                      SlowPal: "DISABLED",
-                      SpatialAdaptiveQuantization: "ENABLED",
-                      TemporalAdaptiveQuantization: "ENABLED",
-                      FlickerAdaptiveQuantization: "DISABLED",
-                      EntropyEncoding: "CABAC",
-                      Bitrate: 1000000,
-                      FramerateControl: "INITIALIZE_FROM_SOURCE",
-                      RateControlMode: "CBR",
-                      CodecProfile: "MAIN",
-                      Telecine: "NONE",
-                      MinIInterval: 0,
-                      AdaptiveQuantization: "HIGH",
-                      CodecLevel: "AUTO",
-                      FieldEncoding: "PAFF",
-                      SceneChangeDetect: "ENABLED",
-                      QualityTuningLevel: "SINGLE_PASS",
-                      FramerateConversionAlgorithm: "DUPLICATE_DROP",
-                      UnregisteredSeiTimecode: "DISABLED",
-                      GopSizeUnits: "FRAMES",
-                      ParControl: "INITIALIZE_FROM_SOURCE",
-                      NumberBFramesBetweenReferenceFrames: 2,
-                      RepeatPps: "DISABLED",
-                    },
-                  },
-                  AfdSignaling: "NONE",
-                  DropFrameTimecode: "ENABLED",
-                  RespondToAfd: "NONE",
-                  ColorMetadata: "INSERT",
-                },
-                AudioDescriptions: [
-                  {
-                    AudioTypeControl: "FOLLOW_INPUT",
-                    CodecSettings: {
-                      Codec: "AAC",
-                      AacSettings: {
-                        AudioDescriptionBroadcasterMix: "NORMAL",
-                        Bitrate: 96000,
-                        RateControlMode: "CBR",
-                        CodecProfile: "LC",
-                        CodingMode: "CODING_MODE_2_0",
-                        RawFormat: "NONE",
-                        SampleRate: 48000,
-                        Specification: "MPEG4",
-                      },
-                    },
-                    LanguageCodeControl: "FOLLOW_INPUT",
-                  },
-                ],
-                OutputSettings: {
-                  HlsSettings: {
-                    AudioGroupId: "program_audio",
-                    AudioRenditionSets: "program_audio",
-                    SegmentModifier: "$dt$",
-                    IFrameOnlyManifest: "EXCLUDE",
-                  },
-                },
-                NameModifier: "_360",
-              },
-              {
-                ContainerSettings: {
-                  Container: "M3U8",
-                  M3u8Settings: {
-                    AudioFramesPerPes: 4,
-                    PcrControl: "PCR_EVERY_PES_PACKET",
-                    PmtPid: 480,
-                    PrivateMetadataPid: 503,
-                    ProgramNumber: 1,
-                    PatInterval: 0,
-                    PmtInterval: 0,
-                    Scte35Source: "NONE",
-                    Scte35Pid: 500,
-                    TimedMetadata: "NONE",
-                    TimedMetadataPid: 502,
-                    VideoPid: 481,
-                    AudioPids: [
-                      482, 483, 484, 485, 486, 487, 488, 489, 490, 491, 492,
-                    ],
-                  },
-                },
-                VideoDescription: {
-                  Width: 960,
-                  ScalingBehavior: "DEFAULT",
-                  Height: 540,
-                  TimecodeInsertion: "DISABLED",
-                  AntiAlias: "ENABLED",
-                  Sharpness: 50,
-                  CodecSettings: {
-                    Codec: "H_264",
-                    H264Settings: {
-                      InterlaceMode: "PROGRESSIVE",
-                      NumberReferenceFrames: 3,
-                      Syntax: "DEFAULT",
-                      Softness: 0,
-                      GopClosedCadence: 1,
-                      GopSize: 90,
-                      Slices: 1,
-                      GopBReference: "DISABLED",
-                      SlowPal: "DISABLED",
-                      SpatialAdaptiveQuantization: "ENABLED",
-                      TemporalAdaptiveQuantization: "ENABLED",
-                      FlickerAdaptiveQuantization: "DISABLED",
-                      EntropyEncoding: "CABAC",
-                      Bitrate: 2000000,
-                      FramerateControl: "INITIALIZE_FROM_SOURCE",
-                      RateControlMode: "CBR",
-                      CodecProfile: "MAIN",
-                      Telecine: "NONE",
-                      MinIInterval: 0,
-                      AdaptiveQuantization: "HIGH",
-                      CodecLevel: "AUTO",
-                      FieldEncoding: "PAFF",
-                      SceneChangeDetect: "ENABLED",
-                      QualityTuningLevel: "SINGLE_PASS",
-                      FramerateConversionAlgorithm: "DUPLICATE_DROP",
-                      UnregisteredSeiTimecode: "DISABLED",
-                      GopSizeUnits: "FRAMES",
-                      ParControl: "INITIALIZE_FROM_SOURCE",
-                      NumberBFramesBetweenReferenceFrames: 2,
-                      RepeatPps: "DISABLED",
-                    },
-                  },
-                  AfdSignaling: "NONE",
-                  DropFrameTimecode: "ENABLED",
-                  RespondToAfd: "NONE",
-                  ColorMetadata: "INSERT",
-                },
-                AudioDescriptions: [
-                  {
-                    AudioTypeControl: "FOLLOW_INPUT",
-                    CodecSettings: {
-                      Codec: "AAC",
-                      AacSettings: {
-                        AudioDescriptionBroadcasterMix: "NORMAL",
-                        Bitrate: 96000,
-                        RateControlMode: "CBR",
-                        CodecProfile: "LC",
-                        CodingMode: "CODING_MODE_2_0",
-                        RawFormat: "NONE",
-                        SampleRate: 48000,
-                        Specification: "MPEG4",
-                      },
-                    },
-                    LanguageCodeControl: "FOLLOW_INPUT",
-                  },
-                ],
-                OutputSettings: {
-                  HlsSettings: {
-                    AudioGroupId: "program_audio",
-                    AudioRenditionSets: "program_audio",
-                    SegmentModifier: "$dt$",
-                    IFrameOnlyManifest: "EXCLUDE",
-                  },
-                },
-                NameModifier: "_540",
-              },
-              {
-                ContainerSettings: {
-                  Container: "M3U8",
-                  M3u8Settings: {
-                    AudioFramesPerPes: 4,
-                    PcrControl: "PCR_EVERY_PES_PACKET",
-                    PmtPid: 480,
-                    PrivateMetadataPid: 503,
-                    ProgramNumber: 1,
-                    PatInterval: 0,
-                    PmtInterval: 0,
-                    Scte35Source: "NONE",
-                    Scte35Pid: 500,
-                    TimedMetadata: "NONE",
-                    TimedMetadataPid: 502,
-                    VideoPid: 481,
-                    AudioPids: [
-                      482, 483, 484, 485, 486, 487, 488, 489, 490, 491, 492,
-                    ],
-                  },
-                },
-                VideoDescription: {
-                  Width: 1280,
-                  ScalingBehavior: "DEFAULT",
-                  Height: 720,
-                  TimecodeInsertion: "DISABLED",
-                  AntiAlias: "ENABLED",
-                  Sharpness: 50,
-                  CodecSettings: {
-                    Codec: "H_264",
-                    H264Settings: {
-                      InterlaceMode: "PROGRESSIVE",
-                      NumberReferenceFrames: 3,
-                      Syntax: "DEFAULT",
-                      Softness: 0,
-                      GopClosedCadence: 1,
-                      GopSize: 90,
-                      Slices: 1,
-                      GopBReference: "DISABLED",
-                      SlowPal: "DISABLED",
-                      SpatialAdaptiveQuantization: "ENABLED",
-                      TemporalAdaptiveQuantization: "ENABLED",
-                      FlickerAdaptiveQuantization: "DISABLED",
-                      EntropyEncoding: "CABAC",
-                      Bitrate: 3000000,
-                      FramerateControl: "INITIALIZE_FROM_SOURCE",
-                      RateControlMode: "CBR",
-                      CodecProfile: "MAIN",
-                      Telecine: "NONE",
-                      MinIInterval: 0,
-                      AdaptiveQuantization: "HIGH",
-                      CodecLevel: "AUTO",
-                      FieldEncoding: "PAFF",
-                      SceneChangeDetect: "ENABLED",
-                      QualityTuningLevel: "SINGLE_PASS",
-                      FramerateConversionAlgorithm: "DUPLICATE_DROP",
-                      UnregisteredSeiTimecode: "DISABLED",
-                      GopSizeUnits: "FRAMES",
-                      ParControl: "INITIALIZE_FROM_SOURCE",
-                      NumberBFramesBetweenReferenceFrames: 2,
-                      RepeatPps: "DISABLED",
-                    },
-                  },
-                  AfdSignaling: "NONE",
-                  DropFrameTimecode: "ENABLED",
-                  RespondToAfd: "NONE",
-                  ColorMetadata: "INSERT",
-                },
-                AudioDescriptions: [
-                  {
-                    AudioTypeControl: "FOLLOW_INPUT",
-                    CodecSettings: {
-                      Codec: "AAC",
-                      AacSettings: {
-                        AudioDescriptionBroadcasterMix: "NORMAL",
-                        Bitrate: 96000,
-                        RateControlMode: "CBR",
-                        CodecProfile: "LC",
-                        CodingMode: "CODING_MODE_2_0",
-                        RawFormat: "NONE",
-                        SampleRate: 48000,
-                        Specification: "MPEG4",
-                      },
-                    },
-                    LanguageCodeControl: "FOLLOW_INPUT",
-                  },
-                ],
-                OutputSettings: {
-                  HlsSettings: {
-                    AudioGroupId: "program_audio",
-                    AudioRenditionSets: "program_audio",
-                    SegmentModifier: "$dt$",
-                    IFrameOnlyManifest: "EXCLUDE",
-                  },
-                },
-                NameModifier: "_720",
-              },
-            ],
-            OutputGroupSettings: {
-              Type: "HLS_GROUP_SETTINGS",
-              HlsGroupSettings: {
-                ManifestDurationFormat: "INTEGER",
-                SegmentLength: 10,
-                TimedMetadataId3Period: 10,
-                CaptionLanguageSetting: "OMIT",
-                Destination: "s3://quasar-edtech-stream/",
-                DestinationSettings: {
-                  S3Settings: {
-                    AccessControl: {
-                      CannedAcl: "PUBLIC_READ",
-                    },
-                  },
-                },
-                TimedMetadataId3Frame: "PRIV",
-                CodecSpecification: "RFC_4281",
-                OutputSelection: "MANIFESTS_AND_SEGMENTS",
-                ProgramDateTimePeriod: 600,
-                MinSegmentLength: 0,
-                DirectoryStructure: "SINGLE_DIRECTORY",
-                ProgramDateTime: "EXCLUDE",
-                SegmentControl: "SEGMENTED_FILES",
-                ManifestCompression: "NONE",
-                ClientCache: "ENABLED",
-                StreamInfResolution: "INCLUDE",
-              },
-            },
-          },
-        ],
-        AdAvailOffset: 0,
-        Inputs: [
-          {
-            AudioSelectors: {
+            "VideoSelector": {},
+            "AudioSelectors": {
               "Audio Selector 1": {
-                Tracks: [1],
-                Offset: 0,
-                DefaultSelection: "DEFAULT",
-                SelectorType: "TRACK",
-                ProgramSelection: 1,
-              },
+                "DefaultSelection": "DEFAULT"
+              }
             },
-            VideoSelector: {
-              ColorSpace: "FOLLOW",
-            },
-            FilterEnable: "AUTO",
-            PsiControl: "USE_PSI",
-            FilterStrength: 0,
-            DeblockFilter: "DISABLED",
-            DenoiseFilter: "DISABLED",
-            TimecodeSource: "EMBEDDED",
-            FileInput: "s3://quasaredtech-adminuploads/" + uid,
-          },
+            "VideoGenerator": {}
+          }
         ],
+        "OutputGroups": [
+          {
+            "Name": "Apple HLS",
+            "OutputGroupSettings": {
+              "Type": "HLS_GROUP_SETTINGS",
+              "HlsGroupSettings": {
+                "SegmentLength": 10,
+                "MinSegmentLength": 0
+              }
+            },
+            "Outputs": [
+              {
+                "NameModifier": "1080p",
+                "Preset": "System-Avc_16x9_1080p_29_97fps_8500kbps"
+              }
+            ]
+          },
+          {
+            "Name": "Apple HLS",
+            "OutputGroupSettings": {
+              "Type": "HLS_GROUP_SETTINGS",
+              "HlsGroupSettings": {
+                "SegmentLength": 10,
+                "MinSegmentLength": 0
+              }
+            },
+            "Outputs": [
+              {
+                "NameModifier": "720",
+                "Preset": "System-Avc_16x9_720p_29_97fps_3500kbps"
+              }
+            ]
+          },
+          {
+            "Name": "Apple HLS",
+            "OutputGroupSettings": {
+              "Type": "HLS_GROUP_SETTINGS",
+              "HlsGroupSettings": {
+                "SegmentLength": 10,
+                "MinSegmentLength": 0
+              }
+            },
+            "Outputs": [
+              {
+                "Preset": "System-Avc_16x9_540p_29_97fps_3500kbps"
+              }
+            ]
+          },
+          {
+            "Name": "Apple HLS",
+            "OutputGroupSettings": {
+              "Type": "HLS_GROUP_SETTINGS",
+              "HlsGroupSettings": {
+                "SegmentLength": 10,
+                "MinSegmentLength": 0
+              }
+            },
+            "Outputs": [
+              {
+                "Preset": "System-Avc_4x3_360p_14_99fps_400kbps"
+              }
+            ]
+          },
+          {
+            "Name": "Apple HLS",
+            "OutputGroupSettings": {
+              "Type": "HLS_GROUP_SETTINGS",
+              "HlsGroupSettings": {
+                "SegmentLength": 10,
+                "MinSegmentLength": 0
+              }
+            },
+            "Outputs": [
+              {
+                "Preset": "System-Avc_16x9_270p_14_99fps_400kbps"
+              }
+            ]
+          }
+        ],
+        "TimecodeConfig": {
+          "Source": "ZEROBASED"
+        }
       },
+      "Role": "arn:aws:iam::927103216175:role/service-role/MediaConvert_Default_Role",
+      "Queue": "arn:aws:mediaconvert:us-east-1:927103216175:queues/Default"
     };
 
     let endpointPromise = new MediaConvert({

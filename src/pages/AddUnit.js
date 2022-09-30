@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import LinkHelper from "../utils/LinkHelper";
@@ -14,8 +14,6 @@ import Header from "../components/Header";
 let image;
 let imageId;
 let credentials = {
-  accessKeyId: process.env.REACT_APP_ACCESS_KEY_ID,
-  secretAccessKey: process.env.REACT_APP_ACCESS_KEY_SECRET,
 };
 // console.log(credentials);
 
@@ -31,7 +29,48 @@ export default function AddUnit() {
     },
     tags: []
   });
-  let [spinner, setSpinner] = useState(false);
+  let [spinner, setSpinner] = useState(true);
+
+  useEffect(() => {
+    getAWSCredentials();
+  },[])
+
+  let getAWSCredentials = async () => {
+    let response, data;
+    try {
+      response = await fetch(LinkHelper.getLink() + "admin/aws/read", {
+        method: "POST",
+        headers: {
+          authorization: "Bearer " + StorageHelper.get("token"),
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({
+          admin_id: StorageHelper.get("admin_id"),
+        }),
+      });
+      try {
+        data = await response.json();
+
+        if (data.success) {
+          credentials = data.data;
+          // setIsLoaded(true)
+          setSpinner(false)
+        } else {
+          setSpinner(false)
+
+        }
+      } catch (err) {
+        console.log(err);
+        setSpinner(false)
+        
+
+      }
+    } catch (err) {
+      console.log("error", err);
+      setSpinner(false)
+
+    }
+  };
 
   function updateUI(e, type) {
     let val = e.target.value;
@@ -52,11 +91,11 @@ export default function AddUnit() {
   let prerequisiteItemClick = (e, oldUnit) => {
     setUnit({
       ...unit,
-      prerequisite: { ...unit.prerequisite, on: oldUnit._id },
+      prerequisite: { ...unit.prerequisite, on: oldUnit.unit_id },
     });
   };
   async function addUnit(event, unit) {
-
+    console.log(unit)
     if (
       unit.creator === undefined ||
       unit.description === undefined ||
