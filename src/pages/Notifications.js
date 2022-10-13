@@ -64,7 +64,6 @@ export default function Notifications() {
       state.notification.description === undefined ||
       state.notification.link === undefined
     ) {
-      // alert("Please fill all the fields");
       SnackBar("Please fill all the fields", 1500, "OK");
 
       return;

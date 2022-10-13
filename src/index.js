@@ -26,6 +26,7 @@ import BlockedUsers from "./pages/BlockedUsers";
 import LeaderBoard from "./pages/LeaderBoard";
 import Assignments from "./pages/Assignments";
 import Payments from "./pages/Payments";
+import AddAdditionalUnit from "./pages/AddAdditionalLesson";
 
 export const Title = "Admin Panel";
 document.title = "Admin Panel";
@@ -58,6 +59,7 @@ root.render(
         <Route path="/course/add-lesson" element={<AddLesson />} />
         <Route path="/course/lessons" element={<Lessons />} />
         <Route path="/course/lessons/lesson" element={<Lesson />} />
+        <Route path="/additional-lessons" element={<AddAdditionalUnit />} />
         <Route path="/admin/forum/add-answer" element={<AnswerThisQuestion />} />
       </Route>
 
