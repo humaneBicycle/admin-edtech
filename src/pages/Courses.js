@@ -64,8 +64,8 @@ export default function Courses() {
         data = await response.json();
         if (data.success) {
           updateUI(data.data);
-        } else if (data.message === "Token is not valid please login again") {
-          SnackBar("Token is not valid please login again");
+        } else if (data.message === "token is not valid please login") {
+          SnackBar("token is not valid please login");
           window.location.href = "/login";
         } else {
           SnackBar("Something went wrong");
