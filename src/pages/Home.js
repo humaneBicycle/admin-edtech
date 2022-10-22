@@ -1,9 +1,0 @@
-import "../pages/classes.css";
-
-import React from 'react';
-
-export default function Home() {
-  return (
-    <div className="Home">Home</div>
-  )
-}

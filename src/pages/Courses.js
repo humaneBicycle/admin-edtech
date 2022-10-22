@@ -302,7 +302,7 @@ export default function Courses() {
               </>
             ) : (
               <div className="d-flex justify-content-center">
-                Error Loading Content. Please Reload. Backend problem
+                Error Loading Content. Please Reload.
               </div>
             )}
         </div>

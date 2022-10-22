@@ -1,15 +1,15 @@
 import React from "react";
-import Home from "./pages/Home";
 import Navbar from "./components/Navbar";
 
 function App() {
+  window.location.href = "/course"
 
   return (
     <>
 
       <Navbar />
 
-      <Home />
+      {/* <Home /> */}
 
     </>
   )

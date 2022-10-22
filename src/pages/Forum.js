@@ -10,6 +10,7 @@ import Header from "../components/Header";
 
 let questions = [];
 let answers = [];
+let loadedPageAnswerG=1
 export default function Discussion() {
   let [state, setState] = useState({
     spinner: false,
@@ -20,7 +21,6 @@ export default function Discussion() {
   let [isLoaded, setIsLoaded] = useState(false);
   let [isAnswerLoaded, setIsAnswerLoaded] = useState(false);
   let [activeQuestionIndex, setActiveQuestionIndex] = useState(0);
-  let [activeAnswerIndex, setActiveAnswerIndex] = useState(0);
   let [isAllQuestionLoaded, setIsAllQuestionLoaded] = useState(false);
   let [isAllAnswerLoaded, setIsAllAnswerLoaded] = useState(false);
   let [activeQuestionId, setActiveQuestionId] = useState(0);
@@ -59,7 +59,7 @@ export default function Discussion() {
             setIsAllQuestionLoaded(true);
           }
           setActiveQuestionId(data.data.questions[0]._id);
-          getAnswers(data.data.questions[0]._id, 0, 1);
+          getAnswers(data.data.questions[0]._id);
         } else if (data.message === "Token is not valid please login again") {
           SnackBar("Token is not valid please login again");
           window.location.href = "/login";
@@ -76,16 +76,21 @@ export default function Discussion() {
   };
 
   let handleQuestionClick = async (question, index) => {
-    setState({ ...state, loadedPageAnswer: 1 })
+    loadedPageAnswerG=1
     setActiveQuestionIndex(index);
     setIsAnswerLoaded(false);
-    getAnswers(question._id, index);
-  };
-  console.log(state)
+    getAnswers(question._id);
+    
+  }
 
-  let getAnswers = async (id, index) => {
-    console.log(id, index, state.loadedPageAnswer + 1);
+  let getAnswers = async (id) => {
+    // console.log(id, loadedPageAnswerG );
     let response, data;
+    let temp = JSON.stringify({
+      question_id: id,
+      admin_id: StorageHelper.get("admin_id"),
+      page: loadedPageAnswerG ,
+    })
     try {
       response = await fetch(
         LinkHelper.getLink() + "admin/forum/listOfAnswer",
@@ -96,22 +101,18 @@ export default function Discussion() {
 
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({
-            question_id: id,
-            admin_id: StorageHelper.get("admin_id"),
-            page: state.loadedPageAnswer + 1,
-          }),
+          body: temp
         }
       );
+      console.log("json sent while request: ",temp)
       try {
         data = await response.json();
         if (data.success) {
           answers.push(...data.data);
-          setActiveAnswerIndex(index);
           setIsAnswerLoaded(true);
           setState({ ...state, loadedPageAnswer: state.loadedPageAnswer + 1 });
 
-          if (data.pages === state.loadedPageAnswer) {
+          if (data.pages === loadedPageAnswerG) {
             setIsAllAnswerLoaded(true);
           }
         } else {
@@ -247,9 +248,7 @@ export default function Discussion() {
               <div className="FlexBoxRow FlexWrap">
                 <div className="Flex50">
                   <h2 className="title">Questions</h2>
-                  <div className="p-2 ms-2" style={{ minWidth: '75%', }}>
-                    <input type="search" className="form-control" placeholder="Search Forum" />
-                  </div>
+                  
                   <div class="ListBlock">
                     {questions.map((question, index) => (
                       <>
@@ -258,6 +257,7 @@ export default function Discussion() {
                             className="ListItem active"
                             aria-current="true"
                             onClick={() => {
+                              setState({...state,loadedPageAnswer:1})
                               handleQuestionClick(question, index);
                             }}
                           >
@@ -402,7 +402,8 @@ export default function Discussion() {
                             className="actionButton"
                             onClick={() => {
                               if (!isAllAnswerLoaded) {
-                                getAnswers(activeQuestionId, activeAnswerIndex);
+                                loadedPageAnswerG++
+                                getAnswers(activeQuestionId);
                               } else {
                                 SnackBar("All answers are loaded", 1500, "OK");
                               }

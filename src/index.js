@@ -27,6 +27,7 @@ import LeaderBoard from "./pages/LeaderBoard";
 import Assignments from "./pages/Assignments";
 import Payments from "./pages/Payments";
 import AddAdditionalUnit from "./pages/AddAdditionalLesson";
+import PersonalityTest from "./pages/PersonalityTest";
 
 export const Title = "Admin Panel";
 document.title = "Admin Panel";
@@ -53,6 +54,7 @@ root.render(
         <Route path="/forum" element={<Discussion />} />
         <Route path="/course" element={<Courses />} />
         <Route path="/settings" element={<Settings />} />
+        <Route path="/personality-test" element={<PersonalityTest />} />
         <Route path="/course/editCourse" element={<EditCourseModal />} />
         <Route path="/course/add-unit" element={<AddUnit />} />
         <Route path="/course/edit-unit" element={<EditUnit />} />
