@@ -11,36 +11,31 @@ import Header from "../components/Header";
 import { Upload } from "@aws-sdk/lib-storage";
 import { S3Client, S3 } from "@aws-sdk/client-s3";
 
-
 let image;
 let imageId;
-
+let units=[]
 
 export default function EditUnit() {
   const location = useLocation();
   const unit = location.state.unit;
+  console.log(unit)
   let [state, setState] = useState({
     spinner: true,
-    units: [],
     activeUnit: {
       admin_id: StorageHelper.get("admin_id"),
 
       ...unit,
       progress: -1,
       prerequisite: {
-        has_prerequisite: false,
+        has_prerequisite: unit.has_prerequisite,
       },
     },
   });
-  console.log("state at init", state);
 
   useEffect(() => {
     getUnits();
   }, []);
 
-  let prerequisiteItemClick = (e, unit) => {
-    console.log(unit);
-  };
 
   let getUnits = async () => {
     let response, data;
@@ -57,13 +52,10 @@ export default function EditUnit() {
       });
       try {
         data = await response.json();
-        console.log(data);
+        
         if (data.success) {
+          units.push(data.data)
           getAWSCredentials();
-          setState({
-            ...state,
-            units: data.data,
-          });
         } else {
           SnackBar("Something went wrong: " + data.message, 1500, "OK")
         }
@@ -146,9 +138,7 @@ export default function EditUnit() {
       });
 
       parallelUploads3.on("httpUploadProgress", (progress) => {
-        //TODO update progress bar
         console.log("progress", progress);
-        // setProgress(progress);
       });
 
       await parallelUploads3.done();
@@ -252,10 +242,10 @@ export default function EditUnit() {
                 <label htmlFor="floatingInput">Name</label>
               </div>
 
-              <div class="bg-image hover-overlay ripple my-2 w-100 d-flex justify-content-center" data-mdb-ripple-color="light">
+              <div className="bg-image hover-overlay ripple my-2 w-100 d-flex justify-content-center" data-mdb-ripple-color="light">
                 <img src={state.activeUnit.image_url} alt="No Image" className="img-fluid" style={{ maxWidth: "200px", maxHeight: "200px" }} />
 
-                <div class="mask" style={{ backgroundColor: "rgba(251, 251, 251, 0.15)" }}>
+                <div className="mask" style={{ backgroundColor: "rgba(251, 251, 251, 0.15)" }}>
 
                 </div>
 
@@ -302,18 +292,18 @@ export default function EditUnit() {
                 <input
                   className="form-control"
                   id="floatingInput"
-                  value={state.activeUnit.message}
+                  value={state.activeUnit.description}
                   onChange={(event) => {
                     setState({
                       ...state,
                       activeUnit: {
                         ...state.activeUnit,
-                        message: event.target.value,
+                        description: event.target.value,
                       },
                     });
                   }}
                 />
-                <label htmlFor="floatingInput">Message </label>
+                <label htmlFor="floatingInput">Description </label>
               </div>
               <div className="form-floating mb-3">
                 <div className="form-check">
@@ -322,6 +312,7 @@ export default function EditUnit() {
                     type="radio"
                     name="flexRadioDefault"
                     htmlFor="flexRadioDefault1"
+                    defaultChecked={"\""+state.activeUnit.is_paid+"\""}
                     onChange={(e) => {
                       setState({
                         ...state,
@@ -344,7 +335,8 @@ export default function EditUnit() {
                     className="form-check-input"
                     type="radio"
                     name="flexRadioDefault"
-                    defaultChecked={state.activeUnit.is_paid}
+                    defaultChecked={"\""+!state.activeUnit.is_paid+"\""}
+                    
                     htmlFor="flexRadioDefault1"
                     onChange={(e) => {
                       setState({
@@ -360,7 +352,7 @@ export default function EditUnit() {
                     className="form-check-label"
                     htmlFor="flexRadioDefault2"
                   >
-                    Free(price will be 0)
+                    Free
                   </label>
                 </div>
               </div>
@@ -371,8 +363,9 @@ export default function EditUnit() {
                     type="checkbox"
                     role="switch"
                     id="flexSwitchCheckChecked"
+                    defaultchacked={"\""+state.activeUnit.prerequisite.has_prerequisite+"\""}
                     onChange={(event) => {
-                      // article.prerequisite.has_prerequisite=!hasPrerequisite
+                      
                       setState({
                         ...state,
                         activeUnit: {
@@ -410,12 +403,12 @@ export default function EditUnit() {
                           className="dropdown-menu"
                           aria-labelledby="dropdownMenuButton"
                         >
-                          {state.units.length !== 0 ? (
-                            state.units.map((unit) => {
+                          {units.length !== 0 ? (
+                            units.map((unit,i) => {
                               return (
-                                <li
+                                <li key={i} className="dropdown-item"
                                   onClick={(e) => {
-                                    prerequisiteItemClick(e, unit);
+                                    setState({...state,prerequisite:{...state.prerequisite,on:unit._id}})
                                   }}
                                 >
                                   {unit.unit_name}
@@ -423,7 +416,7 @@ export default function EditUnit() {
                               );
                             })
                           ) : (
-                            <li>No Lessons Found. Can't set Prerequisite</li>
+                            <li className="p-2">No Units Found. Can't set Prerequisite</li>
                           )}
                         </ul>
                       </div>
@@ -478,7 +471,7 @@ export default function EditUnit() {
                 )}
               </div>
               <button
-                className="btn btn-outline-primary mx-4 my-4"
+                className="btn btn-primary mx-4 my-4 container-fluid"
                 onClick={(e) => {
                   uploadImageToS3();
                 }}

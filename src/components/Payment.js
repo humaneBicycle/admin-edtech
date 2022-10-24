@@ -38,20 +38,13 @@ export default function Payment(props) {
       state.payment.price === undefined ||
       state.payment.prerequisite.has_prerequisite
     ) {
-      if (state.payment.prerequisite.has_prerequisite) {
-        if (state.payment.prerequisite.on === undefined) {
-          SnackBar("Please select prerequisite lesson");
-          return;
-        }
-      } else {
-        SnackBar("Please fill all fields");
-        return;
-      }
+      SnackBar("Please fill all fields");
+      return;
     }
     let response, data;
     setState({ ...state, spinner: true });
     try {
-      response = await fetch(LinkHelper.getLink()+"admin/lesson/create", {
+      response = await fetch(LinkHelper.getLink() + "admin/lesson/create", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -61,7 +54,7 @@ export default function Payment(props) {
       });
       try {
         data = await response.json();
-        console.log(data)
+        console.log(data);
         if (data.success) {
           SnackBar("Payment created successfully");
           setState({ ...state, spinner: false });
@@ -137,7 +130,7 @@ export default function Payment(props) {
             <label htmlFor="floatingInput">Description</label>
           </div>
           <div className="form-check form-switch">
-            <input
+            {/* <input
               className="form-check-input"
               type="checkbox"
               role="switch"
@@ -162,9 +155,9 @@ export default function Payment(props) {
               checked
             >
               Has Pre-requisites
-            </label>
+            </label> */}
             <div className="prerequisites">
-              {state.payment.prerequisite.has_prerequisite ? (
+              {/* {state.payment.prerequisite.has_prerequisite ? (
                 <>
                   <>
                     <div className="dropdown">
@@ -252,17 +245,17 @@ export default function Payment(props) {
                 </>
               ) : (
                 <></>
-              )}
-              <button
-                className="btn btn-primary"
-                onClick={() => {
-                  addPayment();
-                }}
-              >
-                Add Lesson
-              </button>
+              )} */}
             </div>
           </div>
+          <button
+            className="btn btn-primary container-fluid"
+            onClick={() => {
+              addPayment();
+            }}
+          >
+            Add Lesson
+          </button>
         </>
       )}
     </div>

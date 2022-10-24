@@ -5,6 +5,7 @@ import Loader from "../components/Loader";
 import StorageHelper from "../utils/StorageHelper";
 import LinkHelper from "../utils/LinkHelper";
 import SnackBar from "../components/snackbar";
+import {Link} from "react-router-dom"
 
 export default function PersonalityTest() {
   let [state, setState] = useState({
@@ -59,9 +60,6 @@ export default function PersonalityTest() {
       });
     }
   };
-  let addQuestions = async (test_id) => {
-      
-  }
 
   return (
     <>
@@ -84,14 +82,14 @@ export default function PersonalityTest() {
                       <p className="card-text">{test.message}</p>
                     </div>
                     <div>
-                          <a
-                            onClick={() => {
-                                addQuestions(test._id);
-                            }}
+                          <Link
+                            to="/personality-test/add-questions"
+                            state={{test:test}}
+                            
                             className="goToNotifications btn btn-primary rounded-3 bg-primary text-white"
                           >
                             Add Questions
-                          </a>
+                          </Link>
                         </div>
                   </div>
                 </>

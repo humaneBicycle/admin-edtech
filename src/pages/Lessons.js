@@ -44,31 +44,37 @@ export default function Lessons() {
       });
       try {
         data = await response.json();
-        console.log(data.data.lessons)
-        setLessons(data.data.lessons);
-        setIsLoaded(true);
-      } catch {
-        // console.log("error");
-        SnackBar("Error", 1500, "OK")
+        if (data.success) {
+          setLessons(data.data.lessons);
+          setIsLoaded(true);
+        } else {
+          SnackBar("Something Went Wrong", 3500, "OK");
+        }
+      } catch (err) {
+        console.log(err);
+        SnackBar("Error", 1500, "OK");
       }
     } catch (error) {
       console.log(error);
-      SnackBar("Error", 1500, "OK")
+      SnackBar("Error", 1500, "OK");
       // alert("Error");
     }
   };
   let updateChangedLessonOrder = async () => {
-    console.log(lessonJsonToUpdate)
+    console.log(lessonJsonToUpdate);
     let response, data;
     try {
-      response = await fetch(LinkHelper.getLink() + "admin/lesson/update/position", {
-        method: "PUT",
-        headers: {
-          authorization: "Bearer " + StorageHelper.get("token"),
-          "content-type": "application/json",
-        },
-        body: JSON.stringify(lessonJsonToUpdate),
-      });
+      response = await fetch(
+        LinkHelper.getLink() + "admin/lesson/update/position",
+        {
+          method: "PUT",
+          headers: {
+            authorization: "Bearer " + StorageHelper.get("token"),
+            "content-type": "application/json",
+          },
+          body: JSON.stringify(lessonJsonToUpdate),
+        }
+      );
       try {
         data = await response.json();
         console.log(data);
@@ -77,8 +83,7 @@ export default function Lessons() {
           setIsLessonOrderChanged(false);
         } else {
           // alert("Error");
-          SnackBar("Error", 1500, "OK")
-
+          SnackBar("Error", 1500, "OK");
         }
       } catch {
         console.log("error");
@@ -86,14 +91,12 @@ export default function Lessons() {
     } catch (error) {
       console.log(error);
       // alert("Error");
-      SnackBar("Error", 1500, "OK")
-
+      SnackBar("Error", 1500, "OK");
     }
     //update the lesson order on server
-
   };
   let handleOnDragEvent = (result) => {
-    console.log(result)
+    console.log(result);
     if (!result.destination) return;
     let items = Array.from(lessons);
     const [reOrderedItems] = items.splice(result.source.index, 1);
@@ -103,15 +106,15 @@ export default function Lessons() {
     items.map((lesson, index) => {
       lessonJsonToUpdate.lessons.push({
         lesson_id: lesson.lesson_id,
-        index: index
-      })
-    })
+        index: index,
+      });
+    });
 
     setIsLessonOrderChanged(true);
   };
-  
+
   let deleteLesson = async (lesson_id) => {
-    let response,data;
+    let response, data;
     try {
       response = await fetch(LinkHelper.getLink() + "admin/lesson/delete", {
         method: "DELETE",
@@ -120,7 +123,6 @@ export default function Lessons() {
           "content-type": "application/json",
         },
         body: JSON.stringify({
-          
           lesson_id: lesson_id,
           admin_id: StorageHelper.get("admin_id"),
         }),
@@ -132,35 +134,36 @@ export default function Lessons() {
           getLessons();
         } else {
           // alert("Error");
-          SnackBar("Error", 1500, "OK")
-
+          SnackBar("Error", 1500, "OK");
         }
-      } catch(err) {
-        SnackBar(err)
+      } catch (err) {
+        SnackBar(err);
       }
     } catch (error) {
-      SnackBar(error, 1500, "OK")
-
+      SnackBar(error, 1500, "OK");
     }
-  }
+  };
 
   return (
     <>
       <Navbar />
 
-
       <div className="MainContent">
         <Header PageTitle={unit.unit_name} />
 
         <div className="MainInnerContainer">
-          <section className="Section" style={{ maxWidth: '100%', margin: "auto" }}>
+          <section
+            className="Section"
+            style={{ maxWidth: "100%", margin: "auto" }}
+          >
             <div className="SectionHeader p-3">
-              <h1 className="ms-3">Lessons   <span className=" h4 ms-3">In Unit: {unit.unit_name} </span></h1>
-
+              <h1 className="ms-3">
+                Lessons{" "}
+                <span className=" h4 ms-3">In Unit: {unit.unit_name} </span>
+              </h1>
             </div>
             {isLessonOrderChanged ? (
               <div className="d-flex flex-row p-2 p-3 fw-bold text-light  justify-content-between align-items-center bg-info">
-
                 <span className="py-1 ps-4">
                   Do you want to save this sort ?
                 </span>
@@ -170,14 +173,12 @@ export default function Lessons() {
                 >
                   Save
                 </button>
-
               </div>
             ) : (
               <></>
             )}
 
             <div className="SectionBody">
-
               {isLoaded ? (
                 <DragDropContext onDragEnd={handleOnDragEvent}>
                   <Droppable droppableId="droppable">
@@ -195,9 +196,11 @@ export default function Lessons() {
                               index={index}
                             >
                               {(provided) => (
-
-                                <Link to="lesson"
-                                  state={{ lesson: lesson }} className="text-dark">
+                                <Link
+                                  to="lesson"
+                                  state={{ lesson: lesson }}
+                                  className="text-dark"
+                                >
                                   <li
                                     className="row"
                                     {...provided.draggableProps}
@@ -233,7 +236,11 @@ export default function Lessons() {
                                                       {lesson.description}
                                                     </p>
                                                     <p className="card-text">
-                                                      prerequisite:   {lesson.prerequisite.message}
+                                                      prerequisite:{" "}
+                                                      {
+                                                        lesson.prerequisite
+                                                          .message
+                                                      }
                                                     </p>
                                                   </div>
                                                 </div>
@@ -272,7 +279,11 @@ export default function Lessons() {
                                                       {lesson.description}
                                                     </p>
                                                     <p className="card-text">
-                                                      prerequisite:   {lesson.prerequisite.message}
+                                                      prerequisite:{" "}
+                                                      {
+                                                        lesson.prerequisite
+                                                          .message
+                                                      }
                                                     </p>
                                                   </div>
                                                 </div>
@@ -321,71 +332,8 @@ export default function Lessons() {
                                       ) : (
                                         <></>
                                       )}
-                                      {lesson.type === "payment" ? <>
-                                        <div
-                                          className="card mb-3"
-                                          style={{ maxHeight: 270 }}
-                                        >
-                                          <div className="row g-0">
-                                            <div className="col-md-2">
-                                              <img
-                                                src="https://mdbcdn.b-cdn.net/wp-content/uploads/2020/06/vertical.webp"
-                                                alt="Trendy Pants and Shoes"
-                                                className="img-fluid rounded-start"
-                                                style={{ maxHeight: 250 }}
-                                              />
-                                            </div>
-                                            <div className="col-md-8">
-                                              <div className="card-body">
-                                                <h5 className="card-title">
-                                                  {lesson.title}
-                                                </h5>
-                                                <p className="card-text">
-                                                  Type: {lesson.type}
-                                                </p>
-                                                <p className="card-text">
-                                                  <small className="text-muted">
-                                                    id:{lesson.lesson_id}
-                                                  </small>
-                                                </p>
-                                              </div>
-                                            </div>
-                                          </div>
-                                        </div></> : <></>}
-                                      {lesson.type === "event" ? <>
-                                        <div
-                                          className="card mb-3"
-                                          style={{ maxHeight: 270 }}
-                                        >
-                                          <div className="row g-0">
-                                            <div className="col-md-2">
-                                              <img
-                                                src="https://mdbcdn.b-cdn.net/wp-content/uploads/2020/06/vertical.webp"
-                                                alt="Trendy Pants and Shoes"
-                                                className="img-fluid rounded-start"
-                                                style={{ maxHeight: 250 }}
-                                              />
-                                            </div>
-                                            <div className="col-md-8">
-                                              <div className="card-body">
-                                                <h5 className="card-title">
-                                                  {lesson.title}
-                                                </h5>
-                                                <p className="card-text">
-                                                  Type: {lesson.type}
-                                                </p>
-                                                <p className="card-text">
-                                                  <small className="text-muted">
-                                                    id:{lesson.lesson_id}
-                                                  </small>
-                                                </p>
-                                              </div>
-                                            </div>
-                                          </div>
-                                        </div>
-                                      </> : <></>}
-                                      {lesson.type === "test" ? <>
-                                        <div>
+                                      {lesson.type === "payment" ? (
+                                        <>
                                           <div
                                             className="card mb-3"
                                             style={{ maxHeight: 270 }}
@@ -416,13 +364,94 @@ export default function Lessons() {
                                               </div>
                                             </div>
                                           </div>
-                                        </div>
-                                      </> : <></>}
+                                        </>
+                                      ) : (
+                                        <></>
+                                      )}
+                                      {lesson.type === "event" ? (
+                                        <>
+                                          <div
+                                            className="card mb-3"
+                                            style={{ maxHeight: 270 }}
+                                          >
+                                            <div className="row g-0">
+                                              <div className="col-md-2">
+                                                <img
+                                                  src="https://mdbcdn.b-cdn.net/wp-content/uploads/2020/06/vertical.webp"
+                                                  alt="Trendy Pants and Shoes"
+                                                  className="img-fluid rounded-start"
+                                                  style={{ maxHeight: 250 }}
+                                                />
+                                              </div>
+                                              <div className="col-md-8">
+                                                <div className="card-body">
+                                                  <h5 className="card-title">
+                                                    {lesson.title}
+                                                  </h5>
+                                                  <p className="card-text">
+                                                    Type: {lesson.type}
+                                                  </p>
+                                                  <p className="card-text">
+                                                    <small className="text-muted">
+                                                      id:{lesson.lesson_id}
+                                                    </small>
+                                                  </p>
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </>
+                                      ) : (
+                                        <></>
+                                      )}
+                                      {lesson.type === "test" ? (
+                                        <>
+                                          <div>
+                                            <div
+                                              className="card mb-3"
+                                              style={{ maxHeight: 270 }}
+                                            >
+                                              <div className="row g-0">
+                                                <div className="col-md-2">
+                                                  <img
+                                                    src="https://mdbcdn.b-cdn.net/wp-content/uploads/2020/06/vertical.webp"
+                                                    alt="Trendy Pants and Shoes"
+                                                    className="img-fluid rounded-start"
+                                                    style={{ maxHeight: 250 }}
+                                                  />
+                                                </div>
+                                                <div className="col-md-8">
+                                                  <div className="card-body">
+                                                    <h5 className="card-title">
+                                                      {lesson.title}
+                                                    </h5>
+                                                    <p className="card-text">
+                                                      Type: {lesson.type}
+                                                    </p>
+                                                    <p className="card-text">
+                                                      <small className="text-muted">
+                                                        id:{lesson.lesson_id}
+                                                      </small>
+                                                    </p>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </>
+                                      ) : (
+                                        <></>
+                                      )}
                                     </div>
-                                    <button className="btn btn-danger" onClick={(e)=>{
-                                      e.preventDefault();
-                                      deleteLesson(lesson.lesson_id)
-                                    }}>Delete Lesson</button>
+                                    <button
+                                      className="btn btn-danger"
+                                      onClick={(e) => {
+                                        e.preventDefault();
+                                        deleteLesson(lesson.lesson_id);
+                                      }}
+                                    >
+                                      Delete Lesson
+                                    </button>
                                   </li>
                                 </Link>
                               )}
@@ -439,8 +468,8 @@ export default function Lessons() {
                 <>
                   <Loader />
                 </>
-              )}              </div>
-
+              )}{" "}
+            </div>
           </section>
         </div>
       </div>

@@ -43,7 +43,7 @@ export default function Events() {
             spinner: false,
             events: data.data,
           });
-        } else if (data.message === "Token is not valid please login again") {
+        } else if (data.message === "token is not valid please login") {
           SnackBar("Token is not valid please login again");
           window.location.href = "/login";
         } else {
@@ -99,7 +99,7 @@ export default function Events() {
         if (data.success) {
           SnackBar("Event Added Successfully");
           getEvents();
-        } else if (data.message === "Token is not valid please login again") {
+        } else if (data.message === "token is not valid please login") {
           SnackBar("Token is not valid please login again");
           window.location.href = "/login";
         } else {
@@ -133,7 +133,7 @@ export default function Events() {
         if (data.success) {
           SnackBar("Event Deleted Successfully");
           getEvents();
-        } else if (data.message === "Token is not valid please login again") {
+        } else if (data.message === "token is not valid please login") {
           SnackBar("Token is not valid please login again!");
           window.location.href = "/login";
         } else {

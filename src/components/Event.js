@@ -9,6 +9,7 @@ export default function Event(props) {
   let { unit } = useLocation().state;
 
   let [state, setState] = React.useState({
+    isAddButtonDisabled: false,
     spinner: true,
     event: {
       prerequisite: {
@@ -18,7 +19,7 @@ export default function Event(props) {
       admin_id: StorageHelper.get("admin_id"),
       type: "event",
       events: [],
-      completion:"auto"
+      completion: "auto",
     },
     lessons: props.lessons,
     events: [],
@@ -43,14 +44,13 @@ export default function Event(props) {
       });
       try {
         data = await response.json();
-        console.log(data);
         if (data.success) {
           setState({
             ...state,
             spinner: false,
             events: data.data,
           });
-        } else if (data.message === "Token is not valid please login again") {
+        } else if (data.message === "token is not valid please login") {
           SnackBar("Token is not valid please login again");
           window.location.href = "/login";
         } else {
@@ -75,66 +75,65 @@ export default function Event(props) {
       SnackBar("Error", 1500, "OK");
     }
   };
-  let prerequisiteItemClick = (item) => {
-    setState({
-      ...state,
-      event: {
-        ...state.event,
-        prerequisite: { ...state.event.prerequisite, on: item._id },
-      },
-    });
-  };
-  let addTestLesson = async() => {
-    if(state.event.title ===undefined ||
-      state.event.events.length===0||
-      state.event.prerequisite.has_prerequisite){
-        if(state.event.prerequisite.has_prerequisite){
-          if(state.event.prerequisite.on==undefined || state.event.prerequisite.time==undefined||state.event.prerequisite.message==""){
-            SnackBar("Please select all the fields");
-            return;
-          }
-        }else{
-          SnackBar("Please select all the fields");
-          return;
-        }
 
-        
-      }
-      let data,response;
-      // console.log(state.event);
+  /**
+   * 
+   * @param {*} item prerequisite click handler
+   */
+  // let prerequisiteItemClick = (item) => {
+  //   setState({
+  //     ...state,
+  //     event: {
+  //       ...state.event,
+  //       prerequisite: { ...state.event.prerequisite, on: item._id },
+  //     },
+  //   });
+  // };
+  let addTestLesson = async () => {
+    if (
+      state.event.title === undefined ||
+      state.event.events.length === 0 ||
+      state.event.prerequisite.has_prerequisite
+    ) {
+        SnackBar("Please select all the fields");
+        return;
+      
+    }
+    setState({ ...state, isAddButtonDisabled: true });
+    let data, response;
+    try {
+      response = await fetch(LinkHelper.getLink() + "admin/lesson/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: "Bearer " + StorageHelper.get("token"),
+        },
+        body: JSON.stringify(state.event),
+      });
       try {
-        response = await fetch(LinkHelper.getLink() + "admin/lesson/create", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            authorization: "Bearer " + StorageHelper.get("token"),
-          },
-          body: JSON.stringify(state.event),
-        });
-        try {
-          data = await response.json();
-          console.log(data);
-          if (data.success) {
-            SnackBar("Event added successfully");
-            window.location.href = "/course";
-          } else if (data.message === "Token is not valid please login again") {
-            SnackBar("Token is not valid please login again");
-            window.location.href = "/login";
-          } else {
-            SnackBar("Something went wrong");
-            setState({
-              ...state,
-              spinner: false, 
-              isError: true,
-            });
-          }
-        } catch (err) {
-          SnackBar("Error", 1500, "OK");
+        data = await response.json();
+        if (data.success) {
+          SnackBar("Event added successfully");
+          window.location.href = "/course";
+        } else if (data.message === "token is not valid please login") {
+          SnackBar("Token is not valid please login again");
+          window.location.href = "/login";
+        } else {
+          SnackBar("Something went wrong");
+          setState({
+            ...state,
+            spinner: false,
+            isError: true,
+          });
         }
-      } catch (error) {
-        console.log(error);
+      } catch (err) {
         SnackBar("Error", 1500, "OK");
       }
+    } catch (error) {
+      console.log(error);
+      SnackBar("Error", 1500, "OK");
+    }
+    setState({ ...state, isAddButtonDisabled: false });
 
   };
   return (
@@ -142,14 +141,14 @@ export default function Event(props) {
       {!state.spinner ? (
         <>
           <button
-            className="btn btn-success btn-sm"
+            className="btn btn-success btn-sm container-fluid my-4"
             type="button"
             aria-expanded="false"
             onClick={() => {
               window.location.href = "/events";
             }}
           >
-            Add Event
+            Add Events
           </button>
           <h4>Add Events to lessons</h4>
           <div className="form-floating mb-3">
@@ -168,7 +167,7 @@ export default function Event(props) {
             <label htmlFor="floatingInput">Title</label>
           </div>
           <div className="completetion-type-form">
-            <div className="form-check me-2">
+            {/* <div className="form-check me-2">
               <input
                 className="form-check-input"
                 type="radio"
@@ -202,9 +201,9 @@ export default function Event(props) {
               <label className="form-check-label" htmlFor="flexRadioDefault2">
                 Completion Auto
               </label>
-            </div>
+            </div> */}
             <div className="form-check form-switch">
-              <input
+              {/* <input
                 className="form-check-input"
                 type="checkbox"
                 role="switch"
@@ -230,8 +229,8 @@ export default function Event(props) {
                 checked
               >
                 Has Pre-requisites
-              </label>
-              <div className="prerequisites">
+              </label> */}
+              {/* <div className="prerequisites">
                 {state.event.prerequisite.has_prerequisite ? (
                   <>
                     <>
@@ -328,63 +327,84 @@ export default function Event(props) {
                 ) : (
                   <></>
                 )}
-              </div>
-              <div className="dropdown">
-                <button
-                  className="btn btn-primary dropdown-toggle"
-                  type="button"
-                  id="dropdownMenuButton"
-                  data-mdb-toggle="dropdown"
-                  aria-expanded="false"
-                >
-                  Add Events
-                </button>
+              </div> */}
+            </div>
+            <div className="dropdown">
+              <button
+                className="btn btn-primary dropdown-toggle container-fluid"
+                type="button"
+                id="dropdownMenuButton"
+                data-mdb-toggle="dropdown"
+                aria-expanded="false"
+              >
+                Add Events
+              </button>
 
-                <ul
-                  className="dropdown-menu"
-                  aria-labelledby="dropdownMenuButton"
-                >
-                  {state.events.map((event, index) => {
-                    return (
-                      <li
-                        className="dropdown-item"
-                        key={index}
-                        onClick={(e) => {
-                          setState({...state, event: {...state.event, events: [...state.event.events, event]}})
-                        }}
-                      >
-                        {event.title}
-                        
-                      </li>
-                    );
-                  })}
-                </ul>
-              </div>
-              <ul className="list-group list-group-light">
-                {state.event.events.map((event, index) => {
+              <ul
+                className="dropdown-menu"
+                aria-labelledby="dropdownMenuButton"
+              >
+                {state.events.map((event, index) => {
                   return (
                     <li
-                      className="list-group-item"
+                      className="dropdown-item"
                       key={index}
                       onClick={(e) => {
+                        if (!state.event.events.includes(event)) {
+                          setState({
+                            ...state,
+                            event: {
+                              ...state.event,
+                              events: [...state.event.events, event],
+                            },
+                          });
+                        } else {
+                          SnackBar("Event Already Added", 5000, "OK");
+                        }
                       }}
                     >
                       {event.title}
-                      <button className="btn btn-danger btn-sm mx-4" onClick={(e) => {
-                          setState({...state, event: {...state.event, events: state.event.events.filter((item) => item !== event)}})
-                        } }>Delete</button>
                     </li>
                   );
                 })}
               </ul>
-
-              <button
-                className="btn btn-primary  btn-lg my-2"
-                onClick={addTestLesson}
-              >
-                Add Lesson
-              </button>
             </div>
+            <ul className="list-group list-group-light my-4">
+              {state.event.events.map((event, index) => {
+                return (
+                  <li
+                    className="list-group-item"
+                    key={index}
+                    onClick={(e) => {}}
+                  >
+                    {event.title}
+                    <button
+                      className="btn btn-danger btn-sm mx-4"
+                      onClick={(e) => {
+                        setState({
+                          ...state,
+                          event: {
+                            ...state.event,
+                            events: state.event.events.filter(
+                              (item) => item !== event
+                            ),
+                          },
+                        });
+                      }}
+                    >
+                      Delete
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+
+            <button
+              className="btn btn-primary btn-lg my-2 container-fluid"
+              onClick={addTestLesson}
+            >
+              Add Lesson
+            </button>
           </div>
         </>
       ) : (

@@ -38,7 +38,7 @@ export default function StudentProfile() {
             student: data.data,
             user: data.data.user
           });
-        } else if (data.message === "Token is not valid please login again") {
+        } else if (data.message === "token is not valid please login") {
           SnackBar("Token is not valid please login again");
           window.location.href = "/login";
         } else {

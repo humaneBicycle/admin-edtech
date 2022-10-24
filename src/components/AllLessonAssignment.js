@@ -1,30 +1,29 @@
-import React, { useState } from 'react'
-import { useLocation } from 'react-router-dom'
-import StorageHelper from '../utils/StorageHelper';
-import LinkHelper from '../utils/LinkHelper';
+import React, { useState } from "react";
+import { useLocation } from "react-router-dom";
+import StorageHelper from "../utils/StorageHelper";
+import LinkHelper from "../utils/LinkHelper";
 import Loader from "../components/Loader";
 import SnackBar from "../components/snackbar";
 
 export default function AllLessonAsignment(props) {
-
-  let [hasPrerequisite, setHasPrerequisite] = useState(true);
+  // let [hasPrerequisite, setHasPrerequisite] = useState(true);
   let [spinner, setSpinner] = useState(false);
-  let lessons = props.lessons;
   let location = useLocation();
   let { unit } = location.state;
-
-
+  let [state,setState]=useState({
+    isAddButtonDisabled: false,
+  })
 
   let assignmentInit = {
     admin_id: StorageHelper.get("admin_id"),
     type: "assignment",
     unit_id: unit.unit_id,
     prerequisite: {
-      has_prerequisite: true,
+      has_prerequisite: false,
     },
     status: "pending",
-    completetion: "auto"
-  }
+    completetion: "auto",
+  };
   let [assignment, setAssignment] = useState(assignmentInit);
 
   let handleAssignmentChange = (mode, e) => {
@@ -34,74 +33,65 @@ export default function AllLessonAsignment(props) {
   };
 
   let uploadAssigment = async () => {
-    console.log(assignment)
-    if (assignment.title === undefined || assignment.body === undefined || assignment.sample === undefined || assignment.placeholder === undefined ||  assignment.prerequisite.has_prerequisite) {
-      if (assignment.prerequisite.has_prerequisite) {
-        if (
-          assignment.prerequisite.on === undefined ||
-          assignment.prerequisite.time === undefined ||
-          assignment.prerequisite.message === undefined
-        ) {
-          // alert("Please fill all the fields");
-          SnackBar("Please fill all the fields", 1000, "OK")
-          return;
-        }
-      } else {
-        SnackBar("Please fill all the fields", 1000, "OK")
-        // alert("Please fill all the fields");
-        return;
-      }
+    setState({...state,isAddButtonDisabled:true})
+    if (
+      assignment.title === undefined ||
+      assignment.body === undefined ||
+      assignment.sample === undefined ||
+      assignment.placeholder === undefined ||
+      assignment.completetion===undefined
+    ) {
+      SnackBar("Please fill all the fields", 3500, "OK");
+      return;
     }
-    setSpinner(true);
 
+    setSpinner(true);
 
     let response, data;
     try {
       response = await fetch(LinkHelper.getLink() + "/admin/lesson/create", {
         method: "POST",
         headers: {
-          "authorization": "Bearer " + StorageHelper.get("token"),
-          "Content-Type": "application/json"
+          authorization: "Bearer " + StorageHelper.get("token"),
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(assignment)
-      })
+        body: JSON.stringify(assignment),
+      });
       try {
-
         data = await response.json();
         if (data.success) {
           window.location.href = "/course";
         }
         setSpinner(false);
-
       } catch (err) {
         console.log(err);
         setSpinner(false);
-
       }
-
     } catch (err) {
       console.log(err);
       setSpinner(false);
-
     }
+    setState({...state,isAddButtonDisabled:false})
 
-  }
-  let prerequisiteItemClick = (e, lesson) => {
-    console.log(lesson);
-    setAssignment({
-      ...assignment,
-      prerequisite: { ...assignment.prerequisite, on: lesson._id },
-    });
-    console.log(assignment);
   };
+
+  /**
+   * 
+   * @param {*} e 
+   * @param {*} lesson prerequisite lesson. uncomment code to add automatically. added in backend schema
+   */
+  // let prerequisiteItemClick = (e, lesson) => {
+  //   console.log(lesson);
+  //   setAssignment({
+  //     ...assignment,
+  //     prerequisite: { ...assignment.prerequisite, on: lesson._id },
+  //   });
+  //   console.log(assignment);
+  // };
   return (
     <div>
       <div className="mb-3">
-        {spinner ? (
-          <Loader />
-        ) : (
-          <></>
-        )}
+        {spinner ? <Loader /> : <></>}
         <label htmlFor="exampleFormControlInput1" className="form-label">
           Title
         </label>
@@ -112,7 +102,6 @@ export default function AllLessonAsignment(props) {
             handleAssignmentChange("title", event);
           }}
         />
-
         <label htmlFor="exampleFormControlInput1" className="form-label">
           Sample
         </label>
@@ -133,7 +122,6 @@ export default function AllLessonAsignment(props) {
             handleAssignmentChange("placeholder", event);
           }}
         />
-        
         <label htmlFor="exampleFormControlTextarea1" className="form-label">
           Body
         </label>
@@ -147,7 +135,7 @@ export default function AllLessonAsignment(props) {
             handleAssignmentChange("body", event);
           }}
         />
-        <div className="d-flex align-items-center justify-content-start p-2 mb-2 flex-wrap">
+        {/* <div className="d-flex align-items-center justify-content-start p-2 mb-2 flex-wrap">
           <div className="form-check me-2">
             <input
               className="form-check-input"
@@ -205,9 +193,9 @@ export default function AllLessonAsignment(props) {
               Has Pre-requisites
             </label>
           </div>
-        </div> {hasPrerequisite ? (
+        </div> */}
+        {/* {hasPrerequisite ? (
           <>
-
             <div className="dropdown">
               <button
                 className="btn btn-primary btn-sm dropdown-toggle"
@@ -225,7 +213,8 @@ export default function AllLessonAsignment(props) {
                 {lessons.length !== 0 ? (
                   lessons.map((lesson) => {
                     return (
-                      <li className="dropdown-item"
+                      <li
+                        className="dropdown-item"
                         onClick={(e) => {
                           prerequisiteItemClick(e, lesson);
                         }}
@@ -241,7 +230,6 @@ export default function AllLessonAsignment(props) {
             </div>
             <div className="d-flex align-items-center justify-content-between p-2 mb-2 flex-wrap">
               <div className="form-floating me-2">
-
                 <input
                   id="inputPassword5"
                   className="form-control"
@@ -257,13 +245,10 @@ export default function AllLessonAsignment(props) {
                       },
                     });
                   }}
-                /><label htmlFor="inputPassword5">
-                  After Time in Seconds
-                </label>
+                />
+                <label htmlFor="inputPassword5">After Time in Seconds</label>
               </div>
               <div className="form-floating me-2">
-
-
                 <input
                   id="inputPassword5"
                   className="form-control"
@@ -278,24 +263,18 @@ export default function AllLessonAsignment(props) {
                       },
                     });
                   }}
-                />                <label htmlFor="inputPassword5">
-                  Prerequisite Message
-                </label>
+                />{" "}
+                <label htmlFor="inputPassword5">Prerequisite Message</label>
               </div>
             </div>
-
           </>
         ) : (
           <></>
-        )}
+        )} */}
       </div>
-      <button className="btn btn-primary btn-lg my-2" onClick={uploadAssigment}>
+      <button className="btn btn-primary btn-lg my-2 container-fluid" onClick={uploadAssigment} disabled={state.isAddButtonDisabled}>
         Add Lesson
       </button>
-
-
-
     </div>
-
-  )
+  );
 }

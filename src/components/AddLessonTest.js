@@ -29,14 +29,13 @@ export default function AddLessonTest(props) {
       prerequisite: {
         has_prerequisite: false,
       },
+      completetion:"auto",
     },
     lessons: [],
   };
   let [state, setState] = useState(initState);
   let imageRef = useRef(null);
-  // console.log(state)
 
-  let prerequisiteItemClick = async (e) => { };
 
   let addQuestionToTest = () => {
     if (
@@ -53,7 +52,7 @@ export default function AddLessonTest(props) {
       state.activeQuestion.correct_option == undefined ||
       state.activeQuestion.correct_option == ""
     ) {
-      SnackBar("Please fill all the fields");
+      SnackBar("Please all proper fields to add question to test");
       return;
     }
     imageRef.current.value = "";
@@ -94,7 +93,7 @@ export default function AddLessonTest(props) {
       if (isLastUpload) {
         finalUpload();
       }
-      console.log("uploaded", name);
+
     } catch (error) {
       SnackBar("Error uploading image", 1000, "OK");
       setState({ ...state, spinner: false });
@@ -102,49 +101,36 @@ export default function AddLessonTest(props) {
   };
 
   let addTestLesson = async () => {
-    console.log(state);
+    // console.log(state,state.lesson.questions.length===0);
     if (
-      state.lesson.name === undefined ||
-      state.lesson.name === "" ||
+      state.lesson.title === undefined ||
+      state.lesson.title === "" ||
       state.lesson.time_allowed === undefined ||
       state.lesson.time_allowed === "" ||
-      state.lesson.completetion === undefined ||
-      state.lesson.completetion === "" ||
-      state.lesson.prerequisite.has_prerequisite
+      state.lesson.questions.length ===0
     ) {
-      if (state.lesson.prerequisite.has_prerequisite) {
-        if (
-          state.lesson.prerequisite.time === undefined ||
-          state.lesson.prerequisite.time === "" ||
-          state.lesson.prerequisite.message === undefined ||
-          state.lesson.prerequisite.message === ""
-        ) {
-          SnackBar("Please fill all the fields");
-
-          return;
-        }
-      }
-      if (state.lesson.questions.length == 0) {
-        SnackBar("Please add atleast one question");
+        SnackBar("Please fill all the fields");
         return;
-      }
+      
     }
 
     setState({ ...state, spinner: true });
     for (let i = 0; i < state.lesson.questions.length; i++) {
+      if(state.lesson.questions[i].image !== undefined){
       uploadImageToS3(
         state.lesson.questions[i].image_name,
         state.lesson.questions[i].image
-      );
-      if (i === state.lesson.questions.length - 1) {
-        finalUpload();
+      )
+      }else{
+        console.log("question: ", state.lesson.questions[i] , "does not have image");
       }
+      
+      
     }
+    finalUpload();
   };
 
-  let finalUpload = async () => {
-    console.log("sending req");
-
+  let finalUpload = async () => { 
     let response, data;
     try {
       response = await fetch(LinkHelper.getLink() + "admin/lesson/create", {
@@ -157,13 +143,12 @@ export default function AddLessonTest(props) {
       });
       try {
         data = await response.json();
-        console.log(data);
+
         if (data.success) {
           SnackBar("success", 1500);
           setState({ ...initState, spinner: false, lesson: { ...state.lesson, questions: [] } });
         } else {
           SnackBar("error ", data.message);
-          console.log(data);
           setState({ ...state, spinner: false });
         }
       } catch (err) {
@@ -185,7 +170,7 @@ export default function AddLessonTest(props) {
         <>
           <div className="mb-3">
             <label htmlFor="exampleFormControlInput1" className="form-label">
-              Title
+              Test Title
             </label>
             <input
               value={state.lesson.title}
@@ -201,7 +186,7 @@ export default function AddLessonTest(props) {
               }}
             />
             <label htmlFor="exampleFormControlInput1" className="form-label">
-              Time Allowerd in seconds
+              Time Allowerd in seconds for the Test
             </label>
             <input
               value={state.lesson.time_allowed}
@@ -217,6 +202,10 @@ export default function AddLessonTest(props) {
                 });
               }}
             />
+            <div className="border my-4 mx-2 rounded p-2">
+              <div className="alert alert-primary">
+                Add questions one by one. Once done, click on add lesson button to add the lesson.
+              </div>
             <label htmlFor="exampleFormControlInput1" className="form-label">
               Question
             </label>
@@ -340,7 +329,7 @@ export default function AddLessonTest(props) {
 
             <div className="dropdown">
               <button
-                className="btn btn-primary dropdown-toggle"
+                className="btn btn-primary dropdown-toggle my-2"
                 type="button"
                 id="dropdownMenuButton"
                 data-mdb-toggle="dropdown"
@@ -358,22 +347,41 @@ export default function AddLessonTest(props) {
                 <li className="dropdown-item" onClick={() => { setState({ ...state, activeQuestion: { ...state.activeQuestion, correct_option: "d" } }) }}>d</li>
               </ul>
             </div>
-
             <button
-              className="btn btn-success  btn-lg my-2"
+              className="btn btn-success  btn-lg my-2 container-fluid"
               onClick={addQuestionToTest}
             >
               Add Question
             </button>
+            </div>
 
-            <ul class="list-group">
+
+            <ul className="list-group mx-1">
               {state.lesson.questions.map((question, index) => {
                 return (
-                  <>
-                    <li key={index} className="list-group-item">
+                  <div className="row mx-2 border rounded" key={index}>
+                  
+                    <h3 className="col-9 mt-2">
                       Question {index + 1 + ": " + question.question}
+                    </h3>
+                    <div>
+                      Option A: {question.options.a}
+                    </div>
+                    <div>
+                      Option B: {question.options.b}
+                    </div>
+                    <div>
+                      Option C: {question.options.c}
+                    </div>
+                    <div>
+                      Option D: {question.options.d}
+                    </div>
+                    <h3>
+                      Correct Option: {question.correct_option}
+                    </h3>
                       <button
-                        className="btn btn-danger"
+
+                        className="btn btn-danger mx-1 my-2 container-fluid"
                         onClick={() => {
                           setState({
                             ...state,
@@ -388,13 +396,12 @@ export default function AddLessonTest(props) {
                       >
                         Remove
                       </button>
-                    </li>
-                  </>
+                  </div>
                 );
               })}
             </ul>
 
-            <div className="d-flex align-items-center justify-content-start p-2 mb-2 flex-wrap">
+            {/* <div className="d-flex align-items-center justify-content-start p-2 mb-2 flex-wrap">
               <div className="form-check me-2">
                 <input
                   className="form-check-input"
@@ -555,10 +562,10 @@ export default function AddLessonTest(props) {
                   )}
                 </div>
               </div>
-            </div>
+            </div> */}
 
             <button
-              className="btn btn-primary  btn-lg my-2"
+              className="btn btn-primary btn-lg my-2 container-fluid"
               onClick={addTestLesson}
             >
               Add Lesson

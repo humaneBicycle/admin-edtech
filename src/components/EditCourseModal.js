@@ -2,28 +2,17 @@ import Navbar from "./Navbar";
 import LinkHelper from "../utils/LinkHelper";
 import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
-import { PutObjectCommand } from "@aws-sdk/client-s3";
-import { s3Client } from "../libs/s3Clients"; // Helper function that creates an Amazon S3 service client module.
-import S3FileUpload from 'react-s3';
 import StorageHelper from "../utils/StorageHelper";
-import Loader from "../components/Loader";
 import "../pages/classes.css";
-// import SnackBar from "../components/snackbar";
 import Header from "../components/Header";
-const config = {
-  bucketName: 'quasar-edtech',
-  dirName: 'photos', /* optional */
-  region: 'eu-east-1',
-  accessKeyId: 'AKIA5PW5INIXZIDSBRTU',
-  secretAccessKey: '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',
-}
-
-var videoFile;
+import SnackBar from "./snackbar";
 
 export default function EditCourseModal() {
 
   let [activeCourse, setActiveCourse] = useState({});
-
+  let [state, setState]= useState({
+    isUpdateButtonDisabled: false,
+  })
   const location = useLocation();
   const { course } = location.state;
   activeCourse = course;
@@ -40,10 +29,36 @@ export default function EditCourseModal() {
     activeCourse[name] = val;
     setActiveCourse({ ...activeCourse, name: val });
   }
-  function getVideoFile(e) {
-    const files = Array.from(e.target.files);
-    videoFile = files[0];
-    console.log(videoFile);
+  async function updateCourse(e, newCourse) {
+    e.preventDefault();
+    let response, data;
+    newCourse["admin_id"] = StorageHelper.get("admin_id");
+  
+    try {
+      response = await fetch(LinkHelper.getLink() + "admin/updateCourse", {
+        method: "PUT",
+        headers: {
+          "content-type": "application/json",
+          authorization: "Bearer " + StorageHelper.get("token"),
+        },
+        body: JSON.stringify(newCourse),
+      });
+      try {
+        data = await response.json();
+        console.log(data);
+        if (data.success) {
+          SnackBar("Course Updated Successfully",3500, "OK");
+        } else {
+          SnackBar("Error Updating Course",3500, "OK");
+        }
+      } catch (err) {
+        console.log("Error updating course " + data.toString());
+      }
+    } catch (err) {
+      console.log("Error updating course ");
+    }
+    setState({...state, isUpdateButtonDisabled: false})
+    
   }
 
   return (
@@ -57,9 +72,8 @@ export default function EditCourseModal() {
         <div className="MainInnerContainer">
           <div className="Section">
             <div className="SectionHeader pt-3">
-              <h2 className="title">Edit Course :-</h2>
 
-            </div>
+            
             <div className="SectionBody">
 
               <div className="form-floating mb-3">
@@ -86,20 +100,7 @@ export default function EditCourseModal() {
                 />
                 <label htmlFor="floatingInput">Quote</label>
               </div>
-              <div className="form-floating mb-3">
-                <input
-                  className="form-control"
-                  id="floatingInput"
-                  placeholder="name@example.com"
-                  onChange={(event) => {
-                    updateUI(event, "video_url");
-                    getVideoFile(event);
-                  }}
-                  type="file"
-                  accept="video/*"
-                />
-                <label htmlFor="floatingInput">Video</label>
-              </div>
+              
               <div className="form-floating mb-3">
                 <input
                   className="form-control"
@@ -148,7 +149,7 @@ export default function EditCourseModal() {
                 <label htmlFor="floatingInput">Description</label>
               </div>
               <div className="d-flex align-items-center justify-content-start p-2 mb-4 flex-wrap">
-                <div className="form-check me-2">
+                {/* <div className="form-check me-2">
                   <input
                     className="form-check-input"
                     type="radio"
@@ -184,12 +185,13 @@ export default function EditCourseModal() {
                   >
                     Free(price will be 0)
                   </label>
-                </div>
-                <div className="w-100 mt-4">
+                </div> */}
+                <div className="w-100">
                   <button
                     type="button"
                     className="btn btn-primary btn-lg"
                     onClick={(event) => {
+                      setState({...state,isUpdateButtonDisabled:true})
                       updateCourse(event, activeCourse);
                     }}
                   >
@@ -198,6 +200,8 @@ export default function EditCourseModal() {
                 </div>
 
               </div>
+
+            </div>
             </div>
           </div>
         </div>
@@ -206,35 +210,4 @@ export default function EditCourseModal() {
   );
 }
 
-async function updateCourse(e, newCourse) {
-  e.preventDefault();
-  console.log(newCourse);
-  var response, data;
 
-  S3FileUpload
-    .uploadFile(videoFile, config)
-    .then(data => console.log(data))
-    .catch(err => console.error(err))
-
-  // try {
-  //   response = await fetch(LinkHelper.getLink() + "admin/updateCourse", {
-  //     method: "PUT",
-  //     headers: {
-  //       "content-type": "application/json",
-  //     },
-  //     body: JSON.stringify(newCourse),
-  //   });
-  //   try {
-  //     data = await response.json();
-  //     if (data.success) {
-  //       alert("Course updated successfully " + data.toString());
-  //     } else {
-  //       alert("Error updating course " + data.toString());
-  //     }
-  //   } catch (err) {
-  //     alert("Error updating course " + data.toString());
-  //   }
-  // } catch (err) {
-  //   alert("Error updating course ");
-  // }
-}

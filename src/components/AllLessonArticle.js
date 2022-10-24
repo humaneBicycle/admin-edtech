@@ -9,62 +9,54 @@ export default function AllLessonArticle(props) {
   let location = useLocation();
   let { unit } = location.state;
   let [spinner, setSpinner] = useState(false);
+  let [state,setState]=useState({
+    isAddButtonDisabled: false,
+  })
+
   let articleInit = {
     admin_id: StorageHelper.get("admin_id"),
     type: "article",
     unit_id: unit.unit_id,
     prerequisite: {
-      has_prerequisite: true,
+      has_prerequisite: false,
     },
   };
-  let lessons = props.lessons;
-  // console.log(lessons);
 
   let [article, setArticle] = useState(articleInit);
-  console.log(article);
-  let [hasPrerequisite, setHasPrerequisite] = useState(true);
+  // let [hasPrerequisite, setHasPrerequisite] = useState(true);
 
   let handleArticleChange = (mode, e) => {
     let val = e.target.value;
     article[mode] = val;
     setArticle({ ...article });
   };
-
-  let prerequisiteItemClick = (e, lesson) => {
-    console.log(lesson);
-    setArticle({
-      ...article,
-      prerequisite: { ...article.prerequisite, on: lesson._id },
-    });
-    // console.log(article);
-  };
+  
+  /**
+   * 
+   * @param {*} e 
+   * @param {*} lesson prerequisite lesson. uncomment code to add automatically.
+   */
+  // let prerequisiteItemClick = (e, lesson) => {
+  //   console.log(lesson);
+  //   setArticle({
+  //     ...article,
+  //     prerequisite: { ...article.prerequisite, on: lesson._id },
+  //   });
+  // };
 
   let uploadArticle = async () => {
-    console.log("done", article);
+    // console.log("done", article);
+    setState({...state,isAddButtonDisabled:true})
     if (
       article.body === undefined ||
       article.head === undefined ||
-      article.title === undefined ||
-      article.prerequisite.has_prerequisite
+      article.title === undefined 
     ) {
-      if (article.prerequisite.has_prerequisite) {
-        if (
-          article.prerequisite.on === undefined ||
-          article.prerequisite.time === undefined ||
-          article.prerequisite.message === undefined
-        ) {
-          // alert("Please fill all the fields");
-          SnackBar("Please fill all the fields", 1000, "OK")
-          return;
-        }
-      } else {
-        // alert("Please fill all the fields");
         SnackBar("Please fill all the fields", 1000, "OK");
         return;
-      }
+      
     }
     setSpinner(true);
-    console.log(article);
     let response, data;
     try {
       response = await fetch(LinkHelper.getLink() + "admin/lesson/create", {
@@ -79,14 +71,13 @@ export default function AllLessonArticle(props) {
       try {
         data = await response.json();
         if (data.success) {
-          alert("Article Uploaded");
+          SnackBar("Article uploaded successfully", 3500, "OK");
           setSpinner(false);
           window.location.href = "/course";
         } else {
           throw new Error(data.message);
         }
       } catch (err){
-        // alert("Error");
         SnackBar("Error", 1000, "OK");
 
         console.log("error",err);
@@ -95,12 +86,13 @@ export default function AllLessonArticle(props) {
       }
     } catch (error) {
       console.log(error);
-      // alert("Error");
       SnackBar("Error", 1000, "OK");
 
       setSpinner(false);
 
     }
+    setState({...state,isAddButtonDisabled:false})
+
   };
 
   return (
@@ -149,7 +141,7 @@ export default function AllLessonArticle(props) {
               handleArticleChange("body", event);
             }}
           />
-          <div className="d-flex align-items-center justify-content-start p-2 mb-2 flex-wrap">
+          {/* <div className="d-flex align-items-center justify-content-start p-2 mb-2 flex-wrap">
             <div className="form-check me-2">
               <input
                 className="form-check-input"
@@ -206,10 +198,10 @@ export default function AllLessonArticle(props) {
                 Has Pre-requisites
               </label>
             </div>
-          </div>
+          </div> */}
           <div className="prerequisites">
 
-            {hasPrerequisite ? (
+            {/* {hasPrerequisite ? (
               <>
                 <>
                   <div className="dropdown">
@@ -292,10 +284,10 @@ export default function AllLessonArticle(props) {
               </>
             ) : (
               <></>
-            )}
+            )} */}
           </div>
 
-          <button className="btn btn-primary  btn-lg my-2" onClick={uploadArticle}>
+          <button className="btn btn-primary btn-lg my-2 container-fluid" onClick={uploadArticle} disabled={state.isAddButtonDisabled}>
             Add Lesson
           </button>
         </div>

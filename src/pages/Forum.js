@@ -14,7 +14,8 @@ let loadedPageAnswerG=1
 export default function Discussion() {
   let [state, setState] = useState({
     spinner: false,
-    loadedPageAnswer: 1
+    loadedPageAnswer: 1,
+    tags:[]
 
   })
   let [loadedPageQuestion, setLoadedPageQuestion] = useState(1);
@@ -26,6 +27,7 @@ export default function Discussion() {
   let [activeQuestionId, setActiveQuestionId] = useState(0);
   useEffect(() => {
     getQuestions();
+    getTags();
   }, []);
 
   // console.log(state)
@@ -60,7 +62,7 @@ export default function Discussion() {
           }
           setActiveQuestionId(data.data.questions[0]._id);
           getAnswers(data.data.questions[0]._id);
-        } else if (data.message === "Token is not valid please login again") {
+        } else if (data.message === "token is not valid please login") {
           SnackBar("Token is not valid please login again");
           window.location.href = "/login";
         } else {
@@ -82,6 +84,7 @@ export default function Discussion() {
     getAnswers(question._id);
     
   }
+  console.log(answers)
 
   let getAnswers = async (id) => {
     // console.log(id, loadedPageAnswerG );
@@ -108,7 +111,9 @@ export default function Discussion() {
       try {
         data = await response.json();
         if (data.success) {
-          answers.push(...data.data);
+          console.log("received data: ",data)
+          answers=[]
+          answers.push(...data.data)
           setIsAnswerLoaded(true);
           setState({ ...state, loadedPageAnswer: state.loadedPageAnswer + 1 });
 
@@ -118,9 +123,9 @@ export default function Discussion() {
         } else {
           throw new Error(data.message);
         }
-      } catch {
+      } catch (err){
         SnackBar("Error", 1500, "OK");
-        console.log("error");
+        console.log(err);
       }
     } catch (error) {
       console.log(error);
@@ -179,6 +184,37 @@ export default function Discussion() {
       SnackBar(err, 1500, "OK");
     }
   };
+  let getTags = async() => {
+    let response, data;
+    try {
+      response = await fetch(
+        LinkHelper.getLink() + "/admin/tags",
+        {
+          method: "POST",
+          headers: {
+            authorization: "Bearer " + StorageHelper.get("token"),
+
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            admin_id: StorageHelper.get("admin_id")
+          }),
+        }
+      );
+      try {
+        data = await response.json();
+        if (data.success) {
+          setState({...state, tags: data.data})
+        } else {
+          throw new Error(data.message);
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    }catch (err){
+      console.log(err);
+    }
+  }
   let deleteAnswer = async (question_id, answer_id, event) => {
     setState({ ...state, spinner: true })
 
@@ -208,7 +244,7 @@ export default function Discussion() {
           setState({ ...state, spinner: false })
 
           window.location.reload();
-        } else if (data.message === "Token is not valid please login again") {
+        } else if (data.message === "token is not valid please login") {
           SnackBar("Token is not valid please login again");
           window.location.href = "/login";
         } else {
@@ -243,6 +279,12 @@ export default function Discussion() {
           ) : (
             <></>
           )}
+          {state.tags.length>0?(
+            <>
+
+            </>
+          ):(<>
+          </>)}
           {isLoaded ? (
             <>
               <div className="FlexBoxRow FlexWrap">

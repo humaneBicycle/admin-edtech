@@ -13,7 +13,7 @@ import Loader from "../components/Loader";
 import "../pages/classes.css";
 import SnackBar from "../components/snackbar";
 import Header from "../components/Header";
-
+import {Link} from "react-router-dom";
 
 let credentials;
 
@@ -101,15 +101,16 @@ export default function AddLesson() {
           {isLoaded ? (<>
 
             <h2 className="card-title w-100 text-start  ms-5">Adding to: {unit.unit_name} </h2>
+            <div className="alert alert-primary">Add Lessons in Units From here. Change their order and edit them <Link to="/course/lessons" state={{unit}}>here</Link> They will be in that order when displayed in the app.</div>
 
             <section className="Section">
               <div className="SectionHeader">
 
 
-                <ul class="nav nav-tabs" id="ex1" role="tablist">
-                  <li class="nav-item" role="presentation">
+                <ul className="nav nav-tabs" id="ex1" role="tablist">
+                  <li className="nav-item" role="presentation">
                     <a
-                      class="nav-link active"
+                      className="nav-link active"
                       id="ex1-tab-1"
                       data-mdb-toggle="tab"
                       href="#ex1-tabs-1"
@@ -120,9 +121,9 @@ export default function AddLesson() {
                       Lesson Video
                     </a>
                   </li>
-                  <li class="nav-item" role="presentation">
+                  <li className="nav-item" role="presentation">
                     <a
-                      class="nav-link"
+                      className="nav-link"
                       id="ex1-tab-2"
                       data-mdb-toggle="tab"
                       href="#ex1-tabs-2"
@@ -133,9 +134,9 @@ export default function AddLesson() {
                       Lesson Article
                     </a>
                   </li>
-                  <li class="nav-item" role="presentation">
+                  <li className="nav-item" role="presentation">
                     <a
-                      class="nav-link"
+                      className="nav-link"
                       id="ex1-tab-3"
                       data-mdb-toggle="tab"
                       href="#ex1-tabs-3"
@@ -146,9 +147,9 @@ export default function AddLesson() {
                       Lesson Assignment
                     </a>
                   </li>
-                  <li class="nav-item" role="presentation">
+                  <li className="nav-item" role="presentation">
                     <a
-                      class="nav-link"
+                      className="nav-link"
                       id="ex1-tab-4"
                       data-mdb-toggle="tab"
                       href="#ex1-tabs-4"
@@ -159,9 +160,9 @@ export default function AddLesson() {
                       Events
                     </a>
                   </li>
-                  <li class="nav-item" role="presentation">
+                  <li className="nav-item" role="presentation">
                     <a
-                      class="nav-link"
+                      className="nav-link"
                       id="ex1-tab-5"
                       data-mdb-toggle="tab"
                       href="#ex1-tabs-5"
@@ -172,9 +173,9 @@ export default function AddLesson() {
                       Payment
                     </a>
                   </li>
-                  <li class="nav-item" role="presentation">
+                  <li className="nav-item" role="presentation">
                     <a
-                      class="nav-link"
+                      className="nav-link"
                       id="ex1-tab-6"
                       data-mdb-toggle="tab"
                       href="#ex1-tabs-6"
@@ -190,9 +191,9 @@ export default function AddLesson() {
               <div className="SectionBody">
 
                 {/* <!-- Tabs content --> */}
-                <div class="tab-content" id="ex1-content">
+                <div className="tab-content" id="ex1-content">
                   <div
-                    class="tab-pane fade show active"
+                    className="tab-pane fade show active"
                     id="ex1-tabs-1"
                     role="tabpanel"
                     aria-labelledby="ex1-tab-1"
@@ -200,7 +201,7 @@ export default function AddLesson() {
                     <AllLessonVideo lessons={lessons} awsCredentials={credentials} />
                   </div>
                   <div
-                    class="tab-pane fade"
+                    className="tab-pane fade"
                     id="ex1-tabs-2"
                     role="tabpanel"
                     aria-labelledby="ex1-tab-2"
@@ -208,7 +209,7 @@ export default function AddLesson() {
                     <AllLessonArticle lessons={lessons} />
                   </div>
                   <div
-                    class="tab-pane fade"
+                    className="tab-pane fade"
                     id="ex1-tabs-3"
                     role="tabpanel"
                     aria-labelledby="ex1-tab-3"
@@ -216,7 +217,7 @@ export default function AddLesson() {
                     <AllLessonAssignment lessons={lessons} />
                   </div>
                   <div
-                    class="tab-pane fade"
+                    className="tab-pane fade"
                     id="ex1-tabs-4"
                     role="tabpanel"
                     aria-labelledby="ex1-tab-4"
@@ -224,7 +225,7 @@ export default function AddLesson() {
                     <Event lessons={lessons} />
                   </div>
                   <div
-                    class="tab-pane fade"
+                    className="tab-pane fade"
                     id="ex1-tabs-5"
                     role="tabpanel"
                     aria-labelledby="ex1-tab-5"
@@ -232,7 +233,7 @@ export default function AddLesson() {
                     <Payment lessons={lessons} />
                   </div>
                   <div
-                    class="tab-pane fade"
+                    className="tab-pane fade"
                     id="ex1-tabs-6"
                     role="tabpanel"
                     aria-labelledby="ex1-tab-6"
