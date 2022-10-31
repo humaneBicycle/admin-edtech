@@ -72,6 +72,12 @@ export default function PersonalityTest() {
             state.tests.map((test, index) => {
               return (
                 <>
+                <Link
+                            to="/personality-test/add-questions"
+                            state={{test:test}}
+                            
+                            className="container-fluid"
+                          >
                   <div
                     key={index}
                     className="NotificationBlock card flex-row g-2 p-3 border"
@@ -81,18 +87,11 @@ export default function PersonalityTest() {
                       <h2 className="card-title">{test.title}</h2>
                       <p className="card-text">{test.message}</p>
                     </div>
-                    <div>
-                          <Link
-                            to="/personality-test/add-questions"
-                            state={{test:test}}
-                            
-                            className="goToNotifications btn btn-primary rounded-3 bg-primary text-white"
-                          >
-                            Add Questions
-                          </Link>
-                        </div>
+                    
                   </div>
+                  </Link>
                 </>
+                
               );
             })
           ) : (
