@@ -5,7 +5,7 @@ import MediaConvert from "aws-sdk/clients/mediaconvert";
 import LinkHelper from "../utils/LinkHelper";
 import { useLocation } from "react-router";
 import StorageHelper from "../utils/StorageHelper";
-import SnackBar from "../components/snackbar";
+import SnackBar from "./snackbar";
 
 let videoFile;
 let uid;

@@ -87,7 +87,6 @@ export default function Discussion() {
   console.log(answers)
 
   let getAnswers = async (id) => {
-    // console.log(id, loadedPageAnswerG );
     let response, data;
     let temp = JSON.stringify({
       question_id: id,
@@ -110,7 +109,12 @@ export default function Discussion() {
       console.log("json sent while request: ",temp)
       try {
         data = await response.json();
-        if (data.success) {
+        if(data.message==="No page found"){
+          answers=[]
+          console.log("no page found")
+          setIsAnswerLoaded(true);
+        }
+        if (data.success && data.message!=="No page found") {
           console.log("received data: ",data)
           answers=[]
           answers.push(...data.data)
@@ -120,17 +124,15 @@ export default function Discussion() {
           if (data.pages === loadedPageAnswerG) {
             setIsAllAnswerLoaded(true);
           }
-        } else {
-          throw new Error(data.message);
-        }
+
+        } 
       } catch (err){
-        SnackBar("Error", 1500, "OK");
+        // SnackBar(data.message, 1500, "OK");
         console.log(err);
       }
     } catch (error) {
-      console.log(error);
-      SnackBar("Error", 1500, "OK");
-      // alert("Error");
+      console.log(error)
+      SnackBar(data.message, 1500, "OK")
     }
   };
 
@@ -168,12 +170,8 @@ export default function Discussion() {
           throw new Error(data.message);
         }
       } catch (err) {
-        // alert("Error");
         SnackBar("Question deleted successfully", 1500, "OK");
-
         setState({ ...state, spinner: false })
-
-
         console.log("error");
       }
     } catch (err) {
@@ -453,7 +451,9 @@ export default function Discussion() {
                           >
                             Load More Answers
                           </button>
+                          
                         </div>
+                        
                       ) : (
                         <>
                           No answers found!

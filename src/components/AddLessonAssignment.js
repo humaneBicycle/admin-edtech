@@ -2,11 +2,10 @@ import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
 import StorageHelper from "../utils/StorageHelper";
 import LinkHelper from "../utils/LinkHelper";
-import Loader from "../components/Loader";
-import SnackBar from "../components/snackbar";
+import Loader from "./Loader";
+import SnackBar from "./snackbar";
 
-export default function AllLessonAsignment(props) {
-  // let [hasPrerequisite, setHasPrerequisite] = useState(true);
+export default function AllLessonAsignment() {
   let [spinner, setSpinner] = useState(false);
   let location = useLocation();
   let { unit } = location.state;
@@ -46,6 +45,7 @@ export default function AllLessonAsignment(props) {
     }
 
     setSpinner(true);
+    console.log(assignment)
 
     let response, data;
     try {
@@ -135,7 +135,7 @@ export default function AllLessonAsignment(props) {
             handleAssignmentChange("body", event);
           }}
         />
-        {/* <div className="d-flex align-items-center justify-content-start p-2 mb-2 flex-wrap">
+        <div className="d-flex align-items-center justify-content-start p-2 mb-2 flex-wrap">
           <div className="form-check me-2">
             <input
               className="form-check-input"
@@ -166,7 +166,7 @@ export default function AllLessonAsignment(props) {
             </label>
           </div>
 
-          <div className="form-check form-switch">
+          {/* <div className="form-check form-switch">
             <input
               className="form-check-input"
               type="checkbox"
@@ -192,8 +192,8 @@ export default function AllLessonAsignment(props) {
             >
               Has Pre-requisites
             </label>
-          </div>
-        </div> */}
+          </div> */}
+        </div>
         {/* {hasPrerequisite ? (
           <>
             <div className="dropdown">

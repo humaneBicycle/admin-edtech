@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import LinkHelper from "../utils/LinkHelper";
-import AddLessonTest from "../components/AddLessonTest";
-import AllLessonArticle from "../components/AllLessonArticle";
-import AllLessonVideo from "../components/AllLessonVideo";
-import AllLessonAssignment from "../components/AllLessonAssignment";
-import Event from "../components/Event";
-import Payment from "../components/Payment";
+import AddAdditionalLessonArticle from "../components/AddAdditionalLessonArticle";
+import AddAdditionalLessonVideo from "../components/AddAdditionalLessonVideo";
+import AddAdditionalLessonAssignment from "../components/AddAdditionalLessonAssignment";
+import AddAdditionalLessonTest from "../components/AddAdditionalLessonTest";
 import StorageHelper from "../utils/StorageHelper";
 import Loader from "../components/Loader";
 import "../pages/classes.css";
@@ -224,32 +222,8 @@ export default function AddAdditionalLesson() {
                             Lesson Assignment
                           </a>
                         </li>
-                        <li class="nav-item" role="presentation">
-                          <a
-                            class="nav-link"
-                            id="ex1-tab-4"
-                            data-mdb-toggle="tab"
-                            href="#ex1-tabs-4"
-                            role="tab"
-                            aria-controls="ex1-tabs-4"
-                            aria-selected="false"
-                          >
-                            Events
-                          </a>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                          <a
-                            class="nav-link"
-                            id="ex1-tab-5"
-                            data-mdb-toggle="tab"
-                            href="#ex1-tabs-5"
-                            role="tab"
-                            aria-controls="ex1-tabs-5"
-                            aria-selected="false"
-                          >
-                            Payment
-                          </a>
-                        </li>
+                        
+                        
                         <li class="nav-item" role="presentation">
                           <a
                             class="nav-link"
@@ -273,7 +247,7 @@ export default function AddAdditionalLesson() {
                           role="tabpanel"
                           aria-labelledby="ex1-tab-1"
                         >
-                          <AllLessonVideo
+                          <AddAdditionalLessonVideo
                             lessons={lessons}
                             awsCredentials={credentials}
                           />
@@ -284,7 +258,7 @@ export default function AddAdditionalLesson() {
                           role="tabpanel"
                           aria-labelledby="ex1-tab-2"
                         >
-                          <AllLessonArticle lessons={lessons} />
+                          <AddAdditionalLessonArticle lessons={lessons} />
                         </div>
                         <div
                           class="tab-pane fade"
@@ -292,31 +266,17 @@ export default function AddAdditionalLesson() {
                           role="tabpanel"
                           aria-labelledby="ex1-tab-3"
                         >
-                          <AllLessonAssignment lessons={lessons}  />
+                          <AddAdditionalLessonAssignment lessons={lessons}  />
                         </div>
-                        <div
-                          class="tab-pane fade"
-                          id="ex1-tabs-4"
-                          role="tabpanel"
-                          aria-labelledby="ex1-tab-4"
-                        >
-                          <Event lessons={lessons} />
-                        </div>
-                        <div
-                          class="tab-pane fade"
-                          id="ex1-tabs-5"
-                          role="tabpanel"
-                          aria-labelledby="ex1-tab-5"
-                        >
-                          <Payment lessons={lessons} />
-                        </div>
+                        
+                        
                         <div
                           class="tab-pane fade"
                           id="ex1-tabs-6"
                           role="tabpanel"
                           aria-labelledby="ex1-tab-6"
                         >
-                          <AddLessonTest
+                          <AddAdditionalLessonTest
                             lessons={lessons}
                             awsCredentials={credentials}
                           />

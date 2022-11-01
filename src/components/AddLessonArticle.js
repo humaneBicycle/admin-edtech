@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
 import LinkHelper from "../utils/LinkHelper";
 import StorageHelper from "../utils/StorageHelper";
-import Loader from "../components/Loader";
-import SnackBar from "../components/snackbar";
+import Loader from "./Loader";
+import SnackBar from "./snackbar";
 
 export default function AllLessonArticle(props) {
   let location = useLocation();

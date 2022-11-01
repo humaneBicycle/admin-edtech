@@ -29,6 +29,7 @@ import Payments from "./pages/Payments";
 import AddAdditionalUnit from "./pages/AddAdditionalLesson";
 import PersonalityTest from "./pages/PersonalityTest";
 import PersonalityTestAddQuestions from "./pages/PersonalityTestAddQuestions";
+import BlockedDeviceApprovals from "./pages/BlockedDeviceApprovals";
 
 export const Title = "Admin Panel";
 document.title = "Admin Panel";
@@ -44,6 +45,7 @@ root.render(
       <Route exact element={<PrivateRoute />}>
         <Route exact path="/" element={<App />} />
         <Route path="/students" element={<Students />} />
+        <Route path="/students/change-device-approvals" element={<BlockedDeviceApprovals />} />
         <Route path="/students/profile" element={<StudentProfile />} />
         <Route path="/students/blocked-users" element={<BlockedUsers />} />
         <Route path="/events" element={<Events />} />
