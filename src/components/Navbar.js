@@ -2,7 +2,7 @@ import React from "react";
 import "../pages/classes.css";
 import { Link } from "react-router-dom";
 import StorageHelper from "../utils/StorageHelper";
-import logo from "../images/logo.svg";
+// import logo from "../images/logo.svg";
 import { useRef } from "react";
 
 export default function Navbar() {
@@ -33,12 +33,12 @@ export default function Navbar() {
         <div className="sideMenuInner">
           <div className="sideMenuHeader">
 
-            <Link to="/">
-              <img
+            <Link to="/" >
+              {/* <img
                 src={logo}
                 alt="admin"
-              />
-
+              /> */}
+              EdTech
             </Link>
           </div>
           <ul className="sideMenuLinkList">

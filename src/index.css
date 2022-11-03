@@ -688,10 +688,12 @@ a>svg {
 .card {
 
   transition: all .25s ease-in-out;
+  margin-bottom: 0.25rem;
+  border-radius: 0.25rem;
 }
 
 .card:hover {
-  transform: scale(1.05);
+  transform: scale(1.015);
 }
 
 /* Dark Mode */
@@ -758,6 +760,7 @@ a>svg {
 .darkMode .formInput {
   background-color: #171727 !important;
   border-color: #171727 !important;
+  color: #e9dddd;
 }
 
 .darkMode :is(h1,
@@ -806,12 +809,11 @@ a>svg {
 }
 
 .darkMode .form-label {
-
-  color: inherit;
+  color: #fbfbfbe1;
 }
 
 .form-label {
-  margin-block: 0.75rem 0.5rem;
+  /* margin-block: 0.75rem 0.5rem; */
   color: inherit;
 }
 
