@@ -203,9 +203,7 @@ export default function Notifications() {
             </div>
             <div class="modal-body">
               <div className="form-floating mb-4">
-                <label htmlFor="exampleInputEmail1" className="form-label">
-                  Notification Title
-                </label>
+
                 <input
                   type="email"
                   className="form-control"
@@ -221,12 +219,12 @@ export default function Notifications() {
                       },
                     });
                   }}
-                />
+                />  <label htmlFor="exampleInputEmail1" className="form-label">
+                  Notification Title
+                </label>
               </div>
               <div className="form-floating mb-4">
-                <label htmlFor="exampleInputPassword1" className="form-label">
-                  Notification Body
-                </label>
+
                 <input
                   className="form-control"
                   id="exampleInputPassword1"
@@ -240,12 +238,12 @@ export default function Notifications() {
                     });
                   }}
                   value={state.notification.description}
-                />
+                /> <label htmlFor="exampleInputPassword1" className="form-label">
+                  Notification Body
+                </label>
               </div>
               <div className="form-floating mb-4">
-                <label htmlFor="exampleInputPassword1" className="form-label">
-                  Clickable Link
-                </label>
+
                 <input
                   className="form-control"
                   id="exampleInputPassword1"
@@ -260,7 +258,9 @@ export default function Notifications() {
                     });
                   }}
                   value={state.notification.link}
-                />
+                /> <label htmlFor="exampleInputPassword1" className="form-label">
+                  Clickable Link
+                </label>
               </div>
             </div>
             <div class="modal-footer">

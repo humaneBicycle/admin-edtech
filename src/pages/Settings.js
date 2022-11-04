@@ -238,15 +238,15 @@ export default function Settings() {
             <>
               <div className="row flex-wrap g-3 w-100">
                 <div className="col-12 col-md-6 d-flex flex-column ">
-                  <div className="order-last order-md-first p-2 border-bottom pb-3 mb-4">
+                  <form onSubmit={(e) => e.preventDefault()} className="order-last order-md-first p-2 border-bottom pb-3 mb-4">
                     <h2 className="ms-3">Create New Admin</h2>
                     <div className="formElement">
-                      <label htmlFor="exampleInputEmail1" className="formLabel">
+                      <label htmlFor="exampleInputEmail2" className="formLabel">
                         Email
                       </label>
                       <input
                         className="formInput"
-                        id="exampleInputEmail1"
+                        id="exampleInputEmail2"
                         placeholder="Enter Unique Email Address"
                         value={state.new_admin.email}
                         onChange={(e) => {
@@ -273,6 +273,7 @@ export default function Settings() {
                         type="password"
                         placeholder="Enter your password..."
                         value={state.new_admin.password}
+                        autoComplete="true"
                         onChange={(e) => {
                           setState({
                             ...state,
@@ -296,14 +297,14 @@ export default function Settings() {
                         Create
                       </button>
                     </div>
-                  </div>
+                  </form>
                   <div className="order-last order-md-first p-2 border-bottom pb-3 mb-4" style={{ order: "2" }}>
 
 
                     <h2 className="ms-3">Dark Mode</h2>
 
 
-                    <input checked={document.body.classList.contains("darkMode") ? "true" : "false"} type="checkbox" id="switch" hidden className="darkModeToggle" onClick={(e) => darkModeToggle(e)} onLoad={(e) => {
+                    <input defaultChecked={document.body.classList.contains("darkMode") ? "true" : "false"} type="checkbox" id="switch" hidden className="darkModeToggle" onClick={(e) => darkModeToggle(e)} onLoad={(e) => {
                       if (localStorage.getItem("darkMode")) {
                         e.target.setAttribute("checked", "true");
                       }
@@ -311,7 +312,7 @@ export default function Settings() {
                     <div className="app" style={{ borderRadius: '10px' }}>
                       <div className="DarkModeButton">
                         <div className="content">
-                          <label for="switch">
+                          <label htmlFor="switch">
                             <div className="toggle"></div>
                             <div className="names">
                               <p className="light">Light</p>
@@ -351,14 +352,14 @@ export default function Settings() {
                       </div>
                       <div className="formElement">
                         <label
-                          htmlFor="exampleInputPassword1"
+                          htmlFor="exampleInputPassword2"
                           className="formLabel"
                         >
                           Access Secret Key
                         </label>
                         <input
                           className="formInput"
-                          id="exampleInputPassword1"
+                          id="exampleInputPassword2"
                           placeholder="Enter Access Secret Key"
                           value={state.credentials.secretAccessKey}
                           onChange={(e) => {
@@ -465,33 +466,32 @@ export default function Settings() {
                     if (admin._id === StorageHelper.get("admin_id")) {
                       return (
                         //id of logged in admin
-                        <>
-                          <div key={index} className="card border mb-3" >
-                            <div className="card-body p-3">
-                              <h3 className="card-title">{admin.email}</h3>
-                              <p className="card-text">Role:  {admin.role}  & <small className="AdminProfession">Created at {admin.created_at}</small></p>
 
-                            </div>
+                        <div key={index} className="card border mb-3" >
+                          <div className="card-body p-3">
+                            <h3 className="card-title">{admin.email}</h3>
+                            <p className="card-text">Role:  {admin.role}  & <small className="AdminProfession">Created at {admin.created_at}</small></p>
+
                           </div>
-                        </>
+                        </div>
+
                       );
                     } else {
                       return (
                         //id of all other admins
-                        <>
-                          <div key={index} className="card border mb-2" >
-                            <div className="card-body p-3">
-                              <h3 className="card-title">{admin.email} <span className="AdminDelete" onClick={(e) => { e.preventDefault(); deleteAdmin(admin._id) }}>
 
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" ><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
-                              </span></h3>
-                              <p className="card-text">Role:  {admin.role}  & <small className="AdminProfession">Created at {admin.created_at}</small></p>
+                        <div key={index} className="card border mb-2" >
+                          <div className="card-body p-3">
+                            <h3 className="card-title">{admin.email} <span className="AdminDelete" onClick={(e) => { e.preventDefault(); deleteAdmin(admin._id) }}>
 
-                            </div>
+                              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" ><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                            </span></h3>
+                            <p className="card-text">Role:  {admin.role}  & <small className="AdminProfession">Created at {admin.created_at}</small></p>
+
                           </div>
+                        </div>
 
-
-                        </>)
+                      )
 
 
                     }

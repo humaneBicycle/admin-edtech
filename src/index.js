@@ -58,7 +58,7 @@ root.render(
         <Route path="/course" element={<Courses />} />
         <Route path="/settings" element={<Settings />} />
         <Route path="/personality-test" element={<PersonalityTest />} />
-        <Route path="personality-test/add-questions" element={<PersonalityTestAddQuestions />} />
+        <Route path="/personality-test/add-questions" element={<PersonalityTestAddQuestions />} />
         <Route path="/course/editCourse" element={<EditCourseModal />} />
         <Route path="/course/add-unit" element={<AddUnit />} />
         <Route path="/course/edit-unit" element={<EditUnit />} />
