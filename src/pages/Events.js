@@ -16,7 +16,7 @@ export default function Events() {
     },
     spinner: true,
   });
-  
+
   useEffect(() => {
     getEvents();
   }, []);
@@ -76,7 +76,7 @@ export default function Events() {
       state.activeEvent.description === undefined ||
       state.activeEvent.type === undefined ||
       state.activeEvent.time.date_full === undefined ||
-      state.activeEvent.time.event_time === undefined||
+      state.activeEvent.time.event_time === undefined ||
       state.activeEvent.price === undefined
     ) {
       SnackBar("Please fill all the fields");
@@ -380,55 +380,111 @@ export default function Events() {
                   }}
                 />{" "}
                 <label htmlFor="inputPassword5" className="form-label">
-                  Time 
+                  Time
                 </label>
-                
-
               </div>
-              <div className="d-flex align-items-center justify-content-start p-2 mb-2 flex-wrap">
-                <div className="form-check m-2">
-                  <input
-                    className="form-check-input"
-                    type="radio"
-                    name="flexRadioDefault"
-                    id="flexRadioDefault1"
-                    checked={state.activeEvent.type === "online"}
-                    onChange={() => {
-                      setState({
-                        ...state,
-                        activeEvent: { ...state.activeEvent, type: "online" },
-                      });
-                    }}
-                  />
-                  <label
-                    className="form-check-label"
-                    htmlFor="flexRadioDefault1"
-                  >
-                    online
-                  </label>
-                </div>
-                <div className="form-check me-2">
-                  <input
-                    className="form-check-input"
-                    type="radio"
-                    name="flexRadioDefault"
-                    id="flexRadioDefault2"
-                    checked={state.activeEvent.type === "offline"}
-                    onChange={() => {
-                      setState({
-                        ...state,
-                        activeEvent: { ...state.activeEvent, type: "offline" },
-                      });
-                    }}
-                  />
-                  <label
-                    className="form-check-label"
-                    htmlFor="flexRadioDefault2"
-                  >
-                    offline
-                  </label>
-                </div>
+              <div class="form-check form-switch">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  role="switch"
+                  id="flexSwitchCheckDefault"
+                  checked={state.activeEvent.mode === "online" ? true : false}
+                  onChange={(event) => {
+                    setState({
+                      ...state,
+                      activeEvent: {
+                        ...state.activeEvent,
+                        mode: event.target.checked ? "online" : "offline",
+                      },
+                    });
+                  }}
+                />
+                <label class="form-check-label" for="flexSwitchCheckDefault">
+                  Online
+                </label>
               </div>
+              {state.activeEvent.mode === "online" ? (
+                <>
+                  <div className="form-floating m-2">
+                    <input
+                      id="inputPassword5"
+                      className="form-control"
+                      placeholder="Enter the Meet Link"
+                      value={state.activeEvent.meet_link}
+                      onChange={(event) => {
+                        setState({
+                          ...state,
+                          activeEvent: {
+                            ...state.activeEvent,
+                            meet_link: event.target.value,
+                          },
+                        });
+                      }}
+                    />
+                    <label htmlFor="inputPassword5" className="form-label">
+                      Enter the meet link
+                    </label>
+                  </div>
+                  <div className="form-floating m-2">
+                    <input
+                      id="inputPassword5"
+                      className="form-control"
+                      placeholder="API Key"
+                      value={state.activeEvent.sdk}
+                      onChange={(event) => {
+                        setState({...state,activeEvent:{...state.activeEvent,sdk:event.target.value}})
+                      }}
+                    />
+                    <label htmlFor="inputPassword5" className="form-label">
+                      SDK
+                    </label>
+                  </div>
+                  <div className="form-floating m-2">
+                    <input
+                      id="inputPassword5"
+                      className="form-control"
+                      placeholder="Secret key"
+                      value={state.activeEvent.key}
+                      onChange={(event) => {
+                        setState({...state,activeEvent:{...state.activeEvent,key:event.target.value}})
+                      }}
+                    />
+                    <label htmlFor="inputPassword5" className="form-label">
+                      Key
+                    </label>
+                  </div>
+                  <div className="form-floating m-2">
+                    <input
+                      className="form-control"
+                      placeholder="Secret key"
+                      value={state.activeEvent.id}
+                      onChange={(event) => {
+                        setState({...state,activeEvent:{...state.activeEvent,id:event.target.value}})
+                      }}
+                    />
+                    <label htmlFor="inputPassword5" className="form-label">
+                      ID
+                    </label>
+                  </div>
+                  <div className="form-floating m-2">
+                    <input
+                      className="form-control"
+                      placeholder="Password"
+                      value={state.activeEvent.pw}
+                      onChange={(event) => {
+                        setState({...state,activeEvent:{...state.activeEvent,pw:event.target.value}})
+                      }}
+                    />
+                    <label htmlFor="inputPassword5" className="form-label">
+                      Password
+                    </label>
+                  </div>
+                  
+                </>
+              ) : (
+                <></>
+              )}
             </div>
             <div class="modal-footer">
               <button
@@ -443,6 +499,7 @@ export default function Events() {
                 className="btn btn-primary"
                 onClick={(event) => {
                   // updateUI(event, "video_id");
+                  // console.log(state.activeEvent);
                   addEvent();
                 }}
               >

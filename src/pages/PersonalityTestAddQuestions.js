@@ -2,6 +2,9 @@ import React from "react";
 import Navbar from "../components/Navbar";
 import { useLocation } from "react-router-dom";
 import Header from "../components/Header";
+import SnackBar from "../components/snackbar";
+import LinkHelper from "../utils/LinkHelper";
+import StorageHelper from "../utils/StorageHelper";
 
 export default function PersonalityTestAddQuestions() {
   let { test } = useLocation().state;
@@ -9,6 +12,46 @@ export default function PersonalityTestAddQuestions() {
     spinner: true,
     test: test,
   });
+
+  let updateTest = async() => {
+    setState({ ...state, spinner: true });
+    let response,data
+    try{
+        response=await fetch(LinkHelper.getLink()+"admin/personality/test/update",{
+            method:"POST",
+            headers:{
+                "authorization":"Bearer "+StorageHelper.get("token"),
+                "Content-Type":"application/json",
+            },
+            body:JSON.stringify({
+                admin_id:StorageHelper.get("admin_id"),
+                test:state.test,
+            })
+        })
+        try{
+            data=await response.json();
+            if(data.success){
+                setState({...state,spinner:false})
+                SnackBar("Test updated successfully")
+            }
+            else if(data.message==="token is not valid please login"){
+                SnackBar("Token is not valid please login again");
+                window.location.href="/login";
+            }
+            else{
+                SnackBar("Something went wrong");
+            }
+        }
+        catch (e){
+            SnackBar("Something went wrong");
+            console.log(e)
+            
+        }
+    }catch(e){
+        SnackBar("Something went wrong");
+        console.log(e)
+    }
+  }
 
   return (
     <>
@@ -227,9 +270,10 @@ export default function PersonalityTestAddQuestions() {
             onClick={(e) => {
               e.preventDefault();
               console.log(state.test);
+              updateTest()
             }}
           >
-            Button
+            Update
           </button>
         </div>
       </div>

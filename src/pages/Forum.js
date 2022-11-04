@@ -7,17 +7,17 @@ import Loader from "../components/Loader";
 import "../pages/classes.css";
 import SnackBar from "../components/snackbar";
 import Header from "../components/Header";
+import { ScrollMenu, VisibilityContext } from "react-horizontal-scrolling-menu";
 
 let questions = [];
 let answers = [];
-let loadedPageAnswerG=1
+let loadedPageAnswerG = 1;
 export default function Discussion() {
   let [state, setState] = useState({
     spinner: false,
     loadedPageAnswer: 1,
-    tags:[]
-
-  })
+    tags: [],
+  });
   let [loadedPageQuestion, setLoadedPageQuestion] = useState(1);
   let [isLoaded, setIsLoaded] = useState(false);
   let [isAnswerLoaded, setIsAnswerLoaded] = useState(false);
@@ -26,18 +26,48 @@ export default function Discussion() {
   let [isAllAnswerLoaded, setIsAllAnswerLoaded] = useState(false);
   let [activeQuestionId, setActiveQuestionId] = useState(0);
   useEffect(() => {
-    getQuestions();
     getTags();
   }, []);
 
   // console.log(state)
 
+  // let getCategories = async () => {
+  //   let response, data;
+  //   try {
+  //     response = await fetch(LinkHelper.getLink() + "admin/tags", {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         authorization: "Bearer " + StorageHelper.get("token"),
+  //       },
+  //       body:{
+  //         admin_id:StorageHelper.get("admin_id"),
+  //       }
+  //     });
+  //     try {
+  //       data = await response.json();
+  //       console.log(data)
+  //       if (data.success) {
+  //         setState({ ...state, categories: data.categories });
+  //       }
+  //     } catch (err){
+  //       SnackBar("Something went wrong");
+  //     console.log(err)
+
+  //     }
+  //   } catch(err) {
+  //     SnackBar("Something went wrong");
+  //     console.log(err)
+  //   }
+
+  // }
   let getQuestions = async () => {
     let response, data;
     try {
       let json = {
         admin_id: StorageHelper.get("admin_id"),
         page: loadedPageQuestion,
+        tags: state.tags,
       };
       response = await fetch(
         LinkHelper.getLink() + "/admin/forum/getAllQuestion",
@@ -78,21 +108,20 @@ export default function Discussion() {
   };
 
   let handleQuestionClick = async (question, index) => {
-    loadedPageAnswerG=1
+    loadedPageAnswerG = 1;
     setActiveQuestionIndex(index);
     setIsAnswerLoaded(false);
     getAnswers(question._id);
-    
-  }
-  console.log(answers)
+  };
+  console.log(answers);
 
   let getAnswers = async (id) => {
     let response, data;
     let temp = JSON.stringify({
       question_id: id,
       admin_id: StorageHelper.get("admin_id"),
-      page: loadedPageAnswerG ,
-    })
+      page: loadedPageAnswerG,
+    });
     try {
       response = await fetch(
         LinkHelper.getLink() + "admin/forum/listOfAnswer",
@@ -103,41 +132,40 @@ export default function Discussion() {
 
             "Content-Type": "application/json",
           },
-          body: temp
+          body: temp,
         }
       );
-      console.log("json sent while request: ",temp)
+      console.log("json sent while request: ", temp);
       try {
         data = await response.json();
-        if(data.message==="No page found"){
-          answers=[]
-          console.log("no page found")
+        if (data.message === "No page found") {
+          answers = [];
+          console.log("no page found");
           setIsAnswerLoaded(true);
         }
-        if (data.success && data.message!=="No page found") {
-          console.log("received data: ",data)
-          answers=[]
-          answers.push(...data.data)
+        if (data.success && data.message !== "No page found") {
+          console.log("received data: ", data);
+          answers = [];
+          answers.push(...data.data);
           setIsAnswerLoaded(true);
           setState({ ...state, loadedPageAnswer: state.loadedPageAnswer + 1 });
 
           if (data.pages === loadedPageAnswerG) {
             setIsAllAnswerLoaded(true);
           }
-
-        } 
-      } catch (err){
+        }
+      } catch (err) {
         // SnackBar(data.message, 1500, "OK");
         console.log(err);
       }
     } catch (error) {
-      console.log(error)
-      SnackBar(data.message, 1500, "OK")
+      console.log(error);
+      SnackBar(data.message, 1500, "OK");
     }
   };
 
   let deleteQuestion = async (id, event) => {
-    setState({ ...state, spinner: true })
+    setState({ ...state, spinner: true });
     event.preventDefault();
     let response, data;
     try {
@@ -161,60 +189,60 @@ export default function Discussion() {
         if (data.success) {
           SnackBar("Question deleted successfully", 1500, "OK");
 
-          setState({ ...state, spinner: false })
+          setState({ ...state, spinner: false });
 
           window.location.reload();
         } else {
-          setState({ ...state, spinner: false })
+          setState({ ...state, spinner: false });
 
           throw new Error(data.message);
         }
       } catch (err) {
         SnackBar("Question deleted successfully", 1500, "OK");
-        setState({ ...state, spinner: false })
+        setState({ ...state, spinner: false });
         console.log("error");
       }
     } catch (err) {
-      setState({ ...state, spinner: false })
-
+      setState({ ...state, spinner: false });
 
       console.log(err);
       SnackBar(err, 1500, "OK");
     }
   };
-  let getTags = async() => {
+  console.log(state)
+
+  let getTags = async () => {
     let response, data;
     try {
-      response = await fetch(
-        LinkHelper.getLink() + "/admin/tags",
-        {
-          method: "POST",
-          headers: {
-            authorization: "Bearer " + StorageHelper.get("token"),
+      response = await fetch(LinkHelper.getLink() + "/admin/tags", {
+        method: "POST",
+        headers: {
+          authorization: "Bearer " + StorageHelper.get("token"),
 
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            admin_id: StorageHelper.get("admin_id")
-          }),
-        }
-      );
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          admin_id: StorageHelper.get("admin_id"),
+        }),
+      });
       try {
         data = await response.json();
+        console.log(data.data.tags);
         if (data.success) {
-          setState({...state, tags: data.data})
+          setState({ ...state, tags: data.data.tags });
+          getQuestions();
         } else {
           throw new Error(data.message);
         }
       } catch (err) {
         console.log(err);
       }
-    }catch (err){
+    } catch (err) {
       console.log(err);
     }
-  }
+  };
   let deleteAnswer = async (question_id, answer_id, event) => {
-    setState({ ...state, spinner: true })
+    setState({ ...state, spinner: true });
 
     let response, data;
     try {
@@ -239,25 +267,24 @@ export default function Discussion() {
         if (data.success) {
           SnackBar("Answer deleted successfully", 3500, "OK");
 
-          setState({ ...state, spinner: false })
+          setState({ ...state, spinner: false });
 
           window.location.reload();
         } else if (data.message === "token is not valid please login") {
           SnackBar("Token is not valid please login again");
           window.location.href = "/login";
         } else {
-          setState({ ...state, spinner: false })
+          setState({ ...state, spinner: false });
 
           throw new Error(data.message);
         }
       } catch (err) {
         SnackBar(err, 1500, "OK");
 
-        setState({ ...state, spinner: false })
-
+        setState({ ...state, spinner: false });
       }
     } catch (err) {
-      setState({ ...state, spinner: false })
+      setState({ ...state, spinner: false });
 
       SnackBar(err, 1500, "OK");
     }
@@ -270,25 +297,36 @@ export default function Discussion() {
         <Header PageTitle={"Forum "} />
 
         <div className="MainInnerContainer">
-                    {state.spinner ? (
+          {state.spinner ? (
             <>
               <Loader />
             </>
           ) : (
             <></>
           )}
-          {state.tags.length>0?(
-            <>
-
-            </>
-          ):(<>
-          </>)}
           {isLoaded ? (
             <>
               <div className="FlexBoxRow FlexWrap">
                 <div className="Flex50">
+                  {/* <ScrollMenu>
+                    {state.tags.map((tag, index) => {
+                      return (
+                        <div className="mx-2" itemId={index} key={index} onClick={(e)=>{
+
+                          if(state.tsgs.includes(tag)){
+                            setState({...state,tags:state.tags.filter((item)=>item!==tag)})
+                            }else{
+                            setState({...state,selectedTag:tag.tag_id})
+                          }
+                          getQuestions()
+                        }}>
+                          {tag}
+                        </div>
+                      );
+                    })}
+                  </ScrollMenu> */}
                   <h2 className="title">Questions</h2>
-                  
+
                   <div class="ListBlock">
                     {questions.map((question, index) => (
                       <>
@@ -297,7 +335,7 @@ export default function Discussion() {
                             className="ListItem active"
                             aria-current="true"
                             onClick={() => {
-                              setState({...state,loadedPageAnswer:1})
+                              setState({ ...state, loadedPageAnswer: 1 });
                               handleQuestionClick(question, index);
                             }}
                           >
@@ -308,6 +346,9 @@ export default function Discussion() {
                               <p>{question.body}</p>
                               <h6 className="ListItemSubtitle">
                                 {"Total Likes: " + question.total_likes}
+                              </h6>
+                              <h6 className="ListItemSubtitle">
+                                {"User Name: " + question.user_name}
                               </h6>
                             </div>
 
@@ -372,6 +413,9 @@ export default function Discussion() {
                               <p>{question.body}</p>
                               <h6 className="ListItemSubtitle">
                                 {"Total Likes: " + question.total_likes}
+                              </h6>
+                              <h6 className="ListItemSubtitle">
+                                {"User Name: " + question.user_name}
                               </h6>
                             </div>
                           </div>
@@ -442,7 +486,7 @@ export default function Discussion() {
                             className="actionButton"
                             onClick={() => {
                               if (!isAllAnswerLoaded) {
-                                loadedPageAnswerG++
+                                loadedPageAnswerG++;
                                 getAnswers(activeQuestionId);
                               } else {
                                 SnackBar("All answers are loaded", 1500, "OK");
@@ -451,9 +495,7 @@ export default function Discussion() {
                           >
                             Load More Answers
                           </button>
-                          
                         </div>
-                        
                       ) : (
                         <>
                           No answers found!
