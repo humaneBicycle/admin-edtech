@@ -306,7 +306,7 @@ export default function Discussion() {
           {isLoaded ? (
             <>
               <div className="row">
-                <div className="col-1">Tags:</div>
+                <h3 className="col-1 " >Tags:</h3>
                 <div className="col-9 ">
                   <ScrollMenu>
                     {tags.map((tag, index) => {

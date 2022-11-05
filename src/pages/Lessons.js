@@ -169,7 +169,9 @@ export default function Lessons() {
             <div className="SectionHeader p-3">
               <h1 className="ms-3">
                 Lessons{" "}
-                <span className=" h4 ms-3">In Unit: {unit.unit_name} </span>
+                <span className=" h4 ms-3">In Unit: {unit.unit_name} 
+                  <Link to="/course/add-lesson" className="btn btn-primary ms-3" state={{unit:unit}}>Add Lessons</Link>
+                </span>
               </h1>
             </div>
             {isLessonOrderChanged ? (
