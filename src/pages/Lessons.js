@@ -23,6 +23,9 @@ export default function Lessons() {
   let { unit } = location.state;
   lessonJsonToUpdate.unit_id = unit.unit_id;
   let [isLessonOrderChanged, setIsLessonOrderChanged] = React.useState(false);
+  let [state,setState]=React.useState({
+    isEmpty:false,
+  });
 
   useEffect(() => {
     getLessons();
@@ -44,11 +47,18 @@ export default function Lessons() {
       });
       try {
         data = await response.json();
+        console.log(data)
         if (data.success) {
           setLessons(data.data.lessons);
           setIsLoaded(true);
         } else {
-          SnackBar("Something Went Wrong", 3500, "OK");
+          if(data.message==="Cannot read properties of null (reading 'toObject')"){
+            setState({...state,isEmpty:true});
+            setIsLoaded(true);
+          }else{
+            SnackBar(data.message, 3500, "OK");
+
+          }
         }
       } catch (err) {
         console.log(err);
@@ -180,6 +190,10 @@ export default function Lessons() {
 
             <div className="SectionBody">
               {isLoaded ? (
+                state.isEmpty?(<>
+                  No Lessons Found
+                  </>):(<>
+                  
                 <DragDropContext onDragEnd={handleOnDragEvent}>
                   <Droppable droppableId="droppable">
                     {(provided) => (
@@ -464,11 +478,12 @@ export default function Lessons() {
                     )}
                   </Droppable>
                 </DragDropContext>
+                  </>)
               ) : (
                 <>
                   <Loader />
                 </>
-              )}{" "}
+              )}
             </div>
           </section>
         </div>

@@ -7,17 +7,20 @@ import Loader from "../components/Loader";
 import "../pages/classes.css";
 import SnackBar from "../components/snackbar";
 import Header from "../components/Header";
-import { ScrollMenu, VisibilityContext } from "react-horizontal-scrolling-menu";
+import { ScrollMenu } from "react-horizontal-scrolling-menu";
+// import { LeftArrow, RightArrow } from "../components/arrows";
+
 
 let questions = [];
 let answers = [];
 let loadedPageAnswerG = 1;
+let count=0;
 export default function Discussion() {
   let [state, setState] = useState({
     spinner: false,
     loadedPageAnswer: 1,
-    tags: [],
   });
+  let [tags,setTags] = useState([]);
   let [loadedPageQuestion, setLoadedPageQuestion] = useState(1);
   let [isLoaded, setIsLoaded] = useState(false);
   let [isAnswerLoaded, setIsAnswerLoaded] = useState(false);
@@ -29,45 +32,15 @@ export default function Discussion() {
     getTags();
   }, []);
 
-  // console.log(state)
+  console.log("count:",count++,state)
 
-  // let getCategories = async () => {
-  //   let response, data;
-  //   try {
-  //     response = await fetch(LinkHelper.getLink() + "admin/tags", {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         authorization: "Bearer " + StorageHelper.get("token"),
-  //       },
-  //       body:{
-  //         admin_id:StorageHelper.get("admin_id"),
-  //       }
-  //     });
-  //     try {
-  //       data = await response.json();
-  //       console.log(data)
-  //       if (data.success) {
-  //         setState({ ...state, categories: data.categories });
-  //       }
-  //     } catch (err){
-  //       SnackBar("Something went wrong");
-  //     console.log(err)
-
-  //     }
-  //   } catch(err) {
-  //     SnackBar("Something went wrong");
-  //     console.log(err)
-  //   }
-
-  // }
   let getQuestions = async () => {
     let response, data;
     try {
       let json = {
         admin_id: StorageHelper.get("admin_id"),
         page: loadedPageQuestion,
-        tags: state.tags,
+        tags: tags,
       };
       response = await fetch(
         LinkHelper.getLink() + "/admin/forum/getAllQuestion",
@@ -96,7 +69,7 @@ export default function Discussion() {
           SnackBar("Token is not valid please login again");
           window.location.href = "/login";
         } else {
-          SnackBar("Something went wrong");
+          SnackBar(data.message);
         }
       } catch {
         SnackBar("Error" + data.message, 1500, "OK");
@@ -113,7 +86,6 @@ export default function Discussion() {
     setIsAnswerLoaded(false);
     getAnswers(question._id);
   };
-  console.log(answers);
 
   let getAnswers = async (id) => {
     let response, data;
@@ -144,7 +116,6 @@ export default function Discussion() {
           setIsAnswerLoaded(true);
         }
         if (data.success && data.message !== "No page found") {
-          console.log("received data: ", data);
           answers = [];
           answers.push(...data.data);
           setIsAnswerLoaded(true);
@@ -155,7 +126,6 @@ export default function Discussion() {
           }
         }
       } catch (err) {
-        // SnackBar(data.message, 1500, "OK");
         console.log(err);
       }
     } catch (error) {
@@ -175,7 +145,6 @@ export default function Discussion() {
           method: "DELETE",
           headers: {
             authorization: "Bearer " + StorageHelper.get("token"),
-
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
@@ -198,23 +167,22 @@ export default function Discussion() {
           throw new Error(data.message);
         }
       } catch (err) {
-        SnackBar("Question deleted successfully", 1500, "OK");
+        SnackBar(err.message);
         setState({ ...state, spinner: false });
-        console.log("error");
+        console.log(err);
       }
     } catch (err) {
       setState({ ...state, spinner: false });
 
       console.log(err);
-      SnackBar(err, 1500, "OK");
+      SnackBar(err.message);
     }
   };
-  console.log(state)
 
   let getTags = async () => {
     let response, data;
     try {
-      response = await fetch(LinkHelper.getLink() + "/admin/tags", {
+      response = await fetch(LinkHelper.getLink() + "admin/tags", {
         method: "POST",
         headers: {
           authorization: "Bearer " + StorageHelper.get("token"),
@@ -227,9 +195,8 @@ export default function Discussion() {
       });
       try {
         data = await response.json();
-        console.log(data.data.tags);
         if (data.success) {
-          setState({ ...state, tags: data.data.tags });
+          setTags(data.data.tags)
           getQuestions();
         } else {
           throw new Error(data.message);
@@ -289,6 +256,38 @@ export default function Discussion() {
       SnackBar(err, 1500, "OK");
     }
   };
+
+  let addTag = async (event) => {
+    let response, data;
+    try {
+      response = await fetch(LinkHelper.getLink() + "admin/tags/create", {
+        method: "POST",
+        headers: {
+          authorization: "Bearer " + StorageHelper.get("token"),
+
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          admin_id: StorageHelper.get("admin_id"),
+          tag: event.target.value,
+        }),
+      });
+      try {
+        data = await response.json();
+        if (data.success) {
+          SnackBar("Tag added successfully");
+          setTags([...tags, event.target.value]);
+        } else {
+          throw new Error(data.message);
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    } catch (err) {
+      SnackBar(err.message, 1500, "OK");
+      console.log(err);
+    }
+  };
   return (
     <>
       <Navbar />
@@ -306,34 +305,61 @@ export default function Discussion() {
           )}
           {isLoaded ? (
             <>
-              <div className="FlexBoxRow FlexWrap">
-                <div className="Flex50">
-                  {/* <ScrollMenu>
-                    {state.tags.map((tag, index) => {
+              <div className="row">
+                <div className="col-1">Tags:</div>
+                <div className="col-9 ">
+                  <ScrollMenu>
+                    {tags.map((tag, index) => {
                       return (
-                        <div className="mx-2" itemId={index} key={index} onClick={(e)=>{
-
-                          if(state.tsgs.includes(tag)){
-                            setState({...state,tags:state.tags.filter((item)=>item!==tag)})
-                            }else{
-                            setState({...state,selectedTag:tag.tag_id})
-                          }
-                          getQuestions()
-                        }}>
+                        <div
+                          className="mx-2"
+                          itemID={index}
+                          key={index}
+                          // LeftArrow={LeftArrow}
+                          // RightArrow={RightArrow}
+                          onClick={(e) => {
+                            if (state.tsgs.includes(tag)) {
+                              setState({
+                                ...state,
+                                tags: tags.filter((item) => item !== tag),
+                              });
+                            } else {
+                              setState({
+                                ...state,
+                                selectedTag: tag.tag_id,
+                              });
+                            }
+                            getQuestions();
+                          }}
+                        >
                           {tag}
                         </div>
                       );
                     })}
-                  </ScrollMenu> */}
+                  </ScrollMenu>
+                </div>
+                <div className="col-2">
+                  <button
+                    className="btn btn-success"
+                    data-mdb-toggle="modal"
+                    data-mdb-target="#addNew"
+                  >
+                    Add
+                  </button>
+                </div>
+              </div>
+              <div className="FlexBoxRow FlexWrap">
+                <div className="Flex50">
                   <h2 className="title">Questions</h2>
 
-                  <div class="ListBlock">
+                  <div className="ListBlock">
                     {questions.map((question, index) => (
                       <>
                         {activeQuestionIndex === index ? (
                           <div
                             className="ListItem active"
                             aria-current="true"
+                            key={index}
                             onClick={() => {
                               setState({ ...state, loadedPageAnswer: 1 });
                               handleQuestionClick(question, index);
@@ -400,7 +426,7 @@ export default function Discussion() {
                           </div>
                         ) : (
                           <div
-                            class="ListItem"
+                            className="ListItem"
                             aria-current="true"
                             onClick={() => {
                               handleQuestionClick(question, index);
@@ -444,12 +470,13 @@ export default function Discussion() {
                   {isAnswerLoaded ? (
                     <>
                       {answers.length > 0 ? (
-                        <div class="ListBlock">
+                        <div className="ListBlock">
                           {answers.map((answer, index) => (
                             <>
                               <li
                                 className="ListItem active"
                                 aria-current="true"
+                                key = {index}
                               >
                                 {index + 1 + ". " + answer.head}
                                 <br></br>
@@ -499,7 +526,7 @@ export default function Discussion() {
                       ) : (
                         <>
                           No answers found!
-                          {SnackBar("  No answers found! ", 1500, "OK")}
+                          {SnackBar("No answers found! ", 1500, "OK")}
                         </>
                       )}
                     </>
@@ -516,6 +543,64 @@ export default function Discussion() {
               <Loader />
             </>
           )}
+        </div>
+      </div>
+      <div
+        className="modal fade"
+        id="addNew"
+        tabIndex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
+        <div className="modal-dialog">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h2 className="modal-title" id="exampleModalLabel">
+                Add Tag
+              </h2>
+
+              <button
+                type="button"
+                className="btn-close"
+                data-mdb-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div className="modal-body">
+              <div className="form-floating m-2">
+                <input
+                  id="inputPassword5"
+                  className="form-control"
+                  placeholder="Enter the Message"
+                  value={state.tagToAdd}
+                  onChange={(event) => {
+                    setState({ ...state, tagToAdd: event.target.value });
+                  }}
+                />
+                <label htmlFor="inputPassword5" className="form-label">
+                  Heading
+                </label>
+              </div>
+            </div>
+            <div className="modal-footer">
+              <button
+                type="button"
+                className="btn btn-secondary"
+                data-mdb-dismiss="modal"
+              >
+                Close
+              </button>
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={(event) => {
+                  addTag(event);
+                }}
+              >
+                Add Tag
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </>

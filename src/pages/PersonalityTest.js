@@ -44,7 +44,7 @@ export default function PersonalityTest() {
         }
       } catch (err) {
         console.log(err);
-        SnackBar("error", "Something went wrong");
+        SnackBar(err.message);
 
         setState({
           ...state,
@@ -53,7 +53,7 @@ export default function PersonalityTest() {
       }
     } catch (err) {
       console.log(err);
-      SnackBar("error", "Something went wrong");
+      SnackBar(err.message);
       setState({
         ...state,
         spinner: false,

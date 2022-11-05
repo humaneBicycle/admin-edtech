@@ -61,8 +61,7 @@ export default function Notifications() {
   let sendNotification = async () => {
     if (
       state.notification.title === undefined ||
-      state.notification.description === undefined ||
-      state.notification.link === undefined
+      state.notification.description === undefined
     ) {
       SnackBar("Please fill all the fields", 1500, "OK");
 
@@ -121,7 +120,9 @@ export default function Notifications() {
           <div className="NotificationSection">
             <div className="NotificationList">
               {!state.spinner ? (
-                state.notifications.map((notification, index) => {
+                state.notifications.length > 0 ? (
+                  <>
+                    {state.notifications.map((notification, index) => {
                   return (
                     <>
                       <div
@@ -143,15 +144,91 @@ export default function Notifications() {
                             Go to link
                           </a>
                         </div>
+                        <button
+                          className="goToNotifications btn btn-danger rounded-3 text-white"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            let deleteNotification = async () => {
+                              let response, data;
+                              try {
+                                response = await fetch(
+                                  LinkHelper.getLink() +
+                                    "admin/notification/remove",
+                                  {
+                                    method: "DELETE",
+                                    headers: {
+                                      "Content-Type": "application/json",
+                                      Authorization:
+                                        "Bearer " + StorageHelper.get("token"),
+                                    },
+                                    body: JSON.stringify({
+                                      notification_id:
+                                        notification._id,
+                                        admin_id: StorageHelper.get("admin_id"),
+                                    }),
+                                  }
+                                );
+                                try {
+                                  data = await response.json();
+                                  console.log(data);
+                                  if (data.success) {
+                                    setState({
+                                      ...state,
+                                      spinner: false,
+                                      notifications: state.notifications.filter(
+                                        (item) => {
+                                          return (
+                                            item.notification_id !==
+                                            notification.notification_id
+                                          );
+                                        }
+                                      ),
+                                    });
+                                    let temp = state.notifications;
+                                    temp.splice(index, 1);
+                                    setState({ ...state, notifications: temp });
+                                    // alert("Notification will be sent soon.");
+                                    SnackBar(
+                                      "Notification Deleted",
+                                      1500,
+                                      "OK"
+                                    );
+                                  } else {
+                                    setState({ ...state, spinner: false });
+                                    // alert("Error " + data.message);
+                                    SnackBar(
+                                      "Error : " + data.message,
+                                      1500,
+                                      "OK"
+                                    );
+                                  }
+                                } catch (err) {
+                                  setState({ ...state, spinner: false });
+                                  // alert("Error ", err);
+                                  SnackBar("Error : " + err, 1500, "OK");
+                                }
+                              } catch (err) {
+                                // alert("error", err);
+                                SnackBar("Error : " + err, 1500, "OK");
+                              }
+                            };
+                            deleteNotification()
+                          }}
+                        >
+                          Delete
+                        </button>
                       </div>
                     </>
                   );
-                })
+                })}
+                  </>
+                ):(<>No Notifications Found!</>)
+                
               ) : (
                 <>
                   <Loader />
                 </>
-              )}{" "}
+              )}
             </div>
           </div>
         </div>
@@ -203,7 +280,6 @@ export default function Notifications() {
             </div>
             <div class="modal-body">
               <div className="form-floating mb-4">
-
                 <input
                   type="email"
                   className="form-control"
@@ -219,12 +295,12 @@ export default function Notifications() {
                       },
                     });
                   }}
-                />  <label htmlFor="exampleInputEmail1" className="form-label">
+                />{" "}
+                <label htmlFor="exampleInputEmail1" className="form-label">
                   Notification Title
                 </label>
               </div>
               <div className="form-floating mb-4">
-
                 <input
                   className="form-control"
                   id="exampleInputPassword1"
@@ -238,12 +314,12 @@ export default function Notifications() {
                     });
                   }}
                   value={state.notification.description}
-                /> <label htmlFor="exampleInputPassword1" className="form-label">
+                />{" "}
+                <label htmlFor="exampleInputPassword1" className="form-label">
                   Notification Body
                 </label>
               </div>
               <div className="form-floating mb-4">
-
                 <input
                   className="form-control"
                   id="exampleInputPassword1"
@@ -258,7 +334,8 @@ export default function Notifications() {
                     });
                   }}
                   value={state.notification.link}
-                /> <label htmlFor="exampleInputPassword1" className="form-label">
+                />{" "}
+                <label htmlFor="exampleInputPassword1" className="form-label">
                   Clickable Link
                 </label>
               </div>

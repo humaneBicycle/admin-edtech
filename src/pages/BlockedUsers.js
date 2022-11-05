@@ -66,8 +66,7 @@ export default function BlockedUsers() {
         spinner: false,
         isError: true,
       });
-      // alert("Something went wrong: ", err);
-      SnackBar("Something went wrong: " + err, 1500, "OK")
+      SnackBar(err.message, 1500, "OK")
     }
   };
   let unblockUser = async (user_id) => {
@@ -98,7 +97,7 @@ export default function BlockedUsers() {
       }
     } catch (err) {
       console.log(err);
-      SnackBar("Something went wrong: " + err, 1500, "OK")
+      SnackBar(err.message, 1500, "OK")
     }
   }
   return (

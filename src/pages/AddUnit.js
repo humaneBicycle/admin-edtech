@@ -92,7 +92,6 @@ export default function AddUnit() {
       unit.creator === undefined ||
       unit.description === undefined ||
       unit.unit_name === undefined ||
-      unit.image_url === undefined ||
       unit.prerequisite.has_prerequisite
     ) {
       // console.log(unit.prerequisite.has_prerequisite)
@@ -102,27 +101,25 @@ export default function AddUnit() {
           unit.prerequisite.time === undefined ||
           unit.prerequisite.message === undefined
         ) {
-          // alert("Please fill all the fields");
-          SnackBar("Please fill all the fields", 1000, "OK");
+          SnackBar("Please fill the required fields", 1000, "OK");
           return;
         }
       } else {
-        // alert("Please fill all the fields");
-        SnackBar("Please fill all the fields", 1000, "OK");
-
+        SnackBar("Please fill the required fields", 1000, "OK");
         return;
       }
     }
-    // console.log(unit);
     setSpinner(true);
     event.preventDefault();
+    if(unit.image_url!==undefined){
 
-    uploadImageToS3();
+      uploadImageToS3();
+    }else{
+      UploadUnitInfo()
+    }
 
-    // console.log(unit);
   }
-  let UploadUnitInfo = async (event) => {
-    // console.log("adding unit");
+  let UploadUnitInfo = async () => {
     var response, data;
     try {
       response = await fetch(LinkHelper.getLink() + "admin/unit/create", {
@@ -141,6 +138,10 @@ export default function AddUnit() {
           // alert("Unit added successfully");
           setSpinner(false);
           window.location.href = "/course";
+        }else{
+          SnackBar(data.message)
+          console.log(data)
+          window.location.href="/"
         }
       } catch (error) {
         console.log(error);
@@ -182,7 +183,6 @@ export default function AddUnit() {
       UploadUnitInfo();
     } catch (error) {
       console.log(error);
-      // alert("Error uploading image");
       SnackBar("Error uploading image", 1000, "OK");
       setSpinner(false);
     }
@@ -249,6 +249,20 @@ export default function AddUnit() {
                         className="form-control"
                         id="floatingInput"
                         placeholder="name@example.com"
+                        type="date"
+                        accept="image/*"
+                        onChange={(e) => {
+                          
+                          setUnit({ ...unit, expiry: e.target.value });
+                        }}
+                      />
+                      <label htmlFor="floatingInput">Expiry(Optional)</label>
+                    </div>
+                    <div className="form-floating mb-3">
+                      <input
+                        className="form-control"
+                        id="floatingInput"
+                        placeholder="name@example.com"
                         type="file"
                         accept="image/*"
                         onChange={(e) => {
@@ -263,7 +277,7 @@ export default function AddUnit() {
                           setUnit({ ...unit, image_url: imageIdurl });
                         }}
                       />
-                      <label htmlFor="floatingInput">Thumbnail Image</label>
+                      <label htmlFor="floatingInput">Thumbnail Image(Optional)</label>
                     </div>
                     <div className="form-floating mb-3">
                       <input
@@ -318,8 +332,8 @@ export default function AddUnit() {
                     </div>
 
                     <div className="d-flex align-items-center justify-content-start p-2 mb-2 flex-wrap">
-                      Price: &nbsp;&nbsp;
-                        <div className="form-check me-2">
+                      {/* Price: &nbsp;&nbsp; */}
+                        {/* <div className="form-check me-2">
                           <input
                             className="form-check-input"
                             type="radio"
@@ -356,7 +370,7 @@ export default function AddUnit() {
                           >
                             Free
                           </label>
-                        </div>
+                        </div> */}
                             
                         <div className="form-check form-switch mb-2 container-fluid my-4">
                       <input

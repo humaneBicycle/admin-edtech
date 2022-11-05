@@ -49,7 +49,7 @@ export default function LeaderBoard() {
             SnackBar("Token is not valid please login again");
             window.location.href = "/login";
           } else {
-            SnackBar("Something went wrong");
+            SnackBar(data.message);
             setState({
               ...state,
               spinner: false,

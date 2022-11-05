@@ -42,16 +42,16 @@ export default function BlockedDeviceApprovals() {
                     window.location.href="/login";
                 }
                 else{
-                    SnackBar("Something went wrong");
+                    SnackBar(data.message);
                 }
             }
-            catch{
-                SnackBar("Something went wrong");
+            catch(e){
+                SnackBar(e.message);
                 
             }
         }
-        catch{
-            SnackBar("Something went wrong");
+        catch(e){
+            SnackBar(e.message);
             
         }
     }

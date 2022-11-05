@@ -17,9 +17,6 @@ export default function Unit({
   unit_id,
   image_url
 }) {
-  // function editUnit(e) {
-  //   e.preventDefault();
-  // }
   let unit = {
     has_prerequisite: has_prerequisite,
     message: message,
@@ -31,35 +28,39 @@ export default function Unit({
     unit_id: unit_id,
     image_url: image_url
   };
+  let [state,setState]=React.useState({
+    progressSpinner:false
+  })
 
   let deleteUnit = async () => {
-
-    // console.log("delete");
     let response, data;
+    let toSend = {
+      unit_id: unit.unit_id,
+      admin_id: StorageHelper.get("admin_id"),
+    }
+    console.log(toSend,LinkHelper.getLink() + "admin/unit/remove")
     try {
-      response = await fetch(LinkHelper.getLink() + "/admin/unit/remove", {
+      response = await fetch(LinkHelper.getLink() + "admin/unit/remove", {
         method: "DELETE",
         headers: {
           "authorization": "Bearer " + StorageHelper.get("token"),
 
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          unit_id: unit.unit_id,
-          admin_id: StorageHelper.get("admin_id"),
-        }),
+        body: JSON.stringify(toSend),
       });
       try {
         data = await response.json();
         console.log(data)
 
         if (data.success) {
+          SnackBar("Delete Successfull!")
           window.location.reload();
         } else if (data.message === "token is not valid please login") {
           SnackBar("Token is not valid please login again");
           window.location.href = "/login";
         } else {
-          SnackBar("Something went wrong");
+          SnackBar(data.message);
         }
       } catch (error) {
         console.log(error);
@@ -67,6 +68,7 @@ export default function Unit({
     } catch (err) {
       console.log(err);
     }
+    setState({...state,progressSpinner:false})
   };
 
   return (
@@ -87,6 +89,15 @@ export default function Unit({
 
             </div>
             <div className="col-md-6 col-lg-5 col-xl-5">
+            {state.progressSpinner ? (
+            <>
+              <div class="spinner-border text-dark" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+            </>
+          ) : (
+            <></>
+          )}
               <h3> <Link to="lessons" state={{ unit: unit }}>{unit_name}</Link></h3>
               <div className="d-flex flex-row">
                 <div className="text-danger mb-1 me-2">
@@ -120,16 +131,7 @@ export default function Unit({
             <div className="col-md-6 col-lg-4 col-xl-4 border-sm-start-none border-start">
               <div className="d-flex flex-row flex-wrap align-items-center mb-1 p-1">
                 <small>
-                  {is_locked ? (
-                    <span className="badge bg-light ">
-                      <svg xmlns="http://www.w3.org/2000/svg" width={18} height={18} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="text-success"><rect x={3} y={11} width={18} height={11} rx={2} ry={2} /><path d="M7 11V7a5 5 0 0 1 9.9-1" /></svg>
-                    </span>
-                  ) : (
-                    <span className="badge bg-light ">
-                      <svg xmlns="http://www.w3.org/2000/svg" width={18} height={18} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="text-danger"><rect x={3} y={11} width={18} height={11} rx={2} ry={2} /><path d="M7 11V7a5 5 0 0 1 10 0v4" /></svg>
-
-                    </span>
-                  )}
+                  
                   {is_paid ? (
                     <span className="badge badge-success ms-2 mb-2">Paid</span>
                   ) : (
@@ -140,7 +142,7 @@ export default function Unit({
                   Type : <span className="badge badge-primary mb-2">{type}</span>
                 </small>
 
-                <button className="badge btn-outline-danger btn-sm m-1" type="button" onClick={deleteUnit}>
+                <button className="badge btn-outline-danger btn-sm m-1" type="button" onClick={(e)=>{setState({...state,progressSpinner:true});deleteUnit()}}>
                   <span>Delete</span>
                 </button>
 
@@ -161,8 +163,6 @@ export default function Unit({
                   <span>
                     Edit Unit<i className="far fa-edit mx-2"></i></span>
                 </Link>
-
-
 
               </div>
 

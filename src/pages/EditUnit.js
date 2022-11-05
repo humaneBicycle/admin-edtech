@@ -57,11 +57,11 @@ export default function EditUnit() {
           units.push(data.data)
           getAWSCredentials();
         } else {
-          SnackBar("Something went wrong: " + data.message, 1500, "OK")
+          SnackBar(data.message, 1500, "OK")
         }
       } catch (err) {
 
-        SnackBar("Something went wrong: " + err, 1500, "OK")
+        SnackBar(err.message, 1500, "OK")
         console.log(err);
         setState({
 
@@ -71,7 +71,7 @@ export default function EditUnit() {
       }
     } catch (err) {
       console.log(err);
-      SnackBar("Something went wrong: " + err, 1500, "OK")
+      SnackBar( err.message, 1500, "OK")
       setState({
         ...state,
         spinner: false,
@@ -101,14 +101,14 @@ export default function EditUnit() {
         } 
       } catch (err) {
         console.log(err);
-        SnackBar("Something went wrong: " + err, 1500, "OK")
+        SnackBar(err.message, 1500, "OK")
       setState({...state, spinner: false});
 
 
       }
     } catch (err) {
       console.log("error", err);
-      SnackBar("Something went wrong: " + err, 1500, "OK")
+      SnackBar(err.message, 1500, "OK")
 
       setState({...state, spinner: false});
 
@@ -306,55 +306,7 @@ export default function EditUnit() {
                 <label htmlFor="floatingInput">Description </label>
               </div>
               <div className="form-floating mb-3">
-                <div className="form-check">
-                  <input
-                    className="form-check-input"
-                    type="radio"
-                    name="flexRadioDefault"
-                    htmlFor="flexRadioDefault1"
-                    defaultChecked={"\""+state.activeUnit.is_paid+"\""}
-                    onChange={(e) => {
-                      setState({
-                        ...state,
-                        activeUnit: {
-                          ...state.activeUnit,
-                          is_paid: !state.activeUnit.is_paid,
-                        },
-                      });
-                    }}
-                  />
-                  <label
-                    className="form-check-label"
-                    htmlFor="flexRadioDefault1"
-                  >
-                    Paid
-                  </label>
-                </div>
-                <div className="form-check">
-                  <input
-                    className="form-check-input"
-                    type="radio"
-                    name="flexRadioDefault"
-                    defaultChecked={"\""+!state.activeUnit.is_paid+"\""}
-                    
-                    htmlFor="flexRadioDefault1"
-                    onChange={(e) => {
-                      setState({
-                        ...state,
-                        activeUnit: {
-                          ...state.activeUnit,
-                          is_paid: !state.activeUnit.is_paid,
-                        },
-                      });
-                    }}
-                  />
-                  <label
-                    className="form-check-label"
-                    htmlFor="flexRadioDefault2"
-                  >
-                    Free
-                  </label>
-                </div>
+                
               </div>
               <div className="prerequisites">
                 <div className="form-check form-switch">
@@ -363,7 +315,6 @@ export default function EditUnit() {
                     type="checkbox"
                     role="switch"
                     id="flexSwitchCheckChecked"
-                    defaultchacked={"\""+state.activeUnit.prerequisite.has_prerequisite+"\""}
                     onChange={(event) => {
                       
                       setState({
@@ -381,7 +332,7 @@ export default function EditUnit() {
                   <label
                     className="form-check-label"
                     htmlFor="flexSwitchCheckChecked"
-                    checked
+                    checked={"\""+state.activeUnit.prerequisite.has_prerequisite+"\""}
                   >
                     Has Pre-requisites
                   </label>
@@ -429,6 +380,7 @@ export default function EditUnit() {
                           className="form-control"
                           aria-describedby="passwordHelpBlock"
                           type="number"
+                          value={state.activeUnit.prerequisite.time}
                           onChange={(event) => {
                             setState({
                               ...state,

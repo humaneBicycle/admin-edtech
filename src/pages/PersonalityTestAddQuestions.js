@@ -39,16 +39,16 @@ export default function PersonalityTestAddQuestions() {
                 window.location.href="/login";
             }
             else{
-                SnackBar("Something went wrong");
+                SnackBar(data.message);
             }
         }
         catch (e){
-            SnackBar("Something went wrong");
+            SnackBar(e.message);
             console.log(e)
             
         }
     }catch(e){
-        SnackBar("Something went wrong");
+        SnackBar(e.message);
         console.log(e)
     }
   }

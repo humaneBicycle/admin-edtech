@@ -47,7 +47,7 @@ export default function Events() {
           SnackBar("Token is not valid please login again");
           window.location.href = "/login";
         } else {
-          SnackBar("Something went wrong");
+          SnackBar(data.message);
           setState({
             ...state,
             spinner: false,
@@ -55,7 +55,7 @@ export default function Events() {
           });
         }
       } catch (err) {
-        SnackBar("Error", 1500, "OK");
+        SnackBar(err.message, 1500, "OK");
 
         setState({
           ...state,
@@ -65,7 +65,7 @@ export default function Events() {
       }
     } catch (error) {
       console.log(error);
-      SnackBar("Error", 1500, "OK");
+      SnackBar(error.message, 1500, "OK");
     }
   };
 
@@ -103,13 +103,13 @@ export default function Events() {
           SnackBar("Token is not valid please login again");
           window.location.href = "/login";
         } else {
-          SnackBar("Something went wrong");
+          SnackBar(data.message);
         }
       } catch (err) {
-        SnackBar("Error", 1500, "OK");
+        SnackBar(err.message, 1500, "OK");
       }
     } catch (err) {
-      SnackBar(err, 1500, "OK");
+      SnackBar(err.message, 1500, "OK");
     }
   };
 
@@ -129,7 +129,6 @@ export default function Events() {
       });
       try {
         data = await response.json();
-        console.log(data);
         if (data.success) {
           SnackBar("Event Deleted Successfully");
           getEvents();
@@ -137,7 +136,7 @@ export default function Events() {
           SnackBar("Token is not valid please login again!");
           window.location.href = "/login";
         } else {
-          SnackBar("Something went wrong");
+          SnackBar(data.message);
         }
       } catch (err) {
         SnackBar("Error", 1500, "OK");
