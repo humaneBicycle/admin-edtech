@@ -183,7 +183,7 @@ export default function Courses() {
             !isError ? (
               <>
                 {isUnitOrderChanged ? (
-                  <div className="rounded-4 py-3 g-4 px-3 bg-info mw-75 w-auto d-flex justify-content-between align-items-baseline">
+                  <div className="rounded-4 py-3 g-4 px-3 bg-info mw-75 w-auto d-flex justify-content-between align-items-baseline" style={{ width: "calc(100% - 2rem)" }}>
                     <h3>
                       Do you want to save this sort ?
                     </h3>
@@ -195,35 +195,32 @@ export default function Courses() {
                 ) : (
                   <></>
                 )}
-                <div className="d-flex flex-wrap justify-content-start align-items-stretch">
+                <div className="d-flex flex-wrap justify-content-start align-items-stretch pb-5 p-2 pt-2" style={{ width: "calc(100% - 2rem)" }}>
 
-                  <div className=" Flex50 Height100">
-                    <div className="card w-100 border">
+                  <div className="col-12 mb-4 mx-auto" style={{ marginInline: "auto" }}>
+                    <div className="card w-100 p-1 border">
 
-                      <div className="card-body p-2 pt-3 ps-4">
-                        <h2 className="card-title mb-2">{course.name}</h2>
-                        <h6 className="card-subtitle text-muted mb-2">
-                          {" "}
-                          {"Course id " + course._id}{" "}
-                        </h6>
+                      <div className="card-body  p-2">
+                        <h4 className="card-title h4 text-capitalize mb-2">{course.name}</h4>
+
                         <small className="card-subtitle text-muted mb-3">
                           {" "}
                           {console.log(course)}
                           {"Created on " + course.created}{" "}
                         </small>
-                        <div className="card-body">
+                        <small className="card-body p-0">
 
-                          <p className="card-text">
+                          <p className="card-text mb-0">
                             {"description: " + course.description}
                           </p>
-                          <div className="card-text">
+                          <p className="card-text mb-0">
                             {"quote: " + course.quote}
-                          </div>
-                          <div className="card-text">
+                          </p>
+                          <p className="card-text mb-0">
                             {"heading: " + course.headline}
-                          </div>
-                        </div>
-                        <div className="d-flex flex-row justify-content-end mt-3 card-footer">
+                          </p>
+                        </small>
+                        <div className="d-flex flex-row justify-content-start mt-0 card-footer p-2">
                           <Link
                             className="btn btn-primary btn-sm"
                             to="add-unit"
@@ -232,7 +229,7 @@ export default function Courses() {
                             Add Unit <i className="fas fa-plus ms-2"></i>
                           </Link>
                           <Link
-                            className="btn btn-outline-primary btn-sm ms-auto me-2"
+                            className="btn btn-outline-primary btn-sm  ms-2"
                             to="editCourse"
                             state={{ course: course }}
                           >
@@ -242,13 +239,13 @@ export default function Courses() {
                       </div>
                     </div>
                   </div>
-                  <div className="Flex50 sticky-md-top">
+                  <div className="col-12">
                     <div className="d-flex flex-column">
                       <DragDropContext onDragEnd={handleOnDragEvent}>
                         <Droppable droppableId="droppable">
                           {(provided) => (
                             <div
-                              className="list-group"
+                              className="list-group w-100"
                               {...provided.droppableProps}
                               ref={provided.innerRef}
                             >

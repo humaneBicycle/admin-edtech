@@ -71,38 +71,35 @@ export default function Unit({
 
   return (
 
-    <div key={unit_id}>
-      <div className="card shadow-0 border rounded-3">
-        <div className="card-body">
+    <div key={unit_id} style={{ width: "calc(100% - 2rem)" }}>
+      <div className="card shadow-0 border rounded-3" >
+        <div className="card-body p-2">
           <div className="row">
-            <div className="col-md-12 col-lg-3 col-xl-3 mb-4 mb-lg-0">
-              <div className="bg-image hover-zoom ripple rounded ripple-surface">
-                <img src={unit.image_url} className="w-100" alt="Course" />
-                <a href="#!">
+            <div className="col-4  col-sm-4  col-md-3 mb-lg-0 ">
+              <div className="bg-image hover-zoom  rounded ripple-surface">
+                <img src={unit.image_url} className="img-fluid" alt="Course" style={{ maxHeight: "7rem" }} />
+                <span>
                   <div className="hover-overlay">
                     <div className="mask" style={{ backgroundColor: 'rgba(253, 253, 253, 0.15)' }} />
                   </div>
-                </a>
+                </span>
               </div>
 
             </div>
-            <div className="col-md-6 col-lg-5 col-xl-5">
-              <h3> <Link to="lessons" state={{ unit: unit }}>{unit_name}</Link></h3>
-              <div className="d-flex flex-row">
-                <div className="text-danger mb-1 me-2">
-                  <i className="fa fa-star" />
-                  <i className="fa fa-star" />
-                  <i className="fa fa-star" />
-                  <i className="fa fa-star" />
-                </div>
-                <span></span>
-              </div>
+            <div className="col-6  col-sm-6  col-md-5">
+              <Link to="lessons" className="h5 text-capitalize" style={{
+                display: " -webkit-box",
+                "-webkit-box-orient": "vertical",
+                overflow: "hidden",
+                "-webkit-line-clamp": "1"
+              }} state={{ unit: unit }}>{unit_name}</Link>
+
 
               <div className="mt-1 mb-0 text-muted small">
                 {tags.map((tag, index) => (
                   <>
-                    <span className="text-primary me-1" id={index}>
-                      {index === 0 ? (<></>) : (<>•</>)}
+                    <span className="badge badge-warning me-1" id={index}>
+                      {/* {index === 0 ? (<></>) : (<>•</>)} */}
                       {tag}</span>
                   </>
                 ))}
@@ -112,59 +109,62 @@ export default function Unit({
               <p className="text-truncate mb-4 mb-md-0">
                 {message}
               </p>
-              <div className="d-flex flex-row">
+              <p className="text-muted my-0 ">
                 Course contains :  {total_lessons} Lessons
-              </div>
+              </p>
 
             </div>
-            <div className="col-md-6 col-lg-4 col-xl-4 border-sm-start-none border-start">
-              <div className="d-flex flex-row flex-wrap align-items-center mb-1 p-1">
-                <small>
-                  {is_locked ? (
-                    <span className="badge bg-light ">
-                      <svg xmlns="http://www.w3.org/2000/svg" width={18} height={18} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="text-success"><rect x={3} y={11} width={18} height={11} rx={2} ry={2} /><path d="M7 11V7a5 5 0 0 1 9.9-1" /></svg>
-                    </span>
-                  ) : (
-                    <span className="badge bg-light ">
-                      <svg xmlns="http://www.w3.org/2000/svg" width={18} height={18} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="text-danger"><rect x={3} y={11} width={18} height={11} rx={2} ry={2} /><path d="M7 11V7a5 5 0 0 1 10 0v4" /></svg>
+            <div className="col-12 col-sm-12  col-md-4 border-sm-start-none border-start">
+              {/* <div className="col-3">
 
-                    </span>
-                  )}
+                  <small>
+                    {is_locked ? (
+                      <span className="badge bg-light ">
+                        <svg xmlns="http://www.w3.org/2000/svg" width={18} height={18} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="text-success"><rect x={3} y={11} width={18} height={11} rx={2} ry={2} /><path d="M7 11V7a5 5 0 0 1 9.9-1" /></svg>
+                      </span>
+                    ) : (
+                      <span className="badge bg-light ">
+                        <svg xmlns="http://www.w3.org/2000/svg" width={18} height={18} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="text-danger"><rect x={3} y={11} width={18} height={11} rx={2} ry={2} /><path d="M7 11V7a5 5 0 0 1 10 0v4" /></svg>
+
+                      </span>
+                    )}
+                  </small>
+
+                </div>
+                <div className="col-5">
+
                   {is_paid ? (
-                    <span className="badge badge-success ms-2 mb-2">Paid</span>
+                    <span className="badge badge-success ">Paid</span>
                   ) : (
-                    <span className="badge badge-danger ms-2 mb-2">Not-paid</span>
+                    <span className="badge badge-danger ">Not-paid</span>
                   )}
-                  <br />
+                </div>
+                <div className="col-12 my-2">
+                  Type : <span className="badge badge-primary mb-2 ms-2">{type}</span>
+                </div> */}
 
-                  Type : <span className="badge badge-primary mb-2">{type}</span>
-                </small>
-
-                <button className="badge btn-outline-danger btn-sm m-1" type="button" onClick={deleteUnit}>
-                  <span>Delete</span>
+              <div className="d-flex p-2 w-100  flex-md-column  flex-row " >
+                <button className="btn btn-outline-danger btn-sm m-1" type="button" onClick={deleteUnit}>
+                  Delete
                 </button>
 
                 <Link
-                  className="badge btn-outline-primary btn-sm m-1"
+                  className="btn btn-dark btn-sm m-1 rounded-0"
                   to="add-lesson"
                   state={{ unit: unit }}>
-                  <span>
-
-                    Add lesson
-                  </span>
+                  Add Lesson
                 </Link>
                 <Link
-                  className="badge btn-outline-dark btn-sm  m-1"
+                  className="btn btn-outline-dark btn-sm  m-1"
                   to="edit-unit"
                   state={{ unit: unit }}
                 >
-                  <span>
-                    Edit Unit<i className="far fa-edit mx-2"></i></span>
+                  Edit Unit
                 </Link>
-
-
-
               </div>
+
+
+
 
 
 
@@ -172,7 +172,7 @@ export default function Unit({
           </div>
         </div>
       </div>
-    </div>
+    </div >
 
 
 

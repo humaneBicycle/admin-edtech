@@ -693,7 +693,7 @@ a>svg {
 }
 
 .card:hover {
-  transform: scale(1.015);
+  transform: scale(1.005);
 }
 
 /* Dark Mode */

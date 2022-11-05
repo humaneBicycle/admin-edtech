@@ -8,14 +8,14 @@ import "../pages/classes.css";
 import SnackBar from "../components/snackbar";
 import Header from "../components/Header";
 
-let users=[];
+let users = [];
 
 export default function Students() {
   let [isLoaded, setIsLoaded] = useState(false);
   let [isAllLoaded, setIsAllLoaded] = useState(false);
   let [loadedPageStudent, setLoadedPageStudent] = useState(1);
-  let [state,setState]=useState({
-    users:[],
+  let [state, setState] = useState({
+    users: [],
 
   })
 
@@ -42,7 +42,7 @@ export default function Students() {
       try {
         data = await response.json();
         if (data.success) {
-          setState({...state,users:[...state.users,...data.data.users]})
+          setState({ ...state, users: [...state.users, ...data.data.users] })
           if (data.pages === loadedPageStudent) {
             setLoadedPageStudent(loadedPageStudent);
             setIsAllLoaded(true);
@@ -73,10 +73,10 @@ export default function Students() {
         <Header PageTitle={"Students"} />
 
         <div className="MainInnerContainer">
-          <div className="d-flex justify-content-between align-items-center g-3 border-bottom w-100 mb-5">
-            <div className="p-2 ms-2" style={{ minWidth: '75%', }}>
+          <div className="d-flex justify-content-end align-items-center g-3  w-100 mb-2">
+            {/* <div className="p-2 ms-2" style={{ minWidth: '75%', }}>
               <input type="search" className="form-control" placeholder="Search Students" />
-            </div>
+            </div> */}
             <div className="p-2">
               <Link className="btn btn-dark btn-sm" to="/students/blocked-users">
                 <svg xmlns="http://www.w3.org/2000/svg" width={18} height={18} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><line x1={8} y1={6} x2={21} y2={6} /><line x1={8} y1={12} x2={21} y2={12} /><line x1={8} y1={18} x2={21} y2={18} /><line x1={3} y1={6} x2="3.01" y2={6} /><line x1={3} y1={12} x2="3.01" y2={12} /><line x1={3} y1={18} x2="3.01" y2={18} /></svg>
@@ -101,30 +101,35 @@ export default function Students() {
                 {state.users.map((user, index) => (
                   // console.log(user);
 
-                  <Link to="/students/profile" key={index} className="w-100 p-3" state={{ currentUser: user }} style={{ "text-decoration": "none", "color": "inherit" }}>
+                  <Link to="/students/profile" key={index} className="w-100" state={{ currentUser: user }} style={{ "text-decoration": "none", "color": "inherit" }}>
                     <div className="card  border border-dark overflow-hidden" key={user._id}>
-                      <div className="card-body d-flex justify-content-between align-items-center g-3 border-bottom">
-                        <div className="w-100">
-
-                          <div className="card-title">
-
-                            <h1 className="card-title">
+                      <div className="card-body p-3 d-flex justify-content-between align-items-center g-3 ">
+                        <div className="w-100  d-flex justify-content-between align-items-center">
+                          <div>
+                            <h3 className="card-title">
                               {user.name}
-                            </h1>
-                            {
-                              user.is_anonymous ? (<span className="badge bg-warning ms-auto me-2">Anonymous</span>) : (<span className="badge bg-success">Registered</span>)
-                            }
+                            </h3>
+                            <h6 className="card-subtitle">{user.phone_number}</h6>
                           </div>
-                          <h5 className="card-subtitle">{user.phone_number}</h5>
 
-                          <p className="card-text mb-1">
+                          <div>
+
+                            {
+                              user.is_anonymous ? (<span className="badge bg-warning ms-auto me-2 rounded-pill">Anonymous</span>) : (<span className="badge bg-success rounded-pill">Registered</span>)
+                            }
+
+                          </div>
+
+
+
+                          {/* <p className="card-text mb-1">
                             Tests given = {user.test_given}
                           </p>
                           <p className="card-text mb-1">
-                            Created On = {user.created_at}
-                            {/* Is Anonymous Sign In = {user.is_anonymous.toString()}<br></br>
+                            Created On = {user.created_at} */}
+                          {/* Is Anonymous Sign In = {user.is_anonymous.toString()}<br></br>
                       Is Educator = {user.educator.toString()}<br></br> */}
-                          </p>
+                          {/* </p>
                           <p className="card-text mb-1">
                             Average : <span className="badge badge-primary">
                               {user.avg_percentage_test} %
@@ -139,7 +144,7 @@ export default function Students() {
                             Last Lesson : <span className="text-muted">
                               {user.last_lesson.title}
                             </span>
-                          </p>
+                          </p> */}
                         </div>
 
                       </div>

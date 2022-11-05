@@ -16,7 +16,7 @@ export default function Events() {
     },
     spinner: true,
   });
-  
+
   useEffect(() => {
     getEvents();
   }, []);
@@ -76,7 +76,7 @@ export default function Events() {
       state.activeEvent.description === undefined ||
       state.activeEvent.type === undefined ||
       state.activeEvent.time.date_full === undefined ||
-      state.activeEvent.time.event_time === undefined||
+      state.activeEvent.time.event_time === undefined ||
       state.activeEvent.price === undefined
     ) {
       SnackBar("Please fill all the fields");
@@ -164,12 +164,12 @@ export default function Events() {
                   return (
                     <>
                       <li
-                        className="list-group-item d-flex justify-content-between align-items-center g-3 border-bottom"
+                        className="list-group-item d-flex flex-wrap  justify-content-between align-items-center g-3 mb-2  py-0 px-3"
                         key={i}
                       >
-                        <div className="pe-2 border-end w-75">
-                          <div class="fw-bold h4">{event.title}</div>
-                          <div class=" h6">
+                        <div className="pe-2 border-end col-sm-8 col-12" style={{ color: "#ffffffbd" }}>
+                          <div class="fw-bold h5">{event.title}</div>
+                          <div class=" card-text">
                             <span className="fw-bold">Venue: </span>{" "}
                             {event.venue} |{" "}
                             <span className="fw-bold"> Date :</span>{" "}
@@ -177,26 +177,35 @@ export default function Events() {
                           </div>
                           <p class="text-muted"> {event.description}</p>
                         </div>
-                        <div className="p-2 w-25 text-center">
-                          <p className="mb-2">
-                            Price:
-                            <span class="badge rounded-pill badge-primary ms-2">
-                              {event.price}
+
+                        <div className="p-2 text-center  col-sm-4 col-12 d-flex flex-row flex-sm-column g-4">
+                          <div style={{ height: "30px", marginRight: "0.25rem" }}>
+
+                            <p className="mb-2">
+                              Price:
+                              <span class="badge rounded-pill badge-primary ms-2">
+                                {event.price}
+                              </span>
+                            </p>{" "}
+                          </div>
+                          <div style={{ height: "30px", marginRight: "0.25rem" }}>
+
+                            <span class="badge rounded-pill badge-info mb-2">
+                              {event.type}
                             </span>
-                          </p>{" "}
-                          <span class="badge rounded-pill badge-info mb-2">
-                            {event.type}
-                          </span>
-                          <p>
+                          </div>
+                          <div style={{ height: "30px" }}>
+
                             <button
-                              className="btn btn-danger btn-sm my-2"
+                              className="btn btn-danger btn-sm "
                               onClick={() => {
                                 deleteEvent(event);
                               }}
                             >
                               Delete
                             </button>
-                          </p>
+
+                          </div>
                         </div>
                       </li>
                     </>
@@ -380,9 +389,9 @@ export default function Events() {
                   }}
                 />{" "}
                 <label htmlFor="inputPassword5" className="form-label">
-                  Time 
+                  Time
                 </label>
-                
+
 
               </div>
               <div className="d-flex align-items-center justify-content-start p-2 mb-2 flex-wrap">
