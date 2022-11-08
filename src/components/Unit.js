@@ -91,9 +91,9 @@ export default function Unit({
             <div className="col-6  col-sm-6  col-md-5">
               <Link to="lessons" className="h5 text-capitalize" style={{
                 display: " -webkit-box",
-                "-webkit-box-orient": "vertical",
+                WebkitBoxOrient: "vertical",
                 overflow: "hidden",
-                "-webkit-line-clamp": "1"
+                WebkitLineClamp: "1"
               }} state={{ unit: unit }}>{unit_name}</Link>
 
 

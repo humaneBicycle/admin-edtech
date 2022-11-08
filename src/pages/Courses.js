@@ -259,17 +259,19 @@ export default function Courses() {
                     <div className="d-flex flex-column">
                       <DragDropContext onDragEnd={handleOnDragEvent}>
                         <Droppable droppableId="droppable">
-                          {(provided) => (
+                          {(provided, index) => (
                             <div
                               className="list-group w-100"
                               {...provided.droppableProps}
                               ref={provided.innerRef}
+                              key={index}
+
                             >
                               {course.units != null ? (
                                 course.units.map((unit, index) => (
                                   <>
                                     <Draggable
-                                      key={unit.unit_id}
+                                      key={index}
                                       draggableId={unit.unit_id}
                                       index={index}
                                     >
@@ -277,11 +279,12 @@ export default function Courses() {
                                         <div
                                           {...provided.draggableProps}
                                           ref={provided.innerRef}
+                                          key={index}
                                           {...provided.dragHandleProps} className="row justify-content-center mb-3"
                                         >
 
                                           <Unit
-                                            key={unit.unit_id}
+                                            key={index}
                                             image_url={unit.image_url}
                                             has_prerequisite={unit.prerequisite.has_prerequisite.toString()}
                                             type={unit.prerequisite.type}
@@ -302,42 +305,9 @@ export default function Courses() {
                                 ))
                               ) : (
                                 <>
-                                  <Draggable
-                                    key={unit.unit_id}
-                                    draggableId={unit.unit_id}
-                                    index={index}
-                                  >
-                                    {(provided) => (
-                                      <div
-                                        {...provided.draggableProps}
-                                        ref={provided.innerRef}
-                                        {...provided.dragHandleProps}
-                                        className="row justify-content-center mb-3"
-                                      >
-                                        <Unit
-                                          key={unit.unit_id}
-                                          image_url={unit.image_url}
-                                          has_prerequisite={unit.prerequisite.has_prerequisite.toString()}
-                                          type={unit.prerequisite.type}
-                                          time={unit.prerequisite.time}
-                                          message={unit.prerequisite.message}
-                                          unit_name={unit.unit_title}
-                                          tags={unit.tags}
-                                          total_lessons={unit.total_lessons}
-                                          is_paid={unit.is_paid}
-                                          is_locked={unit.is_locked}
-                                          unit_id={unit.unit_id}
-                                        />
-                                      </div>
-                                    )}
-                                  </Draggable>
+                                  <div>No Units found</div>
                                 </>
                               )}
-                              : (
-                              <>
-                                <div>No Units found</div>
-                              </>
-                            )}
                             </div>
                           )}
                         </Droppable>
