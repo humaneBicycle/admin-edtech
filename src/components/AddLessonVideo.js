@@ -513,7 +513,7 @@ export default function AllLessonVideo(props) {
       }
     } catch (err) {
       console.log(err);
-      SnackBar("Something went wrong" + err.message, 1800, "OK");
+      SnackBar(err.message, 1800, "OK");
     }
     setState({ ...state, isButtonDisabled: false });
   };

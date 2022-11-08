@@ -49,17 +49,13 @@ export default function Login() {
 
       } catch (err) {
         console.log(err);
-        SnackBar("Something went wrong. Email or Password is incorrect", 1500, "OK");
-
-        // alert("Something went wrong. Email or Password is incorrect");
+        SnackBar("Email or Password is incorrect", 1500, "OK");
       }
       console.log(e.target.email.value);
       console.log(e.target.password.value);
     } catch (error) {
       console.log(error);
-      SnackBar("Something went wrong.", 1500, "OK");
-
-      // alert("Something went wrong.");
+      SnackBar(error.message, 1500, "OK");
     }
 
 

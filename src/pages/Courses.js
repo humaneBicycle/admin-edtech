@@ -13,9 +13,7 @@ import Header from "../components/Header";
 let updatedUnits;
 let unitJsonToUpdate = {
   admin_id: StorageHelper.get("admin_id"),
-  units: [
-
-  ]
+  units: [],
 };
 
 export default function Courses() {
@@ -23,7 +21,9 @@ export default function Courses() {
   const [progressVisibility, isVisible] = React.useState(true);
   const [course, setCourses] = React.useState({});
   const [isError, setErrorStaus] = React.useState(false);
-
+  let [state, setState] = React.useState({
+    progressSpinner: false
+  })
 
   const [isEditCourseModalVisible, setEditCourseModalVisibility] =
     React.useState(false);
@@ -33,12 +33,12 @@ export default function Courses() {
 
   function updateUI(course) {
     isVisible(false);
-    unitJsonToUpdate.units = course.units.map(unit => {
+    unitJsonToUpdate.units = course.units.map((unit) => {
       return {
         id: unit.id,
         name: unit.name,
-        order: unit.order
-      }
+        order: unit.order,
+      };
     });
     setCourses(course);
   }
@@ -48,17 +48,16 @@ export default function Courses() {
   let getCourses = async () => {
     let json = {
       admin_id: StorageHelper.get("admin_id"),
-    }
-    console.log(json)
+    };
+    console.log(json);
     try {
       response = await fetch(LinkHelper.getLink() + "admin/course", {
         method: "POST",
         headers: {
-
           "content-type": "application/json",
-          "authorization": "Bearer " + StorageHelper.get("token"),
+          authorization: "Bearer " + StorageHelper.get("token"),
         },
-        body: JSON.stringify(json)
+        body: JSON.stringify(json),
       });
       try {
         data = await response.json();
@@ -68,7 +67,7 @@ export default function Courses() {
           SnackBar("token is not valid please login");
           window.location.href = "/login";
         } else {
-          SnackBar("Something went wrong");
+          SnackBar(data.message);
         }
         console.log(data);
         // setLoaded(true);
@@ -76,106 +75,107 @@ export default function Courses() {
         updateUI(data.data);
       } catch (err) {
         // alert("Invalid Response! Please Reload");
-        SnackBar("Invalid Response! Please Reload", 1500, "OK")
-        // updateUI(null);
+        SnackBar("Invalid Response!" + err.message, 1500, "OK");
         loadFailed(err);
-        // console.log(progressVisibility);
       }
     } catch (err) {
       console.log(err);
       loadFailed(err);
-      // alert("Something went wrong! Please Reload");
-      SnackBar("Something went wrong! Please Reload", 1500, "OK")
-
-      // updateUI(null);
+      SnackBar("Please Reload" + err.message, 1500, "OK");
     }
   };
 
   let loadFailed = (error) => {
     isVisible(false);
     setErrorStaus(true);
-
-    // alert("Something went wrong! Please Reload");
   };
 
   let handleOnDragEvent = (result) => {
     if (!result.destination) return;
-    // console.log(result);
     let updateChangedUnitOrder = Array.from(course.units);
-    updateChangedUnitOrder[result.source.index].index = result.destination.index;
-    const [reOrderedItems] = updateChangedUnitOrder.splice(result.source.index, 1);
+    updateChangedUnitOrder[result.source.index].index =
+      result.destination.index;
+    const [reOrderedItems] = updateChangedUnitOrder.splice(
+      result.source.index,
+      1
+    );
     updateChangedUnitOrder.splice(result.destination.index, 0, reOrderedItems);
     setCourses({ ...course, units: updateChangedUnitOrder });
-    let i = 0
-    updateChangedUnitOrder.forEach(unit => {
+    let i = 0;
+    updateChangedUnitOrder.forEach((unit) => {
       unit.index = i;
       i++;
     });
-    unitJsonToUpdate.units = updateChangedUnitOrder.map(unit => {
+    unitJsonToUpdate.units = updateChangedUnitOrder.map((unit) => {
       return {
         unit_id: unit.unit_id,
-        index: unit.index
-      }
-    })
+        index: unit.index,
+      };
+    });
     setCourses({ ...course, units: updateChangedUnitOrder });
 
-    console.log(unitJsonToUpdate)
+    console.log(unitJsonToUpdate);
     setIsUnitOrderChanged(true);
   };
 
   let updateChangedUnitOrder = async (event) => {
-    console.log(unitJsonToUpdate)
+    console.log(unitJsonToUpdate);
 
     let response, data;
     try {
-      response = await fetch(LinkHelper.getLink() + "admin/unit/update/position", {
-        method: "PUT",
-        headers: {
-          "authorization": "Bearer " + StorageHelper.get("token"),
+      response = await fetch(
+        LinkHelper.getLink() + "admin/unit/update/position",
+        {
+          method: "PUT",
+          headers: {
+            authorization: "Bearer " + StorageHelper.get("token"),
 
-          "content-type": "application/json",
-        },
-        body: JSON.stringify(unitJsonToUpdate)
-      })
+            "content-type": "application/json",
+          },
+          body: JSON.stringify(unitJsonToUpdate),
+        }
+      );
       try {
         data = await response.json();
         console.log(data);
         if (data.success) {
           // alert("Successfully Updated");
-          SnackBar("Successfully Updated", 1500, "OK")
+          SnackBar("Successfully Updated", 1500, "OK");
 
           setIsUnitOrderChanged(false);
         } else {
-          // alert("Something went wrong! Please Retry");
-          SnackBar("Something went wrong! Please Retry", 1500, "OK")
-
+          SnackBar(data.message, 1500, "OK");
         }
         setIsUnitOrderChanged(false);
-      }
-      catch (err) {
-        console.log(err)
-        // alert("Something went wrong! Please Retry");
-        SnackBar("Something went wrong! Please Retry", 1500, "OK")
+      } catch (err) {
+        console.log(err);
+        SnackBar(err.message, 1500, "OK");
         setIsUnitOrderChanged(false);
       }
     } catch (err) {
       console.log(err);
-      // alert("Something went wrong! Please Retry");
-      SnackBar("Something went wrong! Please Retry", 1500, "OK")
+      SnackBar(err.message, 1500, "OK");
       setIsUnitOrderChanged(false);
     }
-  }
-
+  };
 
   return (
     <>
       <Navbar />
 
-
       <div className="MainContent">
         <Header PageTitle={"Courses "} />
 
         <div className="MainInnerContainer">
+          {state.progressSpinner ? (
+            <>
+              <div class="spinner-border text-dark" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+            </>
+          ) : (
+            <></>
+          )}
 
           {progressVisibility ? (
             <Loader />
@@ -237,6 +237,22 @@ export default function Courses() {
                           </Link>
                         </div>
                       </div>
+                      <div className="d-flex flex-row justify-content-end mt-3 card-footer">
+                        <Link
+                          className="btn btn-primary btn-sm"
+                          to="add-unit"
+                          state={{ course: course }}
+                        >
+                          Add Unit <i className="fas fa-plus ms-2"></i>
+                        </Link>
+                        <Link
+                          className="btn btn-outline-primary btn-sm ms-auto me-2"
+                          to="editCourse"
+                          state={{ course: course }}
+                        >
+                          Edit Course <i className="far fa-edit ms-2"></i>
+                        </Link>
+                      </div>
                     </div>
                   </div>
                   <div className="col-12">
@@ -286,24 +302,58 @@ export default function Courses() {
                                 ))
                               ) : (
                                 <>
-                                  <div>No Units found</div>
+                                  <Draggable
+                                    key={unit.unit_id}
+                                    draggableId={unit.unit_id}
+                                    index={index}
+                                  >
+                                    {(provided) => (
+                                      <div
+                                        {...provided.draggableProps}
+                                        ref={provided.innerRef}
+                                        {...provided.dragHandleProps}
+                                        className="row justify-content-center mb-3"
+                                      >
+                                        <Unit
+                                          key={unit.unit_id}
+                                          image_url={unit.image_url}
+                                          has_prerequisite={unit.prerequisite.has_prerequisite.toString()}
+                                          type={unit.prerequisite.type}
+                                          time={unit.prerequisite.time}
+                                          message={unit.prerequisite.message}
+                                          unit_name={unit.unit_title}
+                                          tags={unit.tags}
+                                          total_lessons={unit.total_lessons}
+                                          is_paid={unit.is_paid}
+                                          is_locked={unit.is_locked}
+                                          unit_id={unit.unit_id}
+                                        />
+                                      </div>
+                                    )}
+                                  </Draggable>
                                 </>
                               )}
+                              : (
+                              <>
+                                <div>No Units found</div>
+                              </>
+                            )}
                             </div>
                           )}
                         </Droppable>
                       </DragDropContext>
                     </div>
                   </div>
-                </div>
+                </div >
               </>
             ) : (
               <div className="d-flex justify-content-center">
                 Error Loading Content. Please Reload.
               </div>
-            )}
-        </div>
-      </div>
+            )
+          }
+        </div >
+      </div >
     </>
   );
 }

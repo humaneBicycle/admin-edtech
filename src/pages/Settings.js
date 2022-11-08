@@ -15,6 +15,7 @@ export default function Settings() {
     new_admin: {
       admin_id: StorageHelper.get("admin_id"),
     },
+    rpay_credentials:{}
   });
 
   useEffect(() => {
@@ -59,6 +60,36 @@ export default function Settings() {
       console.log(err);
     }
   };
+
+  let setRazorPayCredentials=async()=>{
+    let data, response
+    try{
+      response=await fetch(LinkHelper.getLink()+"admin/razorpay/update",{
+        method:"POST",
+        headers:{
+          "Content-Type":"application/json",
+          "Authorization":"Bearer "+StorageHelper.get("token")
+        },
+        body:JSON.stringify({
+          admin_id:StorageHelper.get("admin_id"),
+          razorpay_key_id:state.rpay_credentials.razorpay_key_id,
+          razorpay_key_secret:state.rpay_credentials.razorpay_key_secret
+        })
+      })
+      try{
+        data=await response.json();
+        console.log(data)
+        if(data.success){
+          SnackBar("Razorpay credentials updated successfully");
+        }
+      }
+      catch(err){
+        console.log(err)
+      }
+    }catch(err){
+      console.log(err)
+    }
+  }
 
   let setAWSCredentials = async (e) => {
     setState({ ...state, isSpinner: true });
@@ -357,6 +388,70 @@ export default function Settings() {
                         type="submit"
                         className="btn btn-primary my-2 w-50 mx-auto"
                         onClick={setAWSCredentials}
+                      >
+                        Submit
+                      </button>
+                    </form>
+                    <form className="AWSSection">
+                      <div className="formElement">
+                        <label
+                          htmlFor="exampleInputEmail1"
+                          className="formLabel"
+                        >
+                          Razor Pay key
+                        </label>
+                        <input
+                          className="formInput"
+                          id="exampleInputEmail1"
+                          placeholder="Enter Razor Pay key"
+                          value={state.rpay_credentials.accessKeyId}
+                          onChange={(e) => {
+                            setState({
+                              ...state,
+                              rpay_credentials: {
+                                ...state.rpay_credentials,
+                                accessKeyId: e.target.value,
+                              },
+                            });
+                          }}
+                        />
+                        <div id="emailHelp" className="formHelper"></div>
+                      </div>
+                      <div className="formElement">
+                        <label
+                          htmlFor="exampleInputPassword1"
+                          className="formLabel"
+                        >
+                          Razor Pay Secret Key
+                        </label>
+                        <input
+                          className="formInput"
+                          id="exampleInputPassword1"
+                          placeholder="Enter Razor Pay Secret Key"
+                          value={state.credentials.secretAccessKey}
+                          onChange={(e) => {
+                            setState({
+                              ...state,
+                              credentials: {
+                                ...state.credentials,
+                                secretAccessKey: e.target.value,
+                              },
+                            });
+                          }}
+                        />
+                      </div>
+
+                      <p className="note m-3 me-5">
+                        <strong>Razorpay credentials : </strong>
+                        
+                        <strong>Note: </strong> All old AWS Credentials will be
+                        deleted.{" "}
+                      </p>
+
+                      <button
+                        type="submit"
+                        className="btn btn-primary my-2 w-50 mx-auto"
+                        onClick={setRazorPayCredentials}
                       >
                         Submit
                       </button>

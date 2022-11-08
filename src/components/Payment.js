@@ -67,7 +67,7 @@ export default function Payment(props) {
         setState({ ...state, spinner: false });
       }
     } catch (e) {
-      SnackBar("Something went wrong");
+      SnackBar(e.message);
       setState({ ...state, spinner: false });
       console.log(e);
     }

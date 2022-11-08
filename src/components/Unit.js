@@ -17,9 +17,6 @@ export default function Unit({
   unit_id,
   image_url
 }) {
-  // function editUnit(e) {
-  //   e.preventDefault();
-  // }
   let unit = {
     has_prerequisite: has_prerequisite,
     message: message,
@@ -31,35 +28,39 @@ export default function Unit({
     unit_id: unit_id,
     image_url: image_url
   };
+  let [state, setState] = React.useState({
+    progressSpinner: false
+  })
 
   let deleteUnit = async () => {
-
-    // console.log("delete");
     let response, data;
+    let toSend = {
+      unit_id: unit.unit_id,
+      admin_id: StorageHelper.get("admin_id"),
+    }
+    console.log(toSend, LinkHelper.getLink() + "admin/unit/remove")
     try {
-      response = await fetch(LinkHelper.getLink() + "/admin/unit/remove", {
+      response = await fetch(LinkHelper.getLink() + "admin/unit/remove", {
         method: "DELETE",
         headers: {
           "authorization": "Bearer " + StorageHelper.get("token"),
 
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          unit_id: unit.unit_id,
-          admin_id: StorageHelper.get("admin_id"),
-        }),
+        body: JSON.stringify(toSend),
       });
       try {
         data = await response.json();
         console.log(data)
 
         if (data.success) {
+          SnackBar("Delete Successfull!")
           window.location.reload();
         } else if (data.message === "token is not valid please login") {
           SnackBar("Token is not valid please login again");
           window.location.href = "/login";
         } else {
-          SnackBar("Something went wrong");
+          SnackBar(data.message);
         }
       } catch (error) {
         console.log(error);
@@ -67,6 +68,7 @@ export default function Unit({
     } catch (err) {
       console.log(err);
     }
+    setState({ ...state, progressSpinner: false })
   };
 
   return (
@@ -161,17 +163,17 @@ export default function Unit({
                 >
                   Edit Unit
                 </Link>
-              </div>
+              </div >
 
 
 
 
 
 
-            </div>
-          </div>
-        </div>
-      </div>
+            </div >
+          </div >
+        </div >
+      </div >
     </div >
 
 

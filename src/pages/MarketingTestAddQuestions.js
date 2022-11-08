@@ -6,7 +6,7 @@ import SnackBar from "../components/snackbar";
 import LinkHelper from "../utils/LinkHelper";
 import StorageHelper from "../utils/StorageHelper";
 
-export default function PersonalityTestAddQuestions() {
+export default function MarketingTestAddQuestions() {
   let { test } = useLocation().state;
   let [state, setState] = React.useState({
     spinner: true,
@@ -17,7 +17,7 @@ export default function PersonalityTestAddQuestions() {
     setState({ ...state, spinner: true });
     let response,data
     try{
-        response=await fetch(LinkHelper.getLink()+"admin/personality/test/update",{
+        response=await fetch(LinkHelper.getLink()+"admin/marketing/test/update",{
             method:"POST",
             headers:{
                 "authorization":"Bearer "+StorageHelper.get("token"),
@@ -58,7 +58,7 @@ export default function PersonalityTestAddQuestions() {
       <Navbar />
 
       <div className="MainContent">
-        <Header PageTitle={"Add Personality Questions"} />
+        <Header PageTitle={"Add Marketing Questions"} />
         <div className="MainInnerContainer">
           <form className="container-fluid ">
             <div class="form-outline mb-4 ">

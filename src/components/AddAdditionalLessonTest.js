@@ -153,13 +153,13 @@ export default function AddAdditionalLessonTest(props) {
         }
       } catch (err) {
         console.log(err)
-        SnackBar("Something went wrong ");
+        SnackBar(err.message);
         setState({ ...state, spinner: false });
       }
     } catch (err) {
       console.log(err)
 
-      SnackBar("Something went wrong ");
+      SnackBar(err.message);
       setState({ ...state, spinner: false });
     }
   };

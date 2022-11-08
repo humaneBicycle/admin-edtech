@@ -90,6 +90,14 @@ export default function Navbar() {
               Personality Test
 
             </NavLink>
+            <NavLink to="/personality-test" className="sideMenuLink">
+              Personality Test
+
+            </NavLink>
+            <Link to="/marketing-test" className="sideMenuLink">
+              Marketing Test
+
+            </Link>
           </ul>
 
           <div className="sideMenuFooter ">

@@ -28,8 +28,10 @@ import Assignments from "./pages/Assignments";
 import Payments from "./pages/Payments";
 import AddAdditionalUnit from "./pages/AddAdditionalLesson";
 import PersonalityTest from "./pages/PersonalityTest";
+import MarketingTest from "./pages/MarketingTest";
 import PersonalityTestAddQuestions from "./pages/PersonalityTestAddQuestions";
 import BlockedDeviceApprovals from "./pages/BlockedDeviceApprovals";
+import MarketingTestAddQuestions from "./pages/MarketingTestAddQuestions";
 
 export const Title = "Admin Panel";
 document.title = "Admin Panel";
@@ -58,7 +60,9 @@ root.render(
         <Route path="/course" element={<Courses />} />
         <Route path="/settings" element={<Settings />} />
         <Route path="/personality-test" element={<PersonalityTest />} />
+        <Route path="/marketing-test" element={<MarketingTest />} />
         <Route path="/personality-test/add-questions" element={<PersonalityTestAddQuestions />} />
+        <Route path="/marketing-test/add-questions" element={<MarketingTestAddQuestions />} />
         <Route path="/course/editCourse" element={<EditCourseModal />} />
         <Route path="/course/add-unit" element={<AddUnit />} />
         <Route path="/course/edit-unit" element={<EditUnit />} />
