@@ -697,12 +697,61 @@ a>svg {
 }
 
 /* Dark Mode */
+html ::-webkit-scrollbar,
+html ::-webkit-scrollbar-track {
+  background-color: #0000;
+}
+
+html ::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+  cursor: pointer !important;
+  transition: all 1s ease-in-out !important;
+}
+
+html ::-webkit-scrollbar-thumb {
+  background-color: #0000;
+  background-color: #969faf;
+  border: 3px solid #0000;
+  border-radius: 20px;
+  background-clip: content-box;
+  cursor: pointer !important;
+  transition: all 1s ease-in-out !important;
+}
+
+html ::-webkit-scrollbar,
+html ::-webkit-scrollbar-track {
+  background-color: #0000;
+}
+
+html ::-webkit-scrollbar-track {
+  background: none;
+  background-clip: content-box;
+}
+
+html :hover::-webkit-scrollbar-track {
+  background: none;
+}
+
+::-webkit-scrollbar * {
+  background: transparent;
+}
+
+::selection {
+  background: #6b75db33;
+  color: #fbfbfb;
+  text-shadow: none;
+}
 
 .darkMode {
   --text: #E6E6E6 !important;
   --bg: #080613 !important;
   --lightBg: #161626 !important;
   --shadow: 10px 0px, 4px rgba(0, 0, 0, 0.12) !important;
+}
+
+.list-group-light .list-group-item {
+  padding: 1rem 0.5rem;
 }
 
 .darkMode #root {

@@ -123,107 +123,108 @@ export default function Notifications() {
                 state.notifications.length > 0 ? (
                   <>
                     {state.notifications.map((notification, index) => {
-                  return (
-                    <>
-                      <div
-                        key={index}
-                        className="NotificationBlock card flex-row g-2 p-3 border"
-                        style={{ border: "2px solid #ddd" }}
-                      >
-                        <div className="NotificationBlockDetailscard-body p-0">
-                          <h2 className="card-title">{notification.title}</h2>
-                          <p className="card-text">
-                            {notification.description}
-                          </p>
-                        </div>
-                        <div>
-                          <a
-                            href={notification.link}
-                            className="goToNotifications btn btn-primary rounded-3 bg-primary text-white"
-                          >
-                            Go to link
-                          </a>
-                        </div>
-                        <button
-                          className="goToNotifications btn btn-danger rounded-3 text-white"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            let deleteNotification = async () => {
-                              let response, data;
-                              try {
-                                response = await fetch(
-                                  LinkHelper.getLink() +
-                                    "admin/notification/remove",
-                                  {
-                                    method: "DELETE",
-                                    headers: {
-                                      "Content-Type": "application/json",
-                                      Authorization:
-                                        "Bearer " + StorageHelper.get("token"),
-                                    },
-                                    body: JSON.stringify({
-                                      notification_id:
-                                        notification._id,
-                                        admin_id: StorageHelper.get("admin_id"),
-                                    }),
-                                  }
-                                );
-                                try {
-                                  data = await response.json();
-                                  console.log(data);
-                                  if (data.success) {
-                                    setState({
-                                      ...state,
-                                      spinner: false,
-                                      notifications: state.notifications.filter(
-                                        (item) => {
-                                          return (
-                                            item.notification_id !==
-                                            notification.notification_id
-                                          );
-                                        }
-                                      ),
-                                    });
-                                    let temp = state.notifications;
-                                    temp.splice(index, 1);
-                                    setState({ ...state, notifications: temp });
-                                    // alert("Notification will be sent soon.");
-                                    SnackBar(
-                                      "Notification Deleted",
-                                      1500,
-                                      "OK"
-                                    );
-                                  } else {
-                                    setState({ ...state, spinner: false });
-                                    // alert("Error " + data.message);
-                                    SnackBar(
-                                      "Error : " + data.message,
-                                      1500,
-                                      "OK"
-                                    );
-                                  }
-                                } catch (err) {
-                                  setState({ ...state, spinner: false });
-                                  // alert("Error ", err);
-                                  SnackBar("Error : " + err, 1500, "OK");
-                                }
-                              } catch (err) {
-                                // alert("error", err);
-                                SnackBar("Error : " + err, 1500, "OK");
-                              }
-                            };
-                            deleteNotification()
-                          }}
+                      return (
+
+                        <div
+                          key={index}
+                          className="NotificationBlock card flex-column flex-md-row g-2 p-3 border align-items-stretch"
+                          style={{ border: "2px solid #ddd" }}
                         >
-                          Delete
-                        </button>
-                      </div>
-                    </>
-                  );
-                })}
+                          <div className="NotificationBlockDetails card-body p-0 col-md-8">
+                            <h2 className="card-title">{notification.title}</h2>
+                            <p className="card-text">
+                              {notification.description}
+                            </p>
+                          </div>
+                          <div className="d-flex  flex-row justify-content-start flex-md-column justify-content-md-center">
+                            <a
+                              href={notification.link}
+                              className=" btn btn-primary btn-sm rounded-3 bg-primary text-white m-2"
+                            >
+                              Go to link
+                            </a>
+
+                            <button
+                              className=" btn btn-danger btn-sm rounded-3 text-white m-2"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                let deleteNotification = async () => {
+                                  let response, data;
+                                  try {
+                                    response = await fetch(
+                                      LinkHelper.getLink() +
+                                      "admin/notification/remove",
+                                      {
+                                        method: "DELETE",
+                                        headers: {
+                                          "Content-Type": "application/json",
+                                          Authorization:
+                                            "Bearer " + StorageHelper.get("token"),
+                                        },
+                                        body: JSON.stringify({
+                                          notification_id:
+                                            notification._id,
+                                          admin_id: StorageHelper.get("admin_id"),
+                                        }),
+                                      }
+                                    );
+                                    try {
+                                      data = await response.json();
+                                      console.log(data);
+                                      if (data.success) {
+                                        setState({
+                                          ...state,
+                                          spinner: false,
+                                          notifications: state.notifications.filter(
+                                            (item) => {
+                                              return (
+                                                item.notification_id !==
+                                                notification.notification_id
+                                              );
+                                            }
+                                          ),
+                                        });
+                                        let temp = state.notifications;
+                                        temp.splice(index, 1);
+                                        setState({ ...state, notifications: temp });
+                                        // alert("Notification will be sent soon.");
+                                        SnackBar(
+                                          "Notification Deleted",
+                                          1500,
+                                          "OK"
+                                        );
+                                      } else {
+                                        setState({ ...state, spinner: false });
+                                        // alert("Error " + data.message);
+                                        SnackBar(
+                                          "Error : " + data.message,
+                                          1500,
+                                          "OK"
+                                        );
+                                      }
+                                    } catch (err) {
+                                      setState({ ...state, spinner: false });
+                                      // alert("Error ", err);
+                                      SnackBar("Error : " + err, 1500, "OK");
+                                    }
+                                  } catch (err) {
+                                    // alert("error", err);
+                                    SnackBar("Error : " + err, 1500, "OK");
+                                  }
+                                };
+                                deleteNotification()
+                              }}
+                            >
+                              Delete
+                            </button>
+                          </div>
+                        </div>
+
+                      );
+                    })}
                   </>
-                ):(<>No Notifications Found!</>)
-                
+                ) : (<>No Notifications Found!</>)
+
               ) : (
                 <>
                   <Loader />
@@ -233,9 +234,9 @@ export default function Notifications() {
           </div>
         </div>
       </div>{" "}
-      <div class="fixed-action-btn" id="fixed1">
+      <div className="fixed-action-btn" id="fixed1">
         <button
-          class="btn btn-floating bg-success text-white btn-lg "
+          className="btn btn-floating bg-success text-white btn-lg "
           data-mdb-toggle="modal"
           data-mdb-target="#addNew"
         >
@@ -258,27 +259,27 @@ export default function Notifications() {
         </button>
       </div>
       <div
-        class="modal fade"
+        className="modal fade"
         id="addNew"
-        tabindex="-1"
+        tabIndex="-1"
         aria-labelledby="exampleModalLabel"
         aria-hidden="true"
       >
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
+        <div className="modal-dialog">
+          <div className="modal-content">
+            <div className="modal-header">
               <h2 className="modal-title" id="exampleModalLabel">
                 Add Notification
               </h2>
 
               <button
                 type="button"
-                class="btn-close"
+                className="btn-close"
                 data-mdb-dismiss="modal"
                 aria-label="Close"
               ></button>
             </div>
-            <div class="modal-body">
+            <div className="modal-body">
               <div className="form-floating mb-4">
                 <input
                   type="email"
@@ -340,10 +341,10 @@ export default function Notifications() {
                 </label>
               </div>
             </div>
-            <div class="modal-footer">
+            <div className="modal-footer">
               <button
                 type="button"
-                class="btn btn-secondary"
+                className="btn btn-secondary"
                 data-mdb-dismiss="modal"
               >
                 Close

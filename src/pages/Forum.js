@@ -14,13 +14,13 @@ import { ScrollMenu } from "react-horizontal-scrolling-menu";
 let questions = [];
 let answers = [];
 let loadedPageAnswerG = 1;
-let count=0;
+let count = 0;
 export default function Discussion() {
   let [state, setState] = useState({
     spinner: false,
     loadedPageAnswer: 1,
   });
-  let [tags,setTags] = useState([]);
+  let [tags, setTags] = useState([]);
   let [loadedPageQuestion, setLoadedPageQuestion] = useState(1);
   let [isLoaded, setIsLoaded] = useState(false);
   let [isAnswerLoaded, setIsAnswerLoaded] = useState(false);
@@ -32,7 +32,7 @@ export default function Discussion() {
     getTags();
   }, []);
 
-  console.log("count:",count++,state)
+  console.log("count:", count++, state)
 
   let getQuestions = async () => {
     let response, data;
@@ -305,16 +305,27 @@ export default function Discussion() {
           )}
           {isLoaded ? (
             <>
-              <div className="row">
-                <h3 className="col-1 " >Tags:</h3>
-                <div className="col-9 ">
+              <div className="d-flex w-100 justify-content-between align-content-center p-2 flex-wrap">
+                <h3 className="col-2 order-0" >Tags:</h3>
+                <div className="col-2 ms-auto">
+                  <button
+                    className="btn btn-success text-capitalize "
+                    style={{ cursor: "pointer" }}
+                    data-mdb-toggle="modal"
+                    data-mdb-target="#addNew"
+                  >
+                    Add More
+                  </button>
+                </div>
+                <div className="col-12 mx-auto p-3">
                   <ScrollMenu>
                     {tags.map((tag, index) => {
                       return (
-                        <div
-                          className="mx-2"
+                        <span
+                          className="mx-2 badge badge-info"
                           itemID={index}
                           key={index}
+                          style={{ cursor: "pointer" }}
                           // LeftArrow={LeftArrow}
                           // RightArrow={RightArrow}
                           onClick={(e) => {
@@ -333,20 +344,12 @@ export default function Discussion() {
                           }}
                         >
                           {tag}
-                        </div>
+                        </span>
                       );
                     })}
                   </ScrollMenu>
                 </div>
-                <div className="col-2">
-                  <button
-                    className="btn btn-success"
-                    data-mdb-toggle="modal"
-                    data-mdb-target="#addNew"
-                  >
-                    Add
-                  </button>
-                </div>
+
               </div>
               <div className="FlexBoxRow FlexWrap">
                 <div className="Flex50">
@@ -476,7 +479,7 @@ export default function Discussion() {
                               <li
                                 className="ListItem active"
                                 aria-current="true"
-                                key = {index}
+                                key={index}
                               >
                                 {index + 1 + ". " + answer.head}
                                 <br></br>
