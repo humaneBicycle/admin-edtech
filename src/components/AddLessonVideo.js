@@ -16,6 +16,8 @@ export default function AllLessonVideo(props) {
   let [progress, setProgress] = useState(-1);
   const location = useLocation();
   let { unit } = location.state;
+  let {lesson}=location.state;
+
   credentials = props.awsCredentials;
 
   let [activeLessonVideo, setActiveLessonVideo] = useState({
@@ -25,6 +27,7 @@ export default function AllLessonVideo(props) {
     prerequisite: {
       has_prerequisite: false,
     },
+    ...lesson,
   });
   let [state, setState] = useState({
     isButtonDisabled: false,

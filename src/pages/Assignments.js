@@ -19,8 +19,6 @@ export default function Assignments() {
     getUnits();
   }, []);
 
-  //   console.log(state);
-
   let getAssignments = async (details) => {
     if (details !== state.last_details) {
       if (details.page === state.total_pages + 1) {
@@ -121,7 +119,6 @@ export default function Assignments() {
   };
 
   let approveAssignment = async (assignment_id) => {
-    // setState({ ...state, spinner: true });
     let response, json;
     try {
       response = await fetch(

@@ -65,7 +65,7 @@ export default function PersonalityTest() {
     <>
       <Navbar />
       <div className="MainContent">
-        <Header PageTitle={"Answer Question "} />
+        <Header PageTitle={"Personality Test"} />
 
         <div className="MainInnerContainer">
           {!state.spinner ? (

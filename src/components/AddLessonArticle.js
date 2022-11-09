@@ -8,6 +8,7 @@ import SnackBar from "./snackbar";
 export default function AllLessonArticle(props) {
   let location = useLocation();
   let { unit } = location.state;
+  let {lesson}=location.state;
   let [spinner, setSpinner] = useState(false);
   let [state,setState]=useState({
     isAddButtonDisabled: false,
@@ -20,6 +21,7 @@ export default function AllLessonArticle(props) {
     prerequisite: {
       has_prerequisite: false,
     },
+    ...lesson,
   };
 
   let [article, setArticle] = useState(articleInit);

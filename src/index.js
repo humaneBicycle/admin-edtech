@@ -32,6 +32,7 @@ import MarketingTest from "./pages/MarketingTest";
 import PersonalityTestAddQuestions from "./pages/PersonalityTestAddQuestions";
 import BlockedDeviceApprovals from "./pages/BlockedDeviceApprovals";
 import MarketingTestAddQuestions from "./pages/MarketingTestAddQuestions";
+import EditLesson from "./pages/EditLesson";
 
 export const Title = "Admin Panel";
 document.title = "Admin Panel";
@@ -71,6 +72,7 @@ root.render(
         <Route path="/course/lessons/lesson" element={<Lesson />} />
         <Route path="/additional-lessons" element={<AddAdditionalUnit />} />
         <Route path="/admin/forum/add-answer" element={<AnswerThisQuestion />} />
+        <Route path="/admin/lesson/edit-lesson" element={<EditLesson />} />
       </Route>
 
 

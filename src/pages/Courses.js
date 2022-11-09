@@ -237,22 +237,6 @@ export default function Courses() {
                           </Link>
                         </div>
                       </div>
-                      <div className="d-flex flex-row justify-content-end mt-3 card-footer">
-                        <Link
-                          className="btn btn-primary btn-sm"
-                          to="add-unit"
-                          state={{ course: course }}
-                        >
-                          Add Unit <i className="fas fa-plus ms-2"></i>
-                        </Link>
-                        <Link
-                          className="btn btn-outline-primary btn-sm ms-auto me-2"
-                          to="editCourse"
-                          state={{ course: course }}
-                        >
-                          Edit Course <i className="far fa-edit ms-2"></i>
-                        </Link>
-                      </div>
                     </div>
                   </div>
                   <div className="col-12">

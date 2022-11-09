@@ -91,24 +91,22 @@ export default function LeaderBoard() {
                   {state.leaders.map((leader, index) => {
                     return (
                       
-                        <div 
+                        <Link 
                           key={index}
                           className="NotificationBlock card flex-row g-2 p-3 border"
                           style={{ border: "2px solid #ddd" }}
+                          state={{ currentUser: { user_id: leader.id } }}
+                          to="/students/profile"
+
                         >
                           <div className="NotificationBlockDetailscard-body p-0">
                             <h2 className="card-title">{index+1 + ". "+leader.user_name}</h2>
                             <p className="card-text">Score: {leader.score}</p>
                           </div>
                           <div>
-                            <Link
-                              to="/students/profile"
-                              state={{ currentUser: { user_id: leader.id } }}
-                            >
-                              Student Profile
-                            </Link>
+                            
                           </div>
-                        </div>
+                        </Link>
                       
                     );
                   })}

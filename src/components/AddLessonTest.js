@@ -10,7 +10,9 @@ import StorageHelper from "../utils/StorageHelper";
 
 let credentials, imageId;
 export default function AddLessonTest(props) {
+  let location = useLocation();
   let { unit } = useLocation().state;
+  let {lesson}=location.state;
 
 
   credentials = props.awsCredentials;
@@ -32,6 +34,7 @@ export default function AddLessonTest(props) {
       completetion:"auto",
     },
     lessons: [],
+    ...lesson,
   };
   let [state, setState] = useState(initState);
   let imageRef = useRef(null);

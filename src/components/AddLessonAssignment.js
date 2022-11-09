@@ -12,6 +12,8 @@ export default function AllLessonAsignment() {
   let [state,setState]=useState({
     isAddButtonDisabled: false,
   })
+  let {lesson}=location.state;
+  console.log("lesson in data: ",lesson)
 
   let assignmentInit = {
     admin_id: StorageHelper.get("admin_id"),
@@ -22,7 +24,10 @@ export default function AllLessonAsignment() {
     },
     status: "pending",
     completetion: "auto",
+    ...lesson,
   };
+  console.log("lesson init: ",lesson)
+
   let [assignment, setAssignment] = useState(assignmentInit);
 
   let handleAssignmentChange = (mode, e) => {
@@ -36,7 +41,6 @@ export default function AllLessonAsignment() {
     if (
       assignment.title === undefined ||
       assignment.body === undefined ||
-      assignment.sample === undefined ||
       assignment.placeholder === undefined ||
       assignment.completetion===undefined
     ) {
@@ -102,7 +106,7 @@ export default function AllLessonAsignment() {
             handleAssignmentChange("title", event);
           }}
         />
-        <label htmlFor="exampleFormControlInput1" className="form-label">
+        {/* <label htmlFor="exampleFormControlInput1" className="form-label">
           Sample
         </label>
         <input
@@ -111,7 +115,7 @@ export default function AllLessonAsignment() {
           onChange={(event) => {
             handleAssignmentChange("sample", event);
           }}
-        />
+        /> */}
         <label htmlFor="exampleFormControlInput1" className="form-label">
           PlaceHolder
         </label>

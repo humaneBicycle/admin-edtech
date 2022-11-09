@@ -460,7 +460,7 @@ export default function Lessons() {
                                       )}
                                     </div>
                                     <button
-                                      className="btn btn-danger"
+                                      className="btn btn-danger mx-2 my-2"
                                       onClick={(e) => {
                                         e.preventDefault();
                                         deleteLesson(lesson.lesson_id);
@@ -468,6 +468,13 @@ export default function Lessons() {
                                     >
                                       Delete Lesson
                                     </button>
+                                    <Link
+                                      className="btn btn-primary mx-2 my-2"
+                                      to={`/admin/lesson/edit-lesson`}
+                                      state={{ lesson: lesson, unit:unit }}
+                                    >
+                                      Edit Lesson
+                                    </Link>
                                   </li>
                                 </Link>
                               )}
