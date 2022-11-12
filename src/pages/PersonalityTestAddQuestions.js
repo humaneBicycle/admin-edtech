@@ -18,7 +18,7 @@ export default function PersonalityTestAddQuestions() {
     let response,data
     try{
         response=await fetch(LinkHelper.getLink()+"admin/personality/test/update",{
-            method:"POST",
+            method:"PUT",
             headers:{
                 "authorization":"Bearer "+StorageHelper.get("token"),
                 "Content-Type":"application/json",

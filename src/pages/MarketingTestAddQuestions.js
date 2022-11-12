@@ -18,7 +18,7 @@ export default function MarketingTestAddQuestions() {
     let response,data
     try{
         response=await fetch(LinkHelper.getLink()+"admin/marketing/test/update",{
-            method:"POST",
+            method:"PUT",
             headers:{
                 "authorization":"Bearer "+StorageHelper.get("token"),
                 "Content-Type":"application/json",

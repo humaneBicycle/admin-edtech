@@ -8,7 +8,6 @@ import "../pages/classes.css";
 import SnackBar from "../components/snackbar";
 import Header from "../components/Header";
 import { ScrollMenu } from "react-horizontal-scrolling-menu";
-// import { LeftArrow, RightArrow } from "../components/arrows";
 
 
 let questions = [];
@@ -35,6 +34,7 @@ export default function Discussion() {
   console.log("count:", count++, state)
 
   let getQuestions = async () => {
+    
     let response, data;
     try {
       let json = {
@@ -42,6 +42,7 @@ export default function Discussion() {
         page: loadedPageQuestion,
         tags: tags,
       };
+      console.log("json sent while question request: ", json)
       response = await fetch(
         LinkHelper.getLink() + "/admin/forum/getAllQuestion",
         {
@@ -72,11 +73,11 @@ export default function Discussion() {
           SnackBar(data.message);
         }
       } catch {
-        SnackBar("Error" + data.message, 1500, "OK");
+        SnackBar( data.message, 1500, "OK");
       }
     } catch (error) {
       console.log(error);
-      SnackBar("Error" + data.message, 1500, "OK");
+      SnackBar( data.message, 1500, "OK");
     }
   };
 
@@ -269,11 +270,12 @@ export default function Discussion() {
         },
         body: JSON.stringify({
           admin_id: StorageHelper.get("admin_id"),
-          tag: event.target.value,
+          tags: [...event.target.value],
         }),
       });
       try {
         data = await response.json();
+        console.log(data);
         if (data.success) {
           SnackBar("Tag added successfully");
           setTags([...tags, event.target.value]);
@@ -281,6 +283,8 @@ export default function Discussion() {
           throw new Error(data.message);
         }
       } catch (err) {
+      SnackBar(err.message, 1500, "OK");
+
         console.log(err);
       }
     } catch (err) {

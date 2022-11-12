@@ -138,8 +138,14 @@ export default function Notifications() {
                           </div>
                           <div className="d-flex  flex-row justify-content-start flex-md-column justify-content-md-center">
                             <a
-                              href={notification.link}
                               className=" btn btn-primary btn-sm rounded-3 bg-primary text-white m-2"
+                              onClick={() => {
+                                if(notification.link!==undefined){
+                                window.location.href=notification.link;
+                                }else{
+                                  SnackBar("No link found for this Notification!",1500,"OK");
+                                }
+                              }}
                             >
                               Go to link
                             </a>

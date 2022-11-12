@@ -13,7 +13,7 @@ export default function AllLessonAsignment() {
     isAddButtonDisabled: false,
   })
   let {lesson}=location.state;
-  console.log("lesson in data: ",lesson)
+  console.log("lesson in AddLessonAssignment: ",lesson)
 
   let assignmentInit = {
     admin_id: StorageHelper.get("admin_id"),

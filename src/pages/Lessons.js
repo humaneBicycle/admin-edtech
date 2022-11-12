@@ -233,12 +233,7 @@ export default function Lessons() {
                                             >
                                               <div className="row g-0">
                                                 <div className="col-md-2">
-                                                  <img
-                                                    src="https://mdbcdn.b-cdn.net/wp-content/uploads/2020/06/vertical.webp"
-                                                    alt="Trendy Pants and Shoes"
-                                                    className="img-fluid rounded-start"
-                                                    style={{ maxHeight: 250 }}
-                                                  />
+                                                  
                                                 </div>
                                                 <div className="col-md-8">
                                                   <div className="card-body">
@@ -276,12 +271,7 @@ export default function Lessons() {
                                             >
                                               <div className="row g-0">
                                                 <div className="col-md-2">
-                                                  <img
-                                                    src="https://mdbcdn.b-cdn.net/wp-content/uploads/2020/06/vertical.webp"
-                                                    alt="Trendy Pants and Shoes"
-                                                    className="img-fluid rounded-start"
-                                                    style={{ maxHeight: 250 }}
-                                                  />
+                                                  
                                                 </div>
                                                 <div className="col-md-8">
                                                   <div className="card-body">
@@ -319,12 +309,7 @@ export default function Lessons() {
                                             >
                                               <div className="row g-0">
                                                 <div className="col-md-2">
-                                                  <img
-                                                    src="https://mdbcdn.b-cdn.net/wp-content/uploads/2020/06/vertical.webp"
-                                                    alt="Trendy Pants and Shoes"
-                                                    className="img-fluid rounded-start"
-                                                    style={{ maxHeight: 250 }}
-                                                  />
+                                                  
                                                 </div>
                                                 <div className="col-md-8">
                                                   <div className="card-body">
@@ -356,12 +341,7 @@ export default function Lessons() {
                                           >
                                             <div className="row g-0">
                                               <div className="col-md-2">
-                                                <img
-                                                  src="https://mdbcdn.b-cdn.net/wp-content/uploads/2020/06/vertical.webp"
-                                                  alt="Trendy Pants and Shoes"
-                                                  className="img-fluid rounded-start"
-                                                  style={{ maxHeight: 250 }}
-                                                />
+                                                
                                               </div>
                                               <div className="col-md-8">
                                                 <div className="card-body">
@@ -392,12 +372,7 @@ export default function Lessons() {
                                           >
                                             <div className="row g-0">
                                               <div className="col-md-2">
-                                                <img
-                                                  src="https://mdbcdn.b-cdn.net/wp-content/uploads/2020/06/vertical.webp"
-                                                  alt="Trendy Pants and Shoes"
-                                                  className="img-fluid rounded-start"
-                                                  style={{ maxHeight: 250 }}
-                                                />
+                                               
                                               </div>
                                               <div className="col-md-8">
                                                 <div className="card-body">
@@ -429,12 +404,7 @@ export default function Lessons() {
                                             >
                                               <div className="row g-0">
                                                 <div className="col-md-2">
-                                                  <img
-                                                    src="https://mdbcdn.b-cdn.net/wp-content/uploads/2020/06/vertical.webp"
-                                                    alt="Trendy Pants and Shoes"
-                                                    className="img-fluid rounded-start"
-                                                    style={{ maxHeight: 250 }}
-                                                  />
+                                                  
                                                 </div>
                                                 <div className="col-md-8">
                                                   <div className="card-body">
