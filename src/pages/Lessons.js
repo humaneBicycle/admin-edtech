@@ -33,6 +33,11 @@ export default function Lessons() {
 
   let getLessons = async () => {
     try {
+      let init = {
+        unit_id: unit.unit_id,
+        admin_id: StorageHelper.get("admin_id"),
+      }
+      console.log(init)
       response = await fetch(LinkHelper.getLink() + "admin/unit", {
         method: "POST",
         headers: {
@@ -40,10 +45,7 @@ export default function Lessons() {
 
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          unit_id: unit.unit_id,
-          admin_id: StorageHelper.get("admin_id"),
-        }),
+        body: JSON.stringify(init),
       });
       try {
         data = await response.json();

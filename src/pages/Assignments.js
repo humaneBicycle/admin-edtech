@@ -37,7 +37,7 @@ export default function Assignments() {
           {
             method: "POST",
             headers: {
-              "Content-Type": "application/json",
+              "Content-Type": "application/json", 
               authorization: "Bearer " + StorageHelper.get("token"),
             },
             body: JSON.stringify(data),

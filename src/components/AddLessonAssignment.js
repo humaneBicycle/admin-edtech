@@ -53,7 +53,7 @@ export default function AllLessonAsignment() {
 
     let response, data;
     try {
-      response = await fetch(LinkHelper.getLink() + "/admin/lesson/create", {
+      response = await fetch(LinkHelper.getLink() + "admin/lesson/create", {
         method: "POST",
         headers: {
           authorization: "Bearer " + StorageHelper.get("token"),

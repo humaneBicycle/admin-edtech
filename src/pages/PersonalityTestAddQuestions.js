@@ -32,7 +32,7 @@ export default function PersonalityTestAddQuestions() {
             data=await response.json();
             if(data.success){
                 setState({...state,spinner:false})
-                SnackBar("Test updated successfully")
+                SnackBar(data.message,1500,"OK")
             }
             else if(data.message==="token is not valid please login"){
                 SnackBar("Token is not valid please login again");

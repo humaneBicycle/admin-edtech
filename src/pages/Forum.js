@@ -44,7 +44,7 @@ export default function Discussion() {
       };
       console.log("json sent while question request: ", json)
       response = await fetch(
-        LinkHelper.getLink() + "/admin/forum/getAllQuestion",
+        LinkHelper.getLink() + "admin/forum/getAllQuestion",
         {
           method: "POST",
           headers: {
@@ -141,7 +141,7 @@ export default function Discussion() {
     let response, data;
     try {
       response = await fetch(
-        LinkHelper.getLink() + "/admin/forum/question/remove",
+        LinkHelper.getLink() + "admin/forum/question/remove",
         {
           method: "DELETE",
           headers: {
@@ -277,7 +277,7 @@ export default function Discussion() {
         data = await response.json();
         console.log(data);
         if (data.success) {
-          SnackBar("Tag added successfully");
+          SnackBar(data.message);
           setTags([...tags, event.target.value]);
         } else {
           throw new Error(data.message);

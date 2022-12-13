@@ -16,6 +16,11 @@ export default function MarketingTestAddQuestions() {
   let updateTest = async() => {
     setState({ ...state, spinner: true });
     let response,data
+    let t = {
+      admin_id:StorageHelper.get("admin_id"),
+      test:state.test,
+  }
+  console.log("sent",t)
     try{
         response=await fetch(LinkHelper.getLink()+"admin/marketing/test/update",{
             method:"PUT",
@@ -23,16 +28,14 @@ export default function MarketingTestAddQuestions() {
                 "authorization":"Bearer "+StorageHelper.get("token"),
                 "Content-Type":"application/json",
             },
-            body:JSON.stringify({
-                admin_id:StorageHelper.get("admin_id"),
-                test:state.test,
-            })
+            body:JSON.stringify(t)
         })
         try{
             data=await response.json();
+            console.log(data)
             if(data.success){
                 setState({...state,spinner:false})
-                SnackBar("Test updated successfully")
+                SnackBar(data.message)
             }
             else if(data.message==="token is not valid please login"){
                 SnackBar("Token is not valid please login again");

@@ -48,7 +48,7 @@ export default function AllLessonAsignment() {
 
     let response, data;
     try {
-      response = await fetch(LinkHelper.getLink() + "/admin/lesson/additionals/create", {
+      response = await fetch(LinkHelper.getLink() + "admin/lesson/additionals/create", {
         method: "POST",
         headers: {
           authorization: "Bearer " + StorageHelper.get("token"),

@@ -27,7 +27,7 @@ export default function Students() {
   let getUsers = async () => {
     let response, data;
     try {
-      response = await fetch(LinkHelper.getLink() + "/admin/users", {
+      response = await fetch(LinkHelper.getLink() + "admin/users", {
         method: "POST",
         headers: {
           "authorization": "Bearer " + StorageHelper.get("token"),

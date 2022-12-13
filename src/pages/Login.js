@@ -27,7 +27,10 @@ export default function Login() {
         }),
       });
       try {
-        data = await response.json();
+        console.log("response",response)
+        data = await response.json()
+
+        console.log("data",data)
 
         setLoginButton(true);
         console.log(data);
@@ -49,13 +52,15 @@ export default function Login() {
 
       } catch (err) {
         console.log(err);
-        SnackBar("Email or Password is incorrect", 1500, "OK");
+        SnackBar(err.message, 1500, "OK");
+        setLoginButton(false);
       }
       console.log(e.target.email.value);
       console.log(e.target.password.value);
     } catch (error) {
       console.log(error);
       SnackBar(error.message, 1500, "OK");
+      setLoginButton(false);
     }
 
 
