@@ -258,8 +258,13 @@ export default function Discussion() {
     }
   };
 
-  let addTag = async (event) => {
+  let addTag = async (t) => {
     let response, data;
+    let init ={
+      admin_id: StorageHelper.get("admin_id"),
+      tags:[ ...tags,t],
+    }
+    console.log("init",init)
     try {
       response = await fetch(LinkHelper.getLink() + "admin/tags/create", {
         method: "POST",
@@ -268,17 +273,14 @@ export default function Discussion() {
 
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          admin_id: StorageHelper.get("admin_id"),
-          tags: [...event.target.value],
-        }),
+        body: JSON.stringify(init),
       });
       try {
         data = await response.json();
         console.log(data);
         if (data.success) {
           SnackBar(data.message);
-          setTags([...tags, event.target.value]);
+          setTags([...tags, t]);
         } else {
           throw new Error(data.message);
         }
@@ -600,8 +602,9 @@ export default function Discussion() {
               <button
                 type="button"
                 className="btn btn-primary"
-                onClick={(event) => {
-                  addTag(event);
+                onClick={() => {
+
+                  addTag(state.tagToAdd);
                 }}
               >
                 Add Tag

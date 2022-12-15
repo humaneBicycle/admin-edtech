@@ -38,7 +38,7 @@ export default function Lessons() {
         admin_id: StorageHelper.get("admin_id"),
       }
       console.log(init)
-      response = await fetch(LinkHelper.getLink() + "admin/unit", {
+      response = await fetch(LinkHelper.getLink() + "admin/lessons", {
         method: "POST",
         headers: {
           authorization: "Bearer " + StorageHelper.get("token"),
@@ -51,7 +51,7 @@ export default function Lessons() {
         data = await response.json();
         console.log(data)
         if (data.success) {
-          setLessons(data.data.lessons);
+          setLessons(data.data);
           setIsLoaded(true);
         } else {
           if(data.message==="Cannot read properties of null (reading 'toObject')"){
