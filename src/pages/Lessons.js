@@ -38,7 +38,7 @@ export default function Lessons() {
         admin_id: StorageHelper.get("admin_id"),
       }
       console.log(init)
-      response = await fetch(LinkHelper.getLink() + "admin/lessons", {
+      response = await fetch(LinkHelper.getLink() + " ", {
         method: "POST",
         headers: {
           authorization: "Bearer " + StorageHelper.get("token"),

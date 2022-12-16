@@ -14,26 +14,30 @@ import { S3Client, S3 } from "@aws-sdk/client-s3";
 let image;
 let imageId;
 let units=[]
+let credentials={}
+let count = 0
 
 export default function EditUnit() {
   const location = useLocation();
   const unit = location.state.unit;
-  console.log(unit)
   let [state, setState] = useState({
     spinner: true,
     activeUnit: {
       admin_id: StorageHelper.get("admin_id"),
-
+      
       ...unit,
       progress: -1,
       prerequisite: {
         has_prerequisite: unit.has_prerequisite,
       },
+      
     },
+    units:[]
   });
+  console.log("count:",count++," state:",state,"credentials: ",credentials)
 
   useEffect(() => {
-    getUnits();
+    getAWSCredentials();
   }, []);
 
 
@@ -52,10 +56,10 @@ export default function EditUnit() {
       });
       try {
         data = await response.json();
-        
         if (data.success) {
-          units.push(data.data)
-          getAWSCredentials();
+          console.log("state b4 setting units", state)
+          setState({...state, units: data.data,spinner: false});
+          // units.push(data.data)
         } else {
           SnackBar(data.message, 1500, "OK")
         }
@@ -96,9 +100,14 @@ export default function EditUnit() {
         data = await response.json();
 
         if (data.success) {
-          setState({...state, spinner: false,credentials: data.data});
+          // console.log("state b4 setting aws credentials", state)
+          // setState({...state, spinner: false,credentials: data.data})
+          credentials=data.data
+          getUnits()
 
-        } 
+        } else{
+          SnackBar(data.message, 1500, "OK")
+        }
       } catch (err) {
         console.log(err);
         SnackBar(err.message, 1500, "OK")
@@ -122,10 +131,13 @@ export default function EditUnit() {
       Body: image,
 
     }
+    if(image===null || image===undefined){
+        editUnit();
+      }else{
     try {
       const parallelUploads3 = new Upload({
         client:
-          new S3({ region: "us-east-1", credentials: state.credentials }) ||
+          new S3({ region: "us-east-1", credentials: credentials }) ||
           new S3Client({}),
         params: params,
 
@@ -145,16 +157,17 @@ export default function EditUnit() {
       editUnit();
     } catch (error) {
       console.log(error)
-      // alert("Error uploading image");
+      // alert("Error upiloading image");
       SnackBar("Error uploading image", 1000, "OK");
       setState({...state, spinner: false});
     }
+  }
   }
 
 
 
   async function editUnit() {
-    console.log(state);
+    console.log(state.activeUnit);
     let response, data;
     try {
       response = await fetch(LinkHelper.getLink() + "admin/unit/update", {
@@ -292,18 +305,18 @@ export default function EditUnit() {
                 <input
                   className="form-control"
                   id="floatingInput"
-                  value={state.activeUnit.description}
+                  value={state.activeUnit.message}
                   onChange={(event) => {
                     setState({
                       ...state,
                       activeUnit: {
                         ...state.activeUnit,
-                        description: event.target.value,
+                        message: event.target.value,
                       },
                     });
                   }}
                 />
-                <label htmlFor="floatingInput">Description </label>
+                <label htmlFor="floatingInput">Message </label>
               </div>
               <div className="form-floating mb-3">
                 
@@ -315,6 +328,7 @@ export default function EditUnit() {
                     type="checkbox"
                     role="switch"
                     id="flexSwitchCheckChecked"
+                    checked={state.activeUnit.prerequisite.has_prerequisite}
                     onChange={(event) => {
                       
                       setState({
@@ -354,11 +368,12 @@ export default function EditUnit() {
                           className="dropdown-menu"
                           aria-labelledby="dropdownMenuButton"
                         >
-                          {units.length !== 0 ? (
-                            units.map((unit,i) => {
+                          {state.units.length !== 0 ? (
+                            state.units.map((unit,i) => {
                               return (
                                 <li key={i} className="dropdown-item"
                                   onClick={(e) => {
+                                    
                                     setState({...state,prerequisite:{...state.prerequisite,on:unit._id}})
                                   }}
                                 >
@@ -367,7 +382,7 @@ export default function EditUnit() {
                               );
                             })
                           ) : (
-                            <li className="p-2">No Units Found. Can't set Prerequisite</li>
+                            <li className="p-2">No Units Found. Can't set Prerequisite.</li>
                           )}
                         </ul>
                       </div>

@@ -10,6 +10,8 @@ import { useLocation } from "react-router-dom";
 
 export default function Lesson() {
   let [state, setState] = React.useState({
+    spinner:true,
+    lesson:{},//full lesson after fetching
 
   })
   let {lesson }=useLocation().state;
@@ -19,6 +21,12 @@ export default function Lesson() {
 
   let getLesson = async () => {
     let response, data;
+    let init = {
+      lesson_id: lesson._id,
+      admin_id: StorageHelper.get("admin_id"),
+    }
+    // console.log(lesson)
+    
     try{
       response = await fetch(LinkHelper.getLink() + "admin/getLesson", {
         method: "POST",
@@ -27,16 +35,13 @@ export default function Lesson() {
 
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          lesson_id: lesson.lesson_id,
-          admin_id: StorageHelper.get("admin_id"),
-        }),
+        body: JSON.stringify(init),
       });
       try {
         data = await response.json();
-        console.log(data)
+        console.log(data.lesson)
         if(data.success){
-          setState({...state,lessons:[...data.data]})
+          setState({...state,lesson:data.lesson,spinner:false})
 
         }
       } catch(error) {
@@ -59,8 +64,22 @@ export default function Lesson() {
         <Header PageTitle={"Lesson"} />
 
         <div className="MainInnerContainer">
-          <Loader />
-          {SnackBar("Nothing Yet", 6000, "OK")}
+          {!state.spinner?<>
+            Title:{lesson.title}<br></br>
+            Amount:{lesson.amount}<br></br>
+            Currency:{lesson.currency}<br></br>
+            description:{lesson.description}<br></br>
+            Head:{lesson.head}<br></br>
+            type:{lesson.type}<br></br>
+            unit_id:{lesson.unit_id}<br></br>
+            completion:{lesson.completion}<br></br>
+            body:{lesson.body}<br></br>
+            body:{lesson.body}<br></br>
+            
+          
+          </>
+          :<Loader/>}
+          
         </div>
       </div>
     </>

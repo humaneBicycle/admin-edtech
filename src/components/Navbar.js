@@ -73,10 +73,10 @@ export default function Navbar() {
               LeaderBoard
 
             </NavLink>
-            <NavLink to="/assignments" className="sideMenuLink">
+            {/* <NavLink to="/assignments" className="sideMenuLink">
               Assignments
 
-            </NavLink>
+            </NavLink> */}
             <NavLink to="/payments" className="sideMenuLink">
               Payments
 
