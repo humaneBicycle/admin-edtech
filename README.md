@@ -36,11 +36,11 @@ Can be a meet link or offline
 ## Android App
 
 <img src="1 (4).jpg" width="200" height="400" /> 
-![1](<1 (5).jpg>) 
-![1](<1 (6).jpg>) 
-![1](<1 (1).jpg>) 
-![1](<1 (2).jpg>) 
-![1](<1 (3).jpg>)
+<img src="1 (5).jpg" width="200" height="400"/> 
+<img src="1 (6).jpg" width="200" height="400"/>
+<img src="1 (1).jpg" width="200" height="400"/> 
+<img src="1 (2).jpg" width="200" height="400"/>
+<img src="1 (3).jpg" width="200" height="400"/> 
 
 Note: 
 This is the source code for admin panel only. Android app and backend are here respectively.
