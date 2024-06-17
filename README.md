@@ -35,7 +35,12 @@ Can be a meet link or offline
 
 ## Android App
 
-![1](<1 (4).jpg> | width=100) ![1](<1 (5).jpg> | width=100) ![1](<1 (6).jpg> | width=100) ![1](<1 (1).jpg> | width=100) ![1](<1 (2).jpg> | width=100) ![1](<1 (3).jpg> | width=100)
+<img src="1 (4).jpg" width="200" height="400" /> 
+![1](<1 (5).jpg>) 
+![1](<1 (6).jpg>) 
+![1](<1 (1).jpg>) 
+![1](<1 (2).jpg>) 
+![1](<1 (3).jpg>)
 
 Note: 
 This is the source code for admin panel only. Android app and backend are here respectively.
