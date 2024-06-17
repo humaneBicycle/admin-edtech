@@ -8,7 +8,7 @@ Users can access content on android, moderators can use react admin panel to man
 
 ## Features
 ### Create, Read, Update and Delete lessons 
-Lesson contain: a video in multiple qualities, articles, assignements, evenets, checkpoint payments, and tests.
+Lesson can contain: a video in multiple qualities, articles, assignements, evenets, checkpoint payments, and tests.
 
 ### Add events to the app based on the lesson
 Can be a meet link or offline
@@ -43,4 +43,4 @@ Can be a meet link or offline
 <img src="1 (3).jpg" width="200" height="400"/> 
 
 Note: 
-This is the source code for admin panel only. Android app and backend are here respectively.
+This is the source code for admin panel only. [Android app](https://github.com/AdityaRajputRana/EdTechApp) and backend are here respectively.
