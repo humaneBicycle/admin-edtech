@@ -91,20 +91,16 @@ export default function Notifications() {
             notifications: [...state.notifications, state.notification],
             notification: { admin_id: StorageHelper.get("admin_id") },
           });
-          // alert("Notification will be sent soon.");
           SnackBar("Notification will be sent soon.", 1500, "OK");
         } else {
           setState({ ...state, spinner: false });
-          // alert("Error " + data.message);
           SnackBar("Error : " + data.message, 1500, "OK");
         }
       } catch (err) {
         setState({ ...state, spinner: false });
-        // alert("Error ", err);
         SnackBar("Error : " + err, 1500, "OK");
       }
     } catch (err) {
-      // alert("error", err);
       SnackBar("Error : " + err, 1500, "OK");
     }
     console.log(state.notification);
@@ -124,7 +120,6 @@ export default function Notifications() {
                   <>
                     {state.notifications.map((notification, index) => {
                       return (
-
                         <div
                           key={index}
                           className="NotificationBlock card flex-column flex-md-row g-2 p-3 border align-items-stretch"
@@ -140,10 +135,14 @@ export default function Notifications() {
                             <a
                               className=" btn btn-primary btn-sm rounded-3 bg-primary text-white m-2"
                               onClick={() => {
-                                if(notification.link!==undefined){
-                                window.location.href=notification.link;
-                                }else{
-                                  SnackBar("No link found for this Notification!",1500,"OK");
+                                if (notification.link !== undefined) {
+                                  window.location.href = notification.link;
+                                } else {
+                                  SnackBar(
+                                    "No link found for this Notification!",
+                                    1500,
+                                    "OK"
+                                  );
                                 }
                               }}
                             >
@@ -159,18 +158,19 @@ export default function Notifications() {
                                   try {
                                     response = await fetch(
                                       LinkHelper.getLink() +
-                                      "admin/notification/remove",
+                                        "admin/notification/remove",
                                       {
                                         method: "DELETE",
                                         headers: {
                                           "Content-Type": "application/json",
                                           Authorization:
-                                            "Bearer " + StorageHelper.get("token"),
+                                            "Bearer " +
+                                            StorageHelper.get("token"),
                                         },
                                         body: JSON.stringify({
-                                          notification_id:
-                                            notification._id,
-                                          admin_id: StorageHelper.get("admin_id"),
+                                          notification_id: notification._id,
+                                          admin_id:
+                                            StorageHelper.get("admin_id"),
                                         }),
                                       }
                                     );
@@ -181,18 +181,22 @@ export default function Notifications() {
                                         setState({
                                           ...state,
                                           spinner: false,
-                                          notifications: state.notifications.filter(
-                                            (item) => {
-                                              return (
-                                                item.notification_id !==
-                                                notification.notification_id
-                                              );
-                                            }
-                                          ),
+                                          notifications:
+                                            state.notifications.filter(
+                                              (item) => {
+                                                return (
+                                                  item.notification_id !==
+                                                  notification.notification_id
+                                                );
+                                              }
+                                            ),
                                         });
                                         let temp = state.notifications;
                                         temp.splice(index, 1);
-                                        setState({ ...state, notifications: temp });
+                                        setState({
+                                          ...state,
+                                          notifications: temp,
+                                        });
                                         // alert("Notification will be sent soon.");
                                         SnackBar(
                                           "Notification Deleted",
@@ -218,19 +222,19 @@ export default function Notifications() {
                                     SnackBar("Error : " + err, 1500, "OK");
                                   }
                                 };
-                                deleteNotification()
+                                deleteNotification();
                               }}
                             >
                               Delete
                             </button>
                           </div>
                         </div>
-
                       );
                     })}
                   </>
-                ) : (<>No Notifications Found!</>)
-
+                ) : (
+                  <>No Notifications Found!</>
+                )
               ) : (
                 <>
                   <Loader />
@@ -257,6 +261,7 @@ export default function Notifications() {
             strokeLinecap="round"
             strokeLinejoin="round"
             className="feather feather-plus-circle"
+            style={{ marginLeft: 9.6 + "px" }}
           >
             {/* <circle cx={12} cy={12} r={10} /> */}
             <line x1={12} y1={8} x2={12} y2={16} />

@@ -5,7 +5,7 @@ import Loader from "../components/Loader";
 import LinkHelper from "../utils/LinkHelper";
 import StorageHelper from "../utils/StorageHelper";
 import SnackBar from "../components/snackbar";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export default function Assignments() {
   let [state, setState] = React.useState({
@@ -37,7 +37,7 @@ export default function Assignments() {
           {
             method: "POST",
             headers: {
-              "Content-Type": "application/json", 
+              "Content-Type": "application/json",
               authorization: "Bearer " + StorageHelper.get("token"),
             },
             body: JSON.stringify(data),
@@ -49,18 +49,16 @@ export default function Assignments() {
           if (json.success) {
             if (json.message !== undefined) {
               SnackBar(json.message, 3000, "OK");
-              setState({...state,assignments:[]})
-            }else{
-                setState({
-                  ...state,
-                  assignments: [...state.assignments, ...json.data],
-                  total_pages: json.pages,
-                  current_page: state.current_page + 1,
-                  last_details: details,
-                });
-
+              setState({ ...state, assignments: [] });
+            } else {
+              setState({
+                ...state,
+                assignments: [...state.assignments, ...json.data],
+                total_pages: json.pages,
+                current_page: state.current_page + 1,
+                last_details: details,
+              });
             }
-            
           }
         } catch (err) {
           setState({
@@ -217,8 +215,8 @@ export default function Assignments() {
       <div className="mainContent">
         <Header PageTitle={"Assignments"} />
         <div className="MainInnerContainer">
-          Note: The assignment will be in "Submitted" mode unless approved by the
-          admin
+          Note: The assignment will be in "Submitted" mode unless approved by
+          the admin
           <div className="NotificationSection">
             <div className="NotificationList">
               {!state.spinner ? (
@@ -236,7 +234,6 @@ export default function Assignments() {
                             current_page: 0,
                             assignments: [],
                           });
-                          //   getAssignments("units");
                         }}
                       >
                         <a
@@ -261,8 +258,6 @@ export default function Assignments() {
                             current_page: 0,
                             assignments: [],
                           });
-
-                          //   getAssignments("users");
                         }}
                       >
                         <a
@@ -287,8 +282,6 @@ export default function Assignments() {
                             current_page: 0,
                             assignments: [],
                           });
-
-                          //   getAssignments("status");
                         }}
                       >
                         <a
@@ -304,8 +297,6 @@ export default function Assignments() {
                         </a>
                       </li>
                     </ul>
-                    {/* Tabs navs */}
-                    {/* Tabs content */}
                     <div className="tab-content" id="ex1-content">
                       <div
                         className="tab-pane fade show active"
@@ -313,7 +304,6 @@ export default function Assignments() {
                         role="tabpanel"
                         aria-labelledby="ex1-tab-1"
                       >
-                        {/* units */}
                         <div className="dropdown">
                           <button
                             className="btn btn-primary dropdown-toggle"
@@ -330,10 +320,15 @@ export default function Assignments() {
                           >
                             {state.units.map((unit, index) => (
                               <>
-                                <li key={index}
+                                <li
+                                  key={index}
                                   onClick={(e) => {
                                     e.preventDefault();
-                                    setState({...state, current_page: 0, assignments: []});
+                                    setState({
+                                      ...state,
+                                      current_page: 0,
+                                      assignments: [],
+                                    });
 
                                     let details = {
                                       unit_id: unit._id,
@@ -404,7 +399,7 @@ export default function Assignments() {
 
                                 let details = {
                                   status: "approved",
-                                  page:  1,
+                                  page: 1,
                                 };
                                 getAssignments(details);
                               }}
@@ -421,7 +416,7 @@ export default function Assignments() {
 
                                 let details = {
                                   status: "rejected",
-                                  page:  1,
+                                  page: 1,
                                 };
                                 getAssignments(details);
                               }}
@@ -465,13 +460,17 @@ export default function Assignments() {
                                 <br></br>
                                 for lesson: {assignment.lesson_id} <br></br>
                                 Type: {assignment.assignment_type} <br></br>
-                                Open user ID:<br></br><Link
-                              to="/students/profile"
-                              state={{ currentUser: { user_id: assignment.user_id } }}
-                            >
-                              Student Profile
-                            </Link>
-                                
+                                Open user ID:<br></br>
+                                <Link
+                                  to="/students/profile"
+                                  state={{
+                                    currentUser: {
+                                      user_id: assignment.user_id,
+                                    },
+                                  }}
+                                >
+                                  Student Profile
+                                </Link>
                               </div>
                               <div
                                 className="btn btn-success"

@@ -1,8 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
-import App from "./App";
-import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Courses from "./pages/Courses";
 import Students from "./pages/Students";
@@ -46,19 +44,19 @@ root.render(
   <BrowserRouter>
     <Routes>
       <Route exact element={<PrivateRoute />}>
-        <Route exact path="/" element={<App />} />
-        <Route path="/students" element={<Students />} />
+        <Route path="/" element={<Courses />} />
+        <Route path="/course" element={<Courses />} />
+        {/* <Route path="/students" element={<Students />} />
         <Route path="/students/change-device-approvals" element={<BlockedDeviceApprovals />} />
         <Route path="/students/profile" element={<StudentProfile />} />
-        <Route path="/students/blocked-users" element={<BlockedUsers />} />
+        <Route path="/students/blocked-users" element={<BlockedUsers />} /> */}
         <Route path="/events" element={<Events />} />
         <Route path="/analytics" element={<Analytics />} />
         <Route path="/assignments" element={<Assignments />} />
         <Route path="/notifications" element={<Notifications />} />
         <Route path="/leaderboard" element={<LeaderBoard />} />
         <Route path="/payments" element={<Payments />} />
-        <Route path="/forum" element={<Discussion />} />
-        <Route path="/course" element={<Courses />} />
+        {/* <Route path="/forum" element={<Discussion />} /> */}
         <Route path="/settings" element={<Settings />} />
         <Route path="/personality-test" element={<PersonalityTest />} />
         <Route path="/marketing-test" element={<MarketingTest />} />
@@ -70,7 +68,7 @@ root.render(
         <Route path="/course/add-lesson" element={<AddLesson />} />
         <Route path="/course/lessons" element={<Lessons />} />
         <Route path="/course/lessons/lesson" element={<Lesson />} />
-        <Route path="/additional-lessons" element={<AddAdditionalUnit />} />
+        {/* <Route path="/additional-lessons" element={<AddAdditionalUnit />} /> */}
         <Route path="/admin/forum/add-answer" element={<AnswerThisQuestion />} />
         <Route path="/admin/lesson/edit-lesson" element={<EditLesson />} />
       </Route>
@@ -83,14 +81,4 @@ root.render(
 
     </Routes>
   </BrowserRouter>
-);
-
-// App.use(cors());
-// App.use((req, res, next) => {
-//   res.header("Access-Control-Allow-Origin", "*")
-// })
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+)

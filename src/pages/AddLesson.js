@@ -190,7 +190,6 @@ export default function AddLesson() {
               </div>
               <div className="SectionBody">
 
-                {/* <!-- Tabs content --> */}
                 <div className="tab-content" id="ex1-content">
                   <div
                     className="tab-pane fade show active"
@@ -249,7 +248,6 @@ export default function AddLesson() {
               <Loader />
             </>
           )}
-          {/* <!-- Tabs content --> */}
         </div>
       </div>
     </>

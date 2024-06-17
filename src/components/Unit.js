@@ -76,19 +76,9 @@ export default function Unit({
     <div key={unit_id} style={{ width: "calc(100% - 2rem)" }}>
       <div className="card shadow-0 border rounded-3" >
         <div className="card-body p-2">
-          <div className="row">
-            <div className="col-4  col-sm-4  col-md-3 mb-lg-0 ">
-              <div className="bg-image hover-zoom  rounded ripple-surface">
-                <img src={unit.image_url} className="img-fluid" alt="Course" style={{ maxHeight: "7rem" }} />
-                <span>
-                  <div className="hover-overlay">
-                    <div className="mask" style={{ backgroundColor: 'rgba(253, 253, 253, 0.15)' }} />
-                  </div>
-                </span>
-              </div>
-
-            </div>
-            <div className="col-6  col-sm-6  col-md-5">
+          <div className="flex justify-between mx-20">
+            
+            <div className="mt-2">
               <Link to="lessons" className="h5 text-capitalize" style={{
                 display: " -webkit-box",
                 WebkitBoxOrient: "vertical",
@@ -97,7 +87,7 @@ export default function Unit({
               }} state={{ unit: unit }}>{unit_name}</Link>
 
 
-              <div className="mt-1 mb-0 text-muted small">
+              <div className="">
                 {tags.map((tag, index) => (
                   <>
                     <span className="badge badge-warning me-1" id={index}>
@@ -116,7 +106,7 @@ export default function Unit({
               </p>
 
             </div>
-            <div className="col-12 col-sm-12  col-md-4 border-sm-start-none border-start">
+            <div className="">
               {/* <div className="col-3">
 
                   <small>

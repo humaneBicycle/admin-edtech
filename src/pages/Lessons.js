@@ -23,8 +23,8 @@ export default function Lessons() {
   let { unit } = location.state;
   lessonJsonToUpdate.unit_id = unit.unit_id;
   let [isLessonOrderChanged, setIsLessonOrderChanged] = React.useState(false);
-  let [state,setState]=React.useState({
-    isEmpty:false,
+  let [state, setState] = React.useState({
+    isEmpty: false,
   });
 
   useEffect(() => {
@@ -36,9 +36,9 @@ export default function Lessons() {
       let init = {
         unit_id: unit.unit_id,
         admin_id: StorageHelper.get("admin_id"),
-      }
-      console.log(init)
-      response = await fetch(LinkHelper.getLink() + " ", {
+      };
+      console.log(init);
+      response = await fetch(LinkHelper.getLink() + "admin/lessons", {
         method: "POST",
         headers: {
           authorization: "Bearer " + StorageHelper.get("token"),
@@ -49,17 +49,19 @@ export default function Lessons() {
       });
       try {
         data = await response.json();
-        console.log(data)
+        console.log(data);
         if (data.success) {
           setLessons(data.data);
           setIsLoaded(true);
         } else {
-          if(data.message==="Cannot read properties of null (reading 'toObject')"){
-            setState({...state,isEmpty:true});
+          if (
+            data.message ===
+            "Cannot read properties of null (reading 'toObject')"
+          ) {
+            setState({ ...state, isEmpty: true });
             setIsLoaded(true);
-          }else{
+          } else {
             SnackBar(data.message, 3500, "OK");
-
           }
         }
       } catch (err) {
@@ -171,8 +173,15 @@ export default function Lessons() {
             <div className="SectionHeader p-3">
               <h1 className="ms-3">
                 Lessons{" "}
-                <span className=" h4 ms-3">In Unit: {unit.unit_name} 
-                  <Link to="/course/add-lesson" className="btn btn-primary ms-3" state={{unit:unit}}>Add Lessons</Link>
+                <span className=" h4 ms-3">
+                  In Unit: {unit.unit_name}
+                  <Link
+                    to="/course/add-lesson"
+                    className="btn btn-primary ms-3"
+                    state={{ unit: unit }}
+                  >
+                    Add Lessons
+                  </Link>
                 </span>
               </h1>
             </div>
@@ -194,272 +203,263 @@ export default function Lessons() {
 
             <div className="SectionBody">
               {isLoaded ? (
-                state.isEmpty?(<>
-                  No Lessons Found
-                  </>):(<>
-                  
-                <DragDropContext onDragEnd={handleOnDragEvent}>
-                  <Droppable droppableId="droppable">
-                    {(provided) => (
-                      <ul
-                        className="list-group mx-4"
-                        {...provided.droppableProps}
-                        ref={provided.innerRef}
-                      >
-                        {lessons.length > 0 ? (
-                          lessons.map((lesson, index) => (
-                            <Draggable
-                              key={lesson.lesson_id}
-                              draggableId={lesson.lesson_id}
-                              index={index}
-                            >
-                              {(provided) => (
-                                <Link
-                                  to="lesson"
-                                  state={{ lesson: lesson }}
-                                  className="text-dark"
+                state.isEmpty ? (
+                  <>No Lessons Found</>
+                ) : (
+                  <>
+                    <DragDropContext onDragEnd={handleOnDragEvent}>
+                      <Droppable droppableId="droppable">
+                        {(provided) => (
+                          <ul
+                            className="list-group mx-4"
+                            {...provided.droppableProps}
+                            ref={provided.innerRef}
+                          >
+                            {lessons.length > 0 ? (
+                              lessons.map((lesson, index) => (
+                                <Draggable
+                                  key={lesson.lesson_id}
+                                  draggableId={lesson.lesson_id}
+                                  index={index}
                                 >
-                                  <li
-                                    className="row"
-                                    {...provided.draggableProps}
-                                    ref={provided.innerRef}
-                                    {...provided.dragHandleProps}
-                                  >
-                                    <div className="column-md-9">
-                                      {lesson.type === "video" ? (
-                                        <>
-                                          <div>
-                                            <div
-                                              className="card mb-3"
-                                              style={{ maxHeight: 270 }}
-                                            >
-                                              <div className="row g-0">
-                                                <div className="col-md-2">
-                                                  
-                                                </div>
-                                                <div className="col-md-8">
-                                                  <div className="card-body">
-                                                    <h5 className="card-title">
-                                                      {lesson.title}
-                                                    </h5>
-                                                    <p className="card-text">
-                                                      Type: {lesson.type}
-                                                    </p>
-                                                    <p className="card-text">
-                                                      {lesson.description}
-                                                    </p>
-                                                    <p className="card-text">
-                                                      prerequisite:{" "}
-                                                      {
-                                                        lesson.prerequisite
-                                                          .message
-                                                      }
-                                                    </p>
-                                                  </div>
-                                                </div>
-                                              </div>
-                                            </div>
-                                          </div>
-                                        </>
-                                      ) : (
-                                        <></>
-                                      )}
-                                      {lesson.type === "article" ? (
-                                        <>
-                                          <div>
-                                            <div
-                                              className="card mb-3"
-                                              style={{ maxHeight: 270 }}
-                                            >
-                                              <div className="row g-0">
-                                                <div className="col-md-2">
-                                                  
-                                                </div>
-                                                <div className="col-md-8">
-                                                  <div className="card-body">
-                                                    <h5 className="card-title">
-                                                      {lesson.title}
-                                                    </h5>
-                                                    <p className="card-text">
-                                                      Type: {lesson.type}
-                                                    </p>
-                                                    <p className="card-text">
-                                                      {lesson.description}
-                                                    </p>
-                                                    <p className="card-text">
-                                                      prerequisite:{" "}
-                                                      {
-                                                        lesson.prerequisite
-                                                          .message
-                                                      }
-                                                    </p>
-                                                  </div>
-                                                </div>
-                                              </div>
-                                            </div>
-                                          </div>
-                                        </>
-                                      ) : (
-                                        <></>
-                                      )}
-                                      {lesson.type === "assignment" ? (
-                                        <>
-                                          <div>
-                                            <div
-                                              className="card mb-3"
-                                              style={{ maxHeight: 270 }}
-                                            >
-                                              <div className="row g-0">
-                                                <div className="col-md-2">
-                                                  
-                                                </div>
-                                                <div className="col-md-8">
-                                                  <div className="card-body">
-                                                    <h5 className="card-title">
-                                                      {lesson.title}
-                                                    </h5>
-                                                    <p className="card-text">
-                                                      Type: {lesson.type}
-                                                    </p>
-                                                    <p className="card-text">
-                                                      <small className="text-muted">
-                                                        id:{lesson.lesson_id}
-                                                      </small>
-                                                    </p>
-                                                  </div>
-                                                </div>
-                                              </div>
-                                            </div>
-                                          </div>
-                                        </>
-                                      ) : (
-                                        <></>
-                                      )}
-                                      {lesson.type === "payment" ? (
-                                        <>
-                                          <div
-                                            className="card mb-3"
-                                            style={{ maxHeight: 270 }}
-                                          >
-                                            <div className="row g-0">
-                                              <div className="col-md-2">
-                                                
-                                              </div>
-                                              <div className="col-md-8">
-                                                <div className="card-body">
-                                                  <h5 className="card-title">
-                                                    {lesson.title}
-                                                  </h5>
-                                                  <p className="card-text">
-                                                    Type: {lesson.type}
-                                                  </p>
-                                                  <p className="card-text">
-                                                    <small className="text-muted">
-                                                      id:{lesson.lesson_id}
-                                                    </small>
-                                                  </p>
-                                                </div>
-                                              </div>
-                                            </div>
-                                          </div>
-                                        </>
-                                      ) : (
-                                        <></>
-                                      )}
-                                      {lesson.type === "event" ? (
-                                        <>
-                                          <div
-                                            className="card mb-3"
-                                            style={{ maxHeight: 270 }}
-                                          >
-                                            <div className="row g-0">
-                                              <div className="col-md-2">
-                                               
-                                              </div>
-                                              <div className="col-md-8">
-                                                <div className="card-body">
-                                                  <h5 className="card-title">
-                                                    {lesson.title}
-                                                  </h5>
-                                                  <p className="card-text">
-                                                    Type: {lesson.type}
-                                                  </p>
-                                                  <p className="card-text">
-                                                    <small className="text-muted">
-                                                      id:{lesson.lesson_id}
-                                                    </small>
-                                                  </p>
-                                                </div>
-                                              </div>
-                                            </div>
-                                          </div>
-                                        </>
-                                      ) : (
-                                        <></>
-                                      )}
-                                      {lesson.type === "test" ? (
-                                        <>
-                                          <div>
-                                            <div
-                                              className="card mb-3"
-                                              style={{ maxHeight: 270 }}
-                                            >
-                                              <div className="row g-0">
-                                                <div className="col-md-2">
-                                                  
-                                                </div>
-                                                <div className="col-md-8">
-                                                  <div className="card-body">
-                                                    <h5 className="card-title">
-                                                      {lesson.title}
-                                                    </h5>
-                                                    <p className="card-text">
-                                                      Type: {lesson.type}
-                                                    </p>
-                                                    <p className="card-text">
-                                                      <small className="text-muted">
-                                                        id:{lesson.lesson_id}
-                                                      </small>
-                                                    </p>
-                                                  </div>
-                                                </div>
-                                              </div>
-                                            </div>
-                                          </div>
-                                        </>
-                                      ) : (
-                                        <></>
-                                      )}
-                                    </div>
-                                    <button
-                                      className="btn btn-danger mx-2 my-2"
-                                      onClick={(e) => {
-                                        e.preventDefault();
-                                        deleteLesson(lesson.lesson_id);
-                                      }}
-                                    >
-                                      Delete Lesson
-                                    </button>
+                                  {(provided) => (
                                     <Link
-                                      className="btn btn-primary mx-2 my-2"
-                                      to={`/admin/lesson/edit-lesson`}
-                                      state={{ lesson: lesson, unit:unit }}
+                                      to="lesson"
+                                      state={{ lesson: lesson }}
+                                      className="text-dark"
                                     >
-                                      Edit Lesson
+                                      <li
+                                        className="row"
+                                        {...provided.draggableProps}
+                                        ref={provided.innerRef}
+                                        {...provided.dragHandleProps}
+                                      >
+                                        <div className="column-md-9">
+                                          {lesson.type === "video" ? (
+                                            <>
+                                              <div>
+                                                <div
+                                                  className="card mb-3"
+                                                  style={{ maxHeight: 270 }}
+                                                >
+                                                  <div className="row g-0">
+                                                    <div className="col-md-2"></div>
+                                                    <div className="col-md-8">
+                                                      <div className="card-body">
+                                                        <h5 className="card-title">
+                                                          {lesson.title}
+                                                        </h5>
+                                                        <p className="card-text">
+                                                          Type: {lesson.type}
+                                                        </p>
+                                                        <p className="card-text">
+                                                          {lesson.description}
+                                                        </p>
+                                                        <p className="card-text">
+                                                          prerequisite:{" "}
+                                                          {
+                                                            lesson.prerequisite
+                                                              .message
+                                                          }
+                                                        </p>
+                                                      </div>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                            </>
+                                          ) : (
+                                            <></>
+                                          )}
+                                          {lesson.type === "article" ? (
+                                            <>
+                                              <div>
+                                                <div
+                                                  className="card mb-3"
+                                                  style={{ maxHeight: 270 }}
+                                                >
+                                                  <div className="row g-0">
+                                                    <div className="col-md-2"></div>
+                                                    <div className="col-md-8">
+                                                      <div className="card-body">
+                                                        <h5 className="card-title">
+                                                          {lesson.title}
+                                                        </h5>
+                                                        <p className="card-text">
+                                                          Type: {lesson.type}
+                                                        </p>
+                                                        <p className="card-text">
+                                                          {lesson.description}
+                                                        </p>
+                                                        <p className="card-text">
+                                                          prerequisite:{" "}
+                                                          {
+                                                            lesson.prerequisite
+                                                              .message
+                                                          }
+                                                        </p>
+                                                      </div>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                            </>
+                                          ) : (
+                                            <></>
+                                          )}
+                                          {lesson.type === "assignment" ? (
+                                            <>
+                                              <div>
+                                                <div
+                                                  className="card mb-3"
+                                                  style={{ maxHeight: 270 }}
+                                                >
+                                                  <div className="row g-0">
+                                                    <div className="col-md-2"></div>
+                                                    <div className="col-md-8">
+                                                      <div className="card-body">
+                                                        <h5 className="card-title">
+                                                          {lesson.title}
+                                                        </h5>
+                                                        <p className="card-text">
+                                                          Type: {lesson.type}
+                                                        </p>
+                                                        <p className="card-text">
+                                                          <small className="text-muted">
+                                                            id:
+                                                            {lesson.lesson_id}
+                                                          </small>
+                                                        </p>
+                                                      </div>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                            </>
+                                          ) : (
+                                            <></>
+                                          )}
+                                          {lesson.type === "payment" ? (
+                                            <>
+                                              <div
+                                                className="card mb-3"
+                                                style={{ maxHeight: 270 }}
+                                              >
+                                                <div className="row g-0">
+                                                  <div className="col-md-2"></div>
+                                                  <div className="col-md-8">
+                                                    <div className="card-body">
+                                                      <h5 className="card-title">
+                                                        {lesson.title}
+                                                      </h5>
+                                                      <p className="card-text">
+                                                        Type: {lesson.type}
+                                                      </p>
+                                                      <p className="card-text">
+                                                        <small className="text-muted">
+                                                          id:{lesson.lesson_id}
+                                                        </small>
+                                                      </p>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                            </>
+                                          ) : (
+                                            <></>
+                                          )}
+                                          {lesson.type === "event" ? (
+                                            <>
+                                              <div
+                                                className="card mb-3"
+                                                style={{ maxHeight: 270 }}
+                                              >
+                                                <div className="row g-0">
+                                                  <div className="col-md-2"></div>
+                                                  <div className="col-md-8">
+                                                    <div className="card-body">
+                                                      <h5 className="card-title">
+                                                        {lesson.title}
+                                                      </h5>
+                                                      <p className="card-text">
+                                                        Type: {lesson.type}
+                                                      </p>
+                                                      <p className="card-text">
+                                                        <small className="text-muted">
+                                                          id:{lesson.lesson_id}
+                                                        </small>
+                                                      </p>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                            </>
+                                          ) : (
+                                            <></>
+                                          )}
+                                          {lesson.type === "test" ? (
+                                            <>
+                                              <div>
+                                                <div
+                                                  className="card mb-3"
+                                                  style={{ maxHeight: 270 }}
+                                                >
+                                                  <div className="row g-0">
+                                                    <div className="col-md-2"></div>
+                                                    <div className="col-md-8">
+                                                      <div className="card-body">
+                                                        <h5 className="card-title">
+                                                          {lesson.title}
+                                                        </h5>
+                                                        <p className="card-text">
+                                                          Type: {lesson.type}
+                                                        </p>
+                                                        <p className="card-text">
+                                                          <small className="text-muted">
+                                                            id:
+                                                            {lesson.lesson_id}
+                                                          </small>
+                                                        </p>
+                                                      </div>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                            </>
+                                          ) : (
+                                            <></>
+                                          )}
+                                        </div>
+                                        <button
+                                          className="btn btn-danger mx-2 my-2"
+                                          onClick={(e) => {
+                                            e.preventDefault();
+                                            deleteLesson(lesson.lesson_id);
+                                          }}
+                                        >
+                                          Delete Lesson
+                                        </button>
+                                        <Link
+                                          className="btn btn-primary mx-2 my-2"
+                                          to={`/admin/lesson/edit-lesson`}
+                                          state={{ lesson: lesson, unit: unit }}
+                                        >
+                                          Edit Lesson
+                                        </Link>
+                                      </li>
                                     </Link>
-                                  </li>
-                                </Link>
-                              )}
-                            </Draggable>
-                          ))
-                        ) : (
-                          <div classNamw="d-flex">No lessons found</div>
+                                  )}
+                                </Draggable>
+                              ))
+                            ) : (
+                              <div classNamw="d-flex">No lessons found</div>
+                            )}
+                          </ul>
                         )}
-                      </ul>
-                    )}
-                  </Droppable>
-                </DragDropContext>
-                  </>)
+                      </Droppable>
+                    </DragDropContext>
+                  </>
+                )
               ) : (
                 <>
                   <Loader />

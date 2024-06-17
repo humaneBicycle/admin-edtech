@@ -115,7 +115,7 @@ body {
   height: auto;
   background-color: inherit;
   box-shadow: 0 4px 35px rgba(0, 0, 0, .1);
-  border-radius: 40px;
+  border-radius: 0px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -147,14 +147,14 @@ body {
   background-color: rgba(0, 0, 0, .1);
   border-radius: 100px;
   position: relative;
-  margin: 1.8rem 0 4rem 0;
+  margin: 0.5rem;
   cursor: pointer;
 }
 
 .DarkModeButton .toggle {
   position: absolute;
   width: 50%;
-  background-color: #fff;
+  background-color: #575555;
   box-shadow: 0 2px 15px rgba(0, 0, 0, .15);
   transition: transform .3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
@@ -826,6 +826,22 @@ html :hover::-webkit-scrollbar-track {
   .h6) {
   color: #CCCCCC !important;
 }
+
+h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  .h1,
+  .h2,
+  .h3,
+  .h4,
+  .h5,
+  .h6 {
+    color:#828282;
+
+  }
 
 .card {
   overflow: hidden;

@@ -22,8 +22,8 @@ export default function Courses() {
   const [course, setCourses] = React.useState({});
   const [isError, setErrorStaus] = React.useState(false);
   let [state, setState] = React.useState({
-    progressSpinner: false
-  })
+    progressSpinner: false,
+  });
 
   const [isEditCourseModalVisible, setEditCourseModalVisibility] =
     React.useState(false);
@@ -180,134 +180,138 @@ export default function Courses() {
           {progressVisibility ? (
             <Loader />
           ) : // course model have been loaded. populate the views
-            !isError ? (
-              <>
-                {isUnitOrderChanged ? (
-                  <div className="rounded-4 py-3 g-4 px-3 bg-info mw-75 w-auto d-flex justify-content-between align-items-baseline" style={{ width: "calc(100% - 2rem)" }}>
-                    <h3>
-                      Do you want to save this sort ?
-                    </h3>
-                    {/* <button className="btn btn-outline-primary me-3 ms-auto">
-                        Cancel
-                      </button> */}
-                    <button className="btn btn-primary mx-3" onClick={updateChangedUnitOrder}>Save</button>
-                  </div>
-                ) : (
-                  <></>
-                )}
-                <div className="d-flex flex-wrap justify-content-start align-items-stretch pb-5 p-2 pt-2" style={{ width: "calc(100% - 2rem)" }}>
+          !isError ? (
+            <>
+              {isUnitOrderChanged ? (
+                <div
+                  className="rounded-4 py-3 g-4 px-3 bg-info mw-75 w-auto d-flex justify-content-between align-items-baseline"
+                  style={{ width: "calc(100% - 2rem)" }}
+                >
+                  <h3>Do you want to save this sort ?</h3>
+                  <button
+                    className="btn btn-primary mx-3"
+                    onClick={updateChangedUnitOrder}
+                  >
+                    Save
+                  </button>
+                </div>
+              ) : (
+                <></>
+              )}
+              <div
+                className="d-flex flex-wrap justify-content-start align-items-stretch pb-5 p-2 pt-2"
+                style={{ width: "calc(100% - 2rem)" }}
+              >
+                <div
+                  className="col-12 mb-4 mx-auto"
+                  style={{ marginInline: "auto" }}
+                >
+                  <div className="card w-100 p-1 border">
+                    <div className="card-body  p-2">
+                      <h4 className="card-title h4 text-capitalize mb-2">
+                        {course.name}
+                      </h4>
 
-                  <div className="col-12 mb-4 mx-auto" style={{ marginInline: "auto" }}>
-                    <div className="card w-100 p-1 border">
-
-                      <div className="card-body  p-2">
-                        <h4 className="card-title h4 text-capitalize mb-2">{course.name}</h4>
-
-                        <small className="card-subtitle text-muted mb-3">
-                          {" "}
-                          {console.log(course)}
-                          {"Created on " + course.created}{" "}
-                        </small>
-                        <small className="card-body p-0">
-
-                          <p className="card-text mb-0">
-                            {"description: " + course.description}
-                          </p>
-                          <p className="card-text mb-0">
-                            {"quote: " + course.quote}
-                          </p>
-                          <p className="card-text mb-0">
-                            {"heading: " + course.headline}
-                          </p>
-                        </small>
-                        <div className="d-flex flex-row justify-content-start mt-0 card-footer p-2">
-                          <Link
-                            className="btn btn-primary btn-sm"
-                            to="add-unit"
-                            state={{ course: course }}
-                          >
-                            Add Unit <i className="fas fa-plus ms-2"></i>
-                          </Link>
-                          <Link
-                            className="btn btn-outline-primary btn-sm  ms-2"
-                            to="editCourse"
-                            state={{ course: course }}
-                          >
-                            Edit Course <i className="far fa-edit ms-2"></i>
-                          </Link>
-                        </div>
+                      <small className="card-subtitle text-muted mb-3">
+                        {" "}
+                        {console.log(course)}
+                      </small>
+                      <small className="card-body p-0">
+                        <p className="card-text mb-0">
+                          {"Description: " + course.description}
+                        </p>
+                        <p className="card-text mb-0">
+                          {"Quote: " + course.quote}
+                        </p>
+                        <p className="card-text mb-0">
+                          {"Heading: " + course.headline}
+                        </p>
+                      </small>
+                      <div className="d-flex flex-row justify-content-start mt-0 card-footer p-2">
+                        <Link
+                          className="btn btn-primary btn-sm"
+                          to="add-unit"
+                          state={{ course: course }}
+                        >
+                          Add Unit <i className="fas fa-plus ms-2"></i>
+                        </Link>
+                        <Link
+                          className="btn btn-outline-primary btn-sm  ms-2"
+                          to="editCourse"
+                          state={{ course: course }}
+                        >
+                          Edit Course <i className="far fa-edit ms-2"></i>
+                        </Link>
                       </div>
                     </div>
                   </div>
-                  <div className="col-12">
-                    <div className="d-flex flex-column">
-                      <DragDropContext onDragEnd={handleOnDragEvent}>
-                        <Droppable droppableId="droppable">
-                          {(provided, index) => (
-                            <div
-                              className="list-group w-100"
-                              {...provided.droppableProps}
-                              ref={provided.innerRef}
-                              key={index}
-
-                            >
-                              {course.units != null ? (
-                                course.units.map((unit, index) => (
-                                  <>
-                                    <Draggable
-                                      key={index}
-                                      draggableId={unit.unit_id}
-                                      index={index}
-                                    >
-                                      {(provided) => (
-                                        <div
-                                          {...provided.draggableProps}
-                                          ref={provided.innerRef}
-                                          key={index}
-                                          {...provided.dragHandleProps} className="row justify-content-center mb-3"
-                                        >
-
-                                          <Unit
-                                            key={index}
-                                            image_url={unit.image_url}
-                                            has_prerequisite={unit.prerequisite.has_prerequisite.toString()}
-                                            type={unit.prerequisite.type}
-                                            time={unit.prerequisite.time}
-                                            message={unit.prerequisite.message}
-                                            unit_name={unit.unit_title}
-                                            tags={unit.tags}
-                                            total_lessons={unit.total_lessons}
-                                            is_paid={unit.is_paid}
-                                            is_locked={unit.is_locked}
-                                            unit_id={unit.unit_id}
-                                          />
-
-                                        </div>
-                                      )}
-                                    </Draggable>
-                                  </>
-                                ))
-                              ) : (
+                </div>
+                <div className="col-12">
+                  <div className="d-flex flex-column">
+                    <DragDropContext onDragEnd={handleOnDragEvent}>
+                      <Droppable droppableId="droppable">
+                        {(provided, index) => (
+                          <div
+                            className="list-group w-100"
+                            {...provided.droppableProps}
+                            ref={provided.innerRef}
+                            key={index}
+                          >
+                            {course.units != null ? (
+                              course.units.map((unit, index) => (
                                 <>
-                                  <div>No Units found</div>
+                                  <Draggable
+                                    key={index}
+                                    draggableId={unit.unit_id}
+                                    index={index}
+                                  >
+                                    {(provided) => (
+                                      <div
+                                        {...provided.draggableProps}
+                                        ref={provided.innerRef}
+                                        key={index}
+                                        {...provided.dragHandleProps}
+                                        className="row justify-content-center mb-3"
+                                      >
+                                        <Unit
+                                          key={index}
+                                          image_url={unit.image_url}
+                                          has_prerequisite={unit.prerequisite.has_prerequisite.toString()}
+                                          type={unit.prerequisite.type}
+                                          time={unit.prerequisite.time}
+                                          message={unit.prerequisite.message}
+                                          unit_name={unit.unit_title}
+                                          tags={unit.tags}
+                                          total_lessons={unit.total_lessons}
+                                          is_paid={unit.is_paid}
+                                          is_locked={unit.is_locked}
+                                          unit_id={unit.unit_id}
+                                        />
+                                      </div>
+                                    )}
+                                  </Draggable>
                                 </>
-                              )}
-                            </div>
-                          )}
-                        </Droppable>
-                      </DragDropContext>
-                    </div>
+                              ))
+                            ) : (
+                              <>
+                                <div>No Units found</div>
+                              </>
+                            )}
+                          </div>
+                        )}
+                      </Droppable>
+                    </DragDropContext>
                   </div>
-                </div >
-              </>
-            ) : (
-              <div className="d-flex justify-content-center">
-                Error Loading Content. Please Reload.
+                </div>
               </div>
-            )
-          }
-        </div >
-      </div >
+            </>
+          ) : (
+            <div className="d-flex justify-content-center">
+              Error Loading Content. Please Reload.
+            </div>
+          )}
+        </div>
+      </div>
     </>
   );
 }

@@ -16,8 +16,6 @@ let credentials = {};
 
 export default function AddUnit() {
   let location = useLocation();
-  let units = location.state.course.units;
-  let [hasPrerequisite, setHasPrerequisite] = useState(false);
   let [unit, setUnit] = useState({
     admin_id: StorageHelper.get("admin_id"),
     is_paid: false,
@@ -94,7 +92,6 @@ export default function AddUnit() {
       unit.unit_name === undefined ||
       unit.prerequisite.has_prerequisite
     ) {
-      // console.log(unit.prerequisite.has_prerequisite)
       if (unit.prerequisite.has_prerequisite) {
         if (
           unit.prerequisite.on === undefined ||
@@ -292,199 +289,7 @@ export default function AddUnit() {
                       <label htmlFor="floatingInput">Description</label>
                     </div>
 
-                    <div className="d-flex align-items-center justify-content-start p-2 mb-2 flex-wrap">
-                        Completetion: &nbsp;&nbsp;
-                      <div className="form-check me-2">
-                        <input
-                          className="form-check-input"
-                          type="radio"
-                          name="flexRadioDefault2"
-                          id="flexRadioDefault3"
-                          onChange={() => {
-                            setUnit({ ...unit, completetion: "manual" });
-                          }}
-                        />
-                        <label
-                          className="form-check-label"
-                          htmlFor="flexRadioDefault1"
-                        >
-                          Manual
-                        </label>
-                      </div>
-                      <div className="form-check">
-                        <input
-                          className="form-check-input"
-                          type="radio"
-                          name="flexRadioDefault2"
-                          id="flexRadioDefault4"
-                          defaultChecked="true"
-                          onChange={() => {
-                            setUnit({ ...unit, completetion: "auto" });
-                          }}
-                        />
-                        <label
-                          className="form-check-label"
-                          htmlFor="flexRadioDefault2"
-                        >
-                          Auto
-                        </label>
-                      </div>
-                    </div>
-
-                    <div className="d-flex align-items-center justify-content-start p-2 mb-2 flex-wrap">
-                      {/* Price: &nbsp;&nbsp; */}
-                        {/* <div className="form-check me-2">
-                          <input
-                            className="form-check-input"
-                            type="radio"
-                            name="flexRadioDefault"
-                            id="flexRadioDefault1"
-                            checked={unit.is_paid === true}
-                            onChange={(e) => {
-                              updateUI(e, "is_paid");
-                            }}
-                          />
-                          <label
-                            className="form-check-label"
-                            htmlFor="flexRadioDefault1"
-                          >
-                            Paid
-                          </label>
-                        </div>
-                        <div className="form-check">
-                          <input
-                            className="form-check-input"
-                            type="radio"
-                            name="flexRadioDefault"
-                            id="flexRadioDefault2"
-                            defaultChecked=""
-                            checked={unit.is_paid === false}
-                            value={unit.is_paid}
-                            onChange={(e) => {
-                              updateUI(e, "is_paid");
-                            }}
-                          />
-                          <label
-                            className="form-check-label"
-                            htmlFor="flexRadioDefault2"
-                          >
-                            Free
-                          </label>
-                        </div> */}
-                            
-                        <div className="form-check form-switch mb-2 container-fluid my-4">
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        role="switch"
-                        id="flexSwitchCheckChecked"
-                        checked={hasPrerequisite}
-                        onChange={(event) => {
-                          // article.prerequisite.has_prerequisite=!hasPrerequisite
-
-                          setUnit({
-                            ...unit,
-                            prerequisite: {
-                              ...unit.prerequisite,
-                              has_prerequisite: !hasPrerequisite,
-                            },
-                          });
-                          setHasPrerequisite(!hasPrerequisite);
-                        }}
-                      />
-                      <label
-                        className="form-check-label"
-                        htmlFor="flexSwitchCheckChecked"
-                      >
-                        Has Pre-requisites
-                      </label>
-                    </div>
-                      
-
-                      {hasPrerequisite ? (
-                    <>
-                      <>
-                        <div className="dropdown w-100">
-                          <button
-                            className="btn btn-primary dropdown-toggle btn-sm"
-                            type="button"
-                            id="dropdownMenuButton"
-                            data-mdb-toggle="dropdown"
-                            aria-expanded="false"
-                          >
-                            On Unit
-                          </button>
-                          <ul
-                            className="dropdown-menu"
-                            aria-labelledby="dropdownMenuButton"
-                          >
-                            {units.map((unit) => {
-                              return (
-                                <li className="dropdown-item"
-                                  onClick={(e) => {
-                                    prerequisiteItemClick(e, unit);
-                                  }}
-                                >
-                                  {unit.unit_title}
-                                </li>
-                              );
-                            })}
-                          </ul>
-                        </div>
-                        <div className="d-flex align-items-center justify-content-around p-2 mb-2 flex-wrap w-100">
-
-
-                          <div class="form-floating mb-4">
-
-
-                            <input
-                              id="inputPassword5"
-                              className="form-control"
-                              type="number"
-                              placeholder="Enter Time"
-
-                              value={unit.prerequisite.time}
-                              onChange={(event) => {
-                                setUnit({
-                                  ...unit,
-                                  prerequisite: {
-                                    ...unit.prerequisite,
-                                    time: event.target.value,
-                                  },
-                                });
-                              }}
-                            /><label htmlFor="inputPassword5" >
-                              After Time in Seconds
-                            </label>
-                          </div>
-                          <div className="form-floating  mb-4">
-
-
-                            <input
-                              id="inputPassword5"
-                              className="form-control"
-                              placeholder="Enter Prerequisite Message"
-                              value={unit.prerequisite.message}
-                              onChange={(event) => {
-                                setUnit({
-                                  ...unit,
-                                  prerequisite: {
-                                    ...unit.prerequisite,
-                                    message: event.target.value,
-                                  },
-                                });
-                              }}
-                            /><label htmlFor="inputPassword5" className="form-label">
-                              Prerequisite Message
-                            </label>
-                          </div>
-                        </div>
-                      </>
-                    </>
-                  ) : (
-                    <></>
-                  )}
-                    </div>
+                   
 
                       <div className="w-100">
                         <button

@@ -230,6 +230,7 @@ export default function Events() {
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   className="feather feather-plus-circle"
+                  style={{marginLeft: 9.6+"px"}}
                 >
                   {/* <circle cx={12} cy={12} r={10} /> */}
                   <line x1={12} y1={8} x2={12} y2={16} />
@@ -508,8 +509,6 @@ export default function Events() {
                 type="button"
                 className="btn btn-primary"
                 onClick={(event) => {
-                  // updateUI(event, "video_id");
-                  // console.log(state.activeEvent);
                   addEvent();
                 }}
               >

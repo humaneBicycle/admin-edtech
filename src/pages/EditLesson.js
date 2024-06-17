@@ -17,7 +17,6 @@ import UpdateLessonVideo from "../components/UpdateLessonVideo";
 
 export default function EditLesson() {
   let { lesson } = useLocation().state;
-  let { unit } = useLocation().state;
   let location = useLocation();
   useEffect(() => {
     getLesson();
@@ -25,7 +24,6 @@ export default function EditLesson() {
   let [state, setState] = useState({
     spinner: true,
   });
-  // console.log("unit: ",unit,"lesson: ",lesson)
   let getLesson = async () => {
     let response, data;
     try {
