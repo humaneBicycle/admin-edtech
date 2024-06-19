@@ -17,6 +17,9 @@ let unitJsonToUpdate = {
 };
 
 export default function Courses() {
+  if(window.location.pathname=="" || window.location.pathname=="/"){
+    window.location.pathname = "/course";
+  }
   const [isUnitOrderChanged, setIsUnitOrderChanged] = React.useState(false);
   const [progressVisibility, isVisible] = React.useState(true);
   const [course, setCourses] = React.useState({});
@@ -75,13 +78,13 @@ export default function Courses() {
         updateUI(data.data);
       } catch (err) {
         // alert("Invalid Response! Please Reload");
-        SnackBar("Invalid Response!" + err.message, 1500, "OK");
+        SnackBar("Invalid Response! " + err.message, 1500, "OK");
         loadFailed(err);
       }
     } catch (err) {
       console.log(err);
       loadFailed(err);
-      SnackBar("Please Reload" + err.message, 1500, "OK");
+      SnackBar(err.message, 1500, "OK");
     }
   };
 
@@ -307,7 +310,7 @@ export default function Courses() {
             </>
           ) : (
             <div className="d-flex justify-content-center">
-              Error Loading Content. Please Reload.
+              Error Loading Content.
             </div>
           )}
         </div>

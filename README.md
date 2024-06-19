@@ -44,3 +44,7 @@ Can be a meet link or offline
 
 Note: 
 This is the source code for admin panel only. [Android app](https://github.com/AdityaRajputRana/EdTechApp) and [backend](https://github.com/rehanmm/edtechAppBackend) are here respectively.
+
+## AWS Setup for video lessons
+
+
