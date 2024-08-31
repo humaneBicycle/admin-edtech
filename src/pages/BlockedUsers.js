@@ -14,7 +14,7 @@ export default function BlockedUsers() {
   });
   useEffect(() => {
     getBlockedUsers();
-  }, []);
+  });
   let getBlockedUsers = async () => {
     let response, data;
     try {

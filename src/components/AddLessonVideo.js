@@ -11,8 +11,10 @@ let videoFile;
 let uid;
 let credentials;
 let videoUId;
+let rendercount=0
 
 export default function AllLessonVideo(props) {
+  console.log("rendered",rendercount++)
   let [progress, setProgress] = useState(-1);
   const location = useLocation();
   let { unit } = location.state;

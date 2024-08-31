@@ -42,8 +42,6 @@ Can be a meet link or offline
 <img src="1 (2).jpg" width="200" height="400"/>
 <img src="1 (3).jpg" width="200" height="400"/> 
 
-Note: 
-This is the source code for admin panel only. [Android app](https://github.com/AdityaRajputRana/EdTechApp) and [backend](https://github.com/rehanmm/edtechAppBackend) are here respectively.
 
 ## AWS Setup for video lessons
 
